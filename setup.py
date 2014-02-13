@@ -23,7 +23,7 @@ setup(
     install_requires=[],
     description=__doc__.strip(),
     classifiers=[line for line in classifiers.split('\n') if line],
-    long_description=open('pysrc/README.txt').read(),
+    long_description=open('README.txt').read(),
     license="LGPL",
     author='Bjorn Pettersen',
     author_email='bp@datakortet.no',
