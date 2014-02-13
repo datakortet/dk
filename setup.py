@@ -8,7 +8,6 @@ classifiers = """\
 Development Status :: 3 - Alpha
 Intended Audience :: Developers
 Programming Language :: Python
-Programming Language :: Javascript
 Topic :: Software Development :: Libraries
 """
 
@@ -25,11 +24,11 @@ setup(
     description=__doc__.strip(),
     classifiers=[line for line in classifiers.split('\n') if line],
     long_description=open('pysrc/README.txt').read(),
-    license="BSD",
+    license="LGPL",
     author='Bjorn Pettersen',
     author_email='bp@datakortet.no',
-    #url='https://github.com/thebjorn/dkjs',
-    #download_url='https://github.com/thebjorn/dkjs',
+    url='https://github.com/thebjorn/dk',
+    download_url='https://github.com/thebjorn/dk',
 
     packages=['dk'],
     zip_safe=False,
