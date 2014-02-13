@@ -15,7 +15,7 @@ import setuptools
 from distutils.core import setup
 
 #version = eval(open('./package.json').read())['version']
-version = '0.7.3'
+version = '0.7.4'
 
 setup(
     name='dk',

@@ -5,6 +5,12 @@ DK utility classes
 Various basic packages pulled from our source tree.
 
 
+Documentation
+-------------
+
+The documentation lives at http://dk.readthedocs.org/
+
+
 
 Running the tests
 -------------------
