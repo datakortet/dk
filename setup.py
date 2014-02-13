@@ -28,7 +28,7 @@ setup(
     license="LGPL",
     author='Bjorn Pettersen',
     author_email='bp@datakortet.no',
-    url='https://github.com/thebjorn/dk',
+    url="http://thebjorn.github.io/dk/",
     download_url='https://github.com/thebjorn/dk',
 
     packages=['dk'],
