@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""The Datakortet Javascript package, dk.js.
+"""The Datakortet Basic utilities package: `dk`.
 """
 
 classifiers = """\
@@ -15,7 +15,7 @@ import setuptools
 from distutils.core import setup
 
 #version = eval(open('./package.json').read())['version']
-version = '0.7.1'
+version = '0.7.3'
 
 setup(
     name='dk',
