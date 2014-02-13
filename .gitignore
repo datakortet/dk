@@ -1,5 +1,8 @@
-*.py~
+*~
 *.pyc
 build/
 dist/
+docs/*.html
+htmlcov
 dk.egg-info/
+docs/_build
