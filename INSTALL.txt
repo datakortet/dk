@@ -1,0 +1,18 @@
+
+From PyPI
+==========
+
+   pip install dk
+
+
+
+To upload to PyPI
+--------------------
+
+ - only source distribution
+
+      python setup.py sdist upload
+
+ - source and windows installer
+
+      python setup.py sdist bdist_wininst upload
