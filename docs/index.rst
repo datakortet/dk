@@ -11,6 +11,9 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   ttcal
+   fstr
+
 
 
 Indices and tables
