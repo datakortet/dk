@@ -6,3 +6,4 @@ docs/*.html
 htmlcov
 dk.egg-info/
 docs/_build
+*.rst#

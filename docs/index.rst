@@ -6,10 +6,16 @@
 Welcome to dk's documentation!
 ==============================
 
+Installation::
+
+    pip install dk
+
 Contents:
 
 .. toctree::
    :maxdepth: 2
+
+   projectinfo
 
    ttcal
    fstr
