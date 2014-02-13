@@ -1,5 +1,4 @@
 
-.. py:module:: dk.ttcal
 
 
 dk.ttcal
