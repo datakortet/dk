@@ -7,7 +7,7 @@
 # W0141 using function `map`.
 # R0904: too many public methods.
 
-
+import six
 import re
 import datetime, calendar
 from itertools import islice
@@ -409,7 +409,10 @@ class Day(datetime.date, RangeMixin, CompareMixin):
         return u'%04d-%02d-%02d' % (self.year, self.month, self.day)
 
     def __str__(self):
-        return unicode(self).encode('u8')
+        if six.PY2:
+            return self.__unicode__().encode('u8')
+        elif six.PY3:
+            return self.__unicode__()
 
     def datetime(self, hour=0, minute=0, second=0):
         "Extend `self` to datetime."
@@ -449,7 +452,7 @@ class Day(datetime.date, RangeMixin, CompareMixin):
         "Return number of days between Days or Day n days ago."
         if isinstance(x, Day):
             return self.toordinal() - x.toordinal()
-        elif isinstance(x, (int, long)):
+        elif isinstance(x, six.integer_types):
             return Day.fromordinal(self.toordinal() - x)
         else:
             raise ValueError('Wrong operands for subtraction: %s and %s'

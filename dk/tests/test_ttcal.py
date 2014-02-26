@@ -4,7 +4,7 @@
 
 # pylint:disable=R0904
 # R0904: Too many public methods
-
+import six
 from unittest import TestCase
 from .. import ttcal
 from datetime import date, timedelta
@@ -31,7 +31,7 @@ class TestDay(TestCase):
 
     def test_unicode_(self):
         "Test of the __unicode__ method."
-        self.assertEqual(unicode(self.day2), u'2012-04-08')
+        self.assertEqual(six.text_type(self.day2), six.u('2012-04-08'))
 
     def test_datetuple(self):
         "Test of the datetuple method."
@@ -448,7 +448,7 @@ class TestDuration(TestCase):
     
     def test_div_(self):
         "Test of the __div__ method."
-        self.assertEqual(self.duration2 / 2,
+        self.assertEqual(self.duration2 // 2,
                          ttcal.Duration(minutes=35))
         
         # Unable to catch the error.
