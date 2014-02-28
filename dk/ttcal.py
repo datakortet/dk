@@ -268,6 +268,15 @@ class Duration(datetime.timedelta):
                 return 0.0
         return Duration(super(Duration, self).__div__(other))
 
+    def __truediv__(self, other):
+        if isinstance(other, Duration):
+            try:
+                return float(self.toint()) / float(other.toint())
+            except ZeroDivisionError:
+                return 0.0
+        return Duration(super(Duration, self).__truediv__(other))
+
+    
 
 ########################################################################
 #  Day
