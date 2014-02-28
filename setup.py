@@ -12,10 +12,25 @@ Topic :: Software Development :: Libraries
 """
 
 import setuptools
-from distutils.core import setup
+from distutils.core import setup, Command
 
 #version = eval(open('./package.json').read())['version']
-version = '0.7.4'
+version = '0.7.5'
+
+
+class PyTest(Command):
+    user_options = []
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        import sys,subprocess
+        errno = subprocess.call([sys.executable, 'runtests.py'])
+        raise SystemExit(errno)
+
 
 setup(
     name='dk',
@@ -30,7 +45,7 @@ setup(
     author_email='bp@datakortet.no',
     url="http://thebjorn.github.io/dk/",
     download_url='https://github.com/thebjorn/dk',
-
+    cmdclass={'test': PyTest},
     packages=['dk'],
     zip_safe=False,
 )
