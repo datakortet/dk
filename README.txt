@@ -1,4 +1,7 @@
 
+.. image:: https://travis-ci.org/thebjorn/dk.png?branch=master
+   :target: https://travis-ci.org/thebjorn/dk
+
 DK utility classes
 ===============================
 
