@@ -8,6 +8,11 @@ classifiers = """\
 Development Status :: 3 - Alpha
 Intended Audience :: Developers
 Programming Language :: Python
+Programming Language :: Python :: 2
+Programming Language :: Python :: 2.6
+Programming Language :: Python :: 2.7
+Programming Language :: Python :: 3
+Programming Language :: Python :: 3.3
 Topic :: Software Development :: Libraries
 """
 
@@ -39,13 +44,13 @@ setup(
     install_requires=[],
     description=__doc__.strip(),
     classifiers=[line for line in classifiers.split('\n') if line],
-    long_description=open('README.txt').read(),
+    long_description=open('README.rst').read(),
     license="LGPL",
     author='Bjorn Pettersen',
     author_email='bp@datakortet.no',
     url="http://thebjorn.github.io/dk/",
     download_url='https://github.com/thebjorn/dk',
     cmdclass={'test': PyTest},
-    packages=['dk'],
+    packages=setuptools.find_packages(exclude=['tests*']),
     zip_safe=False,
 )

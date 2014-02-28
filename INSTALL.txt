@@ -16,3 +16,7 @@ To upload to PyPI
  - source and windows installer
 
       python setup.py sdist bdist_wininst upload
+
+ - source, windows, and wheel installer
+
+      python setup.py sdist bdist_wininst bdist_wheel upload
