@@ -1,6 +1,10 @@
 
 .. image:: https://travis-ci.org/datakortet/dk.svg
-    :target: https://travis-ci.org/datakortet/dk
+   :target: https://travis-ci.org/datakortet/dk
+
+.. image:: https://readthedocs.org/projects/dk/badge/?version=latest
+   :target: https://readthedocs.org/projects/dk/?badge=latest
+   :alt: Documentation Status
 
 
 DK utility classes
