@@ -19,6 +19,9 @@ Contents:
 
    ttcal
    fstr
+   collections
+   html
+   text
 
 
 
