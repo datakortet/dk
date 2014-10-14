@@ -1,6 +1,6 @@
 
 import datetime, decimal
-from pset import pset
+from .pset import pset
 
 
 def Boolean(s):

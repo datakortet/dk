@@ -1,5 +1,5 @@
 
-from unittest2 import TestCase
+from unittest import TestCase
 import datetime
 from dk import collections as adt
 
@@ -14,13 +14,12 @@ class TestRecord(TestCase):
 
     def test_fields(self):
         "Test the fields property."
-        self.assertEqual(self.ff.fields, ['Genre', 'Band', 'Id'])
+        assert set(self.ff.fields) == {'Genre', 'Band', 'Id'}
 
     def test_strvals(self):
         "Test the strvals method."
         self.me.datetime = datetime.datetime(2012, 5, 17, 13, 44, 22)
-        self.assertEqual(self.me.strvals(),
-            ['Metal', 'Metallica', '3', '2012-05-17 13:44:22'])
+        assert set(self.me.strvals()) == {'Metal', 'Metallica', '3', '2012-05-17 13:44:22'}
 
     def test_trans(self):
         "Test the trans method."

@@ -3,7 +3,6 @@ six==1.5.2
 
 # running test suite
 py==1.4.25
-unittest2==0.5.1
 pytest==2.6.3
 pytest-cov==1.8.0
 pytest-xdist==1.11

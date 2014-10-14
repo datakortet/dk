@@ -84,12 +84,12 @@ def tagtester(htmlmod):
 
 
 def test_html():
-    import html
+    from . import html
     return tagtester(html)
 
 
 def test_uhtml():
-    import uhtml
+    from . import uhtml
     return tagtester(uhtml)
 
 

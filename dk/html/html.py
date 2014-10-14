@@ -3,7 +3,11 @@
     HTML helper file.
 
 """
-import htmlentitydefs as _h
+import six
+try:
+    import htmlentitydefs as _h
+except ImportError:
+    import html.entities as _h
 import string as _s
 import types as _types
 from .css import css
@@ -294,7 +298,7 @@ class tag(xtag):
                 res.append(u8(item))
             except TypeError:
                 # generator found for some reason
-                print type(item), dir(item)
+                six.print_(type(item), dir(item))
                 raise
         return ''.join(res)
 

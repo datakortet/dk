@@ -17,10 +17,12 @@ class mmap(list):
     def add(self, key, val):
         super(mmap, self).append((key, val))
 
-    def __iadd__(self, (key, val)):
+    def __iadd__(self, kv):
+        key, val = kv
         self.add(key, val)
 
-    def append(self, (key, val)):
+    def append(self, kv):
+        key, val = kv
         self.add(key, val)
         
     def __setitem__(self, key, val):

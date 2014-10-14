@@ -1,7 +1,5 @@
 
 # pylint: disable=E1101
+from __future__ import absolute_import
 
-from html import *
-from theme import *
-from css import css
-#import tag
+
