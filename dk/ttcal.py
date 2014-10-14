@@ -36,7 +36,8 @@ class RangeMixin(object):
         """Return a tuple of datetimes that is convenient for sql
            `between` queries.
         """
-        return period.first.datetime(), (period.last + 1).datetime()
+        return (period.first.datetime(),
+                (period.last + 1).datetime() - datetime.timedelta(seconds=1))
 
     @property
     def middle(self):
@@ -195,20 +196,23 @@ class Duration(datetime.timedelta):
     
     def __new__(cls, *args, **kw):
         if len(args) == 1 and isinstance(args[0], datetime.timedelta):
+            years = 0
             days = args[0].days
             hours = 0
             minutes = 0
             seconds = args[0].seconds
 
         else:
+            years = kw.get('years', 0)
             days = kw.get('days', 0)
             hours = kw.get('hours', 0)
             minutes = kw.get('minutes', 0)
             seconds = kw.get('seconds', 0)
 
+        # an average year is 365.25 days..
         obj = super(Duration, cls).__new__(cls,
-                                           days=days,
-                                           hours=hours,
+                                           days=days + years * 365,
+                                           hours=hours + years * 6,
                                            minutes=minutes,
                                            seconds=seconds)
         return obj
@@ -236,7 +240,12 @@ class Duration(datetime.timedelta):
         "Convert self to integer."
         return self.seconds + 3600 * 24 * self.days
 
+    __hash__ = datetime.timedelta.__hash__
+
     def __eq__(self, other):
+        if isinstance(other, datetime.timedelta):
+            return super(Duration, self).__eq__(other)
+        
         if isinstance(other, Duration):
             return self.duration_tuple() == other.duration_tuple()
 
@@ -246,9 +255,15 @@ class Duration(datetime.timedelta):
         return False
 
     def __lt__(self, other):
+        if isinstance(other, datetime.timedelta):
+            return super(Duration, self).__lt__(other)
+
         return self.toint() < other.toint()
 
     def __gt__(self, other):
+        if isinstance(other, datetime.timedelta):
+            return super(Duration, self).__gt__(other)
+
         return self.toint() > other.toint()
 
     def __mul__(self, other):
@@ -276,7 +291,6 @@ class Duration(datetime.timedelta):
                 return 0.0
         return Duration(super(Duration, self).__truediv__(other))
 
-    
 
 ########################################################################
 #  Day
@@ -410,9 +424,6 @@ class Day(datetime.date, RangeMixin, CompareMixin):
     def __repr__(self):
         return '%d-%d-%d-%d' % (self.year, self.month, self.day,
                                 self.membermonth)
-
-    #def __str__(self):
-    #    return '%d.%02d.%d' % (self.day, self.month, self.year)
 
     def __unicode__(self):
         return u'%04d-%02d-%02d' % (self.year, self.month, self.day)
@@ -712,6 +723,9 @@ class Week(RangeMixin, CompareMixin):
                 break
             yield d
 
+    def __hash__(self):
+        return self.year * 100 + self.num
+
     def __eq__(self, other):
         return self.year == other.year and self.num == other.num
 
@@ -851,6 +865,9 @@ class Month(RangeMixin, CompareMixin):
     def Month(self):
         return self
 
+    def __hash__(self):
+        return self.year * 100 + self.month
+
     def __eq__(self, other):
         try:
             return self.year == other.year and self.month == other.month
@@ -880,6 +897,14 @@ class Month(RangeMixin, CompareMixin):
         return self + n
 
     def __sub__(self, n):
+        if isinstance(n, Month):
+            first, last = min(self, n), max(self, n)
+            ydiff = last.year - first.year
+            mdiff = last.month - first.month
+            res = 12 * ydiff + mdiff
+            if self > n:
+                return res
+            return -res
         return self + (-n)
 
     # rsub doesn't make sense
@@ -1186,6 +1211,9 @@ class Year(RangeMixin, CompareMixin):
     def last(self):
         "Last day of last month."
         return self.months[-1].last
+
+    def __hash__(self):
+        return self.year
 
     def __eq__(self, other):
         if hasattr(other, 'year'):
