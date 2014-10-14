@@ -5,10 +5,9 @@
 """
 import htmlentitydefs as _h
 import string as _s
-
-from datakortet.utils import u8, unicode_repr
 import types as _types
-from css import css
+from .css import css
+from ..text import u8
 
 
 _map = map

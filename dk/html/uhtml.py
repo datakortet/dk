@@ -9,7 +9,7 @@ from datakortet.utils import u8, unicode_repr
 import types as _types
 import htmlentitydefs as _h
 import string as _s
-from css import css
+from .css import css
 _map = map
 
 raw_string_encodings = ('utf-8', 'iso-8859-1')
