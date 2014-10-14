@@ -1,4 +1,5 @@
-from datakortet.core.adt import pset
+
+from dk.collections import pset
 
 
 class css(pset):

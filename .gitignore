@@ -8,3 +8,4 @@ htmlcov
 dk.egg-info/
 docs/_build
 *.rst#
+*.coverage

@@ -5,7 +5,7 @@
 
 """
 
-from datakortet.utils import u8, unicode_repr
+from dk.text import u8, unicode_repr
 import types as _types
 import htmlentitydefs as _h
 import string as _s
