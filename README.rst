@@ -1,6 +1,7 @@
 
-.. image:: https://travis-ci.org/thebjorn/dk.png?branch=master
-   :target: https://travis-ci.org/thebjorn/dk
+.. image:: https://travis-ci.org/datakortet/dk.svg
+    :target: https://travis-ci.org/datakortet/dk
+
 
 DK utility classes
 ===============================
