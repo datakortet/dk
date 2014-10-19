@@ -2,23 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0a2c3594-eac7-43ac-be46-438628deea8f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dk.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dk/proxy.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/test_proxy.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="DELETED" beforePath="C:\work\github\dk\dk\collections\test_doctests.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\work\github\dk\dk\tests\__init__.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\work\github\dk\dk\tests\test_fstr.py" afterPath="" />
-      <change type="DELETED" beforePath="C:\work\github\dk\dk\tests\test_ttcal.py" afterPath="" />
-      <change type="MOVED" beforePath="C:\work\github\dk\dk\collections\tests\test_orderedset.py" afterPath="$PROJECT_DIR$/tests/test_orderedset.py" />
-      <change type="MOVED" beforePath="C:\work\github\dk\dk\collections\tests\test_pset.py" afterPath="$PROJECT_DIR$/tests/test_pset.py" />
-      <change type="MOVED" beforePath="C:\work\github\dk\dk\collections\tests\test_record.py" afterPath="$PROJECT_DIR$/tests/test_record.py" />
-      <change type="MOVED" beforePath="C:\work\github\dk\dk\html\test_html.py" afterPath="$PROJECT_DIR$/tests/test_html.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tox.ini" afterPath="$PROJECT_DIR$/tox.ini" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dk/grid.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/tests/test_grid.py" />
+      <change type="DELETED" beforePath="C:\work\github\dk\dk\collections\tests\test_orderedset.py" afterPath="" />
+      <change type="DELETED" beforePath="C:\work\github\dk\dk\collections\tests\test_pset.py" afterPath="" />
+      <change type="DELETED" beforePath="C:\work\github\dk\dk\collections\tests\test_record.py" afterPath="" />
+      <change type="DELETED" beforePath="C:\work\github\dk\dk\html\test_html.py" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="dk.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,10 +22,23 @@
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/dk$py_test_in_test_remove_row.coverage" NAME="py.test in test_remove_row Coverage Results" MODIFIED="1413752728160" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/dk$py_test_in_tests.coverage" NAME="py.test in tests Coverage Results" MODIFIED="1413721942169" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/dk$py_test_in_tests__1_.coverage" NAME="py.test in tests (1) Coverage Results" MODIFIED="1413747759311" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/dk$py_test_in_tests__1_.coverage" NAME="py.test in tests (1) Coverage Results" MODIFIED="1413753450978" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/dk$py_test_in_test_repr.coverage" NAME="py.test in test_repr Coverage Results" MODIFIED="1413752483187" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/dk$py_test_in_test_grid_py.coverage" NAME="py.test in test_grid.py Coverage Results" MODIFIED="1413753364571" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/dk$py_test_in_test_uhtml.coverage" NAME="py.test in test_uhtml Coverage Results" MODIFIED="1413722210488" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/dk$py_test_in_test_insert_row.coverage" NAME="py.test in test_insert_row Coverage Results" MODIFIED="1413752597092" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/dk$py_test_in_test_insert_col.coverage" NAME="py.test in test_insert_col Coverage Results" MODIFIED="1413752648751" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/dk$py_test_in_test_grid.coverage" NAME="py.test in test_grid Coverage Results" MODIFIED="1413751919960" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/dk$py_test_in_test_apply.coverage" NAME="py.test in test_apply Coverage Results" MODIFIED="1413753228257" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/dk$py_test_in_test_sum.coverage" NAME="py.test in test_sum Coverage Results" MODIFIED="1413753380785" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/dk$py_test_in_test_copy.coverage" NAME="py.test in test_copy Coverage Results" MODIFIED="1413752239898" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/dk$py_test_in_test_purge.coverage" NAME="py.test in test_purge Coverage Results" MODIFIED="1413752877240" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/dk$Doctests_in_grid.coverage" NAME="Doctests in grid Coverage Results" MODIFIED="1413753436485" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/dk" />
     <SUITE FILE_PATH="coverage/dk$py_test_in_test_bool_proxy.coverage" NAME="py.test in test_bool_proxy Coverage Results" MODIFIED="1413723317890" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/dk$py_test_in_test_remove_col.coverage" NAME="py.test in test_remove_col Coverage Results" MODIFIED="1413752786613" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/dk$py_test_in_test_grid1.coverage" NAME="py.test in test_grid1 Coverage Results" MODIFIED="1413752051513" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -71,10 +74,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="proxy.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="proxy.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/dk/proxy.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.8435583" vertical-offset="2578" max-vertical-offset="3230">
+                <state vertical-scroll-proportion="0.0" vertical-offset="2483" max-vertical-offset="3230">
                   <caret line="184" column="0" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
                   <folding />
                 </state>
@@ -101,16 +104,40 @@
               </provider>
             </entry>
           </file>
+          <file leaf-file-name="grid.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/dk/grid.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="-11.644629" vertical-offset="12060" max-vertical-offset="12665">
+                  <caret line="295" column="24" selection-start-line="295" selection-start-column="24" selection-end-line="295" selection-end-column="24" />
+                  <folding>
+                    <element signature="e#765#775#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
         </leaf>
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="test_proxy.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="test_proxy.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/tests/test_proxy.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.42638037" vertical-offset="1371" max-vertical-offset="2023">
+                <state vertical-scroll-proportion="0.0" vertical-offset="1371" max-vertical-offset="2023">
                   <caret line="97" column="11" selection-start-line="97" selection-start-column="11" selection-end-line="97" selection-end-column="11" />
                   <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="test_grid.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/tests/test_grid.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.8033058" vertical-offset="1605" max-vertical-offset="2210">
+                  <caret line="123" column="29" selection-start-line="123" selection-start-column="29" selection-end-line="123" selection-end-column="29" />
+                  <folding>
+                    <element signature="e#0#15#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -261,35 +288,6 @@
     </key>
   </component>
   <component name="RunManager" selected="Python tests.py.test in tests (1)">
-    <configuration default="false" name="py.test in tests" type="tests" factoryName="py.test" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="dk" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="testToRun" value="$PROJECT_DIR$/dk/tests" />
-      <option name="keywords" value="" />
-      <option name="params" value="" />
-      <option name="USE_PARAM" value="false" />
-      <option name="USE_KEYWORD" value="false" />
-      <RunnerSettings RunnerId="PythonCover" />
-      <RunnerSettings RunnerId="PythonRunner" />
-      <ConfigurationWrapper RunnerId="PythonCover" />
-      <ConfigurationWrapper RunnerId="PythonRunner" />
-      <method />
-    </configuration>
     <configuration default="false" name="py.test in tests (1)" type="tests" factoryName="py.test" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -319,7 +317,7 @@
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="py.test in test_uhtml" type="tests" factoryName="py.test" temporary="true">
+    <configuration default="false" name="py.test in test_apply" type="tests" factoryName="py.test" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs />
@@ -337,8 +335,8 @@
       <option name="TEST_TYPE" value="TEST_SCRIPT" />
       <option name="PATTERN" value="" />
       <option name="USE_PATTERN" value="false" />
-      <option name="testToRun" value="$PROJECT_DIR$/tests/test_html.py" />
-      <option name="keywords" value="test_uhtml" />
+      <option name="testToRun" value="$PROJECT_DIR$/tests/test_grid.py" />
+      <option name="keywords" value="test_apply" />
       <option name="params" value="" />
       <option name="USE_PARAM" value="false" />
       <option name="USE_KEYWORD" value="true" />
@@ -346,7 +344,7 @@
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="py.test in test_bool_proxy" type="tests" factoryName="py.test" temporary="true">
+    <configuration default="false" name="py.test in test_grid.py" type="tests" factoryName="py.test" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs />
@@ -364,11 +362,60 @@
       <option name="TEST_TYPE" value="TEST_SCRIPT" />
       <option name="PATTERN" value="" />
       <option name="USE_PATTERN" value="false" />
-      <option name="testToRun" value="$PROJECT_DIR$/tests/test_proxy.py" />
-      <option name="keywords" value="test_bool_proxy" />
+      <option name="testToRun" value="$PROJECT_DIR$/tests/test_grid.py" />
+      <option name="keywords" value="" />
+      <option name="params" value="" />
+      <option name="USE_PARAM" value="false" />
+      <option name="USE_KEYWORD" value="false" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="py.test in test_sum" type="tests" factoryName="py.test" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="dk" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="testToRun" value="$PROJECT_DIR$/tests/test_grid.py" />
+      <option name="keywords" value="test_sum" />
       <option name="params" value="" />
       <option name="USE_PARAM" value="false" />
       <option name="USE_KEYWORD" value="true" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Doctests in grid" type="tests" factoryName="Doctests" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/dk" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="dk" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/dk/grid.py" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
       <RunnerSettings RunnerId="PythonRunner" />
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
@@ -562,18 +609,20 @@
       <option name="USE_PATTERN" value="false" />
       <method />
     </configuration>
-    <list size="4">
-      <item index="0" class="java.lang.String" itemvalue="Python tests.py.test in tests" />
-      <item index="1" class="java.lang.String" itemvalue="Python tests.py.test in tests (1)" />
-      <item index="2" class="java.lang.String" itemvalue="Python tests.py.test in test_uhtml" />
-      <item index="3" class="java.lang.String" itemvalue="Python tests.py.test in test_bool_proxy" />
+    <list size="5">
+      <item index="0" class="java.lang.String" itemvalue="Python tests.py.test in tests (1)" />
+      <item index="1" class="java.lang.String" itemvalue="Python tests.py.test in test_apply" />
+      <item index="2" class="java.lang.String" itemvalue="Python tests.py.test in test_grid.py" />
+      <item index="3" class="java.lang.String" itemvalue="Python tests.py.test in test_sum" />
+      <item index="4" class="java.lang.String" itemvalue="Python tests.Doctests in grid" />
     </list>
     <recent_temporary>
-      <list size="4">
+      <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Python tests.py.test in tests (1)" />
-        <item index="1" class="java.lang.String" itemvalue="Python tests.py.test in test_bool_proxy" />
-        <item index="2" class="java.lang.String" itemvalue="Python tests.py.test in test_uhtml" />
-        <item index="3" class="java.lang.String" itemvalue="Python tests.py.test in tests" />
+        <item index="1" class="java.lang.String" itemvalue="Python tests.Doctests in grid" />
+        <item index="2" class="java.lang.String" itemvalue="Python tests.py.test in test_sum" />
+        <item index="3" class="java.lang.String" itemvalue="Python tests.py.test in test_grid.py" />
+        <item index="4" class="java.lang.String" itemvalue="Python tests.py.test in test_apply" />
       </list>
     </recent_temporary>
   </component>
@@ -604,11 +653,11 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34736842" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17305644" sideWeight="0.6109482" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32942328" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.2524013" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="-744" y="21" width="337" height="1019" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.2524013" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="-764" y="15" width="337" height="1019" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.1456777" sideWeight="0.6706468" order="0" side_tool="false" content_ui="combo" x="-414" y="0" width="386" height="1151" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.1456777" sideWeight="0.6706468" order="0" side_tool="false" content_ui="combo" x="-416" y="35" width="386" height="1003" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2458287" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29810902" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="92" y="92" width="1736" height="976" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Atlassian " active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32942328" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
@@ -693,7 +742,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/dk/proxy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8435583" vertical-offset="2578" max-vertical-offset="3230">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2483" max-vertical-offset="3230">
           <caret line="184" column="0" selection-start-line="184" selection-start-column="0" selection-end-line="184" selection-end-column="0" />
           <folding />
         </state>
@@ -701,9 +750,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/test_proxy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.42638037" vertical-offset="1371" max-vertical-offset="2023">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1371" max-vertical-offset="2023">
           <caret line="97" column="11" selection-start-line="97" selection-start-column="11" selection-end-line="97" selection-end-column="11" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_grid.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8033058" vertical-offset="1605" max-vertical-offset="2210">
+          <caret line="123" column="29" selection-start-line="123" selection-start-column="29" selection-end-line="123" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dk/grid.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-11.644629" vertical-offset="12060" max-vertical-offset="12665">
+          <caret line="295" column="24" selection-start-line="295" selection-start-column="24" selection-end-line="295" selection-end-column="24" />
+          <folding>
+            <element signature="e#765#775#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
