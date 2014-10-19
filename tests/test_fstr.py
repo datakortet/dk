@@ -6,7 +6,7 @@
 # R0904: Too many public methods
 
 from unittest import TestCase
-from ..fstr import fstr
+from dk.fstr import fstr
 
 
 class TestFstr(TestCase):

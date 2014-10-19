@@ -6,7 +6,7 @@
 # R0904: Too many public methods
 import six
 from unittest import TestCase
-from .. import ttcal
+from dk import ttcal
 from datetime import date, timedelta
 
 
