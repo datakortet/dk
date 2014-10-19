@@ -20,15 +20,8 @@ class sdict(dict):
     def __iter__(self):
         return ((key, self[key]) for key in self._order)
 
+    def keys(self):
+        return self._order
 
-def test_sdict():
-    """
-       >>> x = sdict()
-       >>> x['a'] = 43
-       >>> x['b'] = 'foo'
-    """
-    import doctest
-    doctest.testmod()
-
-if __name__ == "__main__":
-    test_sdict()
+    def values(self):
+        return [self[k] for k in self._order]

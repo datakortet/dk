@@ -39,19 +39,3 @@ class mmap(list):
             if key == k:
                 yield v
         raise StopIteration
-
-
-def test_mmap():
-    """
-       >>> x = mmap(a=1, b=2)
-       >>> list(x['a'])
-       [1]
-       >>> x['a'] = 42
-       >>> list(x['a'])
-       [1, 42]
-    """
-    import doctest
-    doctest.testmod()
-
-if __name__ == "__main__":
-    test_mmap()
