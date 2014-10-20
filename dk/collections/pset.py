@@ -3,17 +3,19 @@
 """Mapping classes.
 """
 from __future__ import absolute_import
+from collections import namedtuple
 import six
+from dk.text import u8
 
 
-# keyval = namedtuple('keyval', 'key val')
+keyval = namedtuple('keyval', 'key val')
 
 
 # def xmlrepr(v, toplevel=False):
 #     "Return ``v`` as xml tag-soup."
 #     if toplevel:
 #         return '<?xml version="1.0" standalone="yes"?>\n' + xmlrepr(v)
-
+    
 #     if hasattr(v, '__xml__'):
 #         return v.__xml__()
 #     if isinstance(v, list):
@@ -32,7 +34,7 @@ import six
 class pset(dict):
     """This code is placed in the Public Domain, or released under the
        wtfpl (http://sam.zoy.org/wtfpl/COPYING) wherever PD is problematic.
-
+    
        Property Set class.
        A property set is an object where values are attached to attributes,
        but can still be iterated over as key/value pairs.
