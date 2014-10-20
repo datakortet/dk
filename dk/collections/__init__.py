@@ -6,7 +6,7 @@
 from __future__ import absolute_import
 
 from .mmap import mmap
-from .pset import keyval, pset, record, defset
+from .pset import pset, record, defset
 from .sdict import sdict
 from .OrderedSet import oset
 from .invdict import invdict
