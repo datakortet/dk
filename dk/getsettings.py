@@ -26,7 +26,7 @@ def _getsettings(q, settingsmodule):
 
 def getsettings(settingsmodule):
     """Return a dict containing the settings from `settingsmodule`
-       (format: 'datakortet.afr.settings').
+       (format: 'xxxxx.site.settings').
     """
     q = multiprocessing.Queue()
     p = multiprocessing.Process(target=_getsettings, args=(q, settingsmodule))

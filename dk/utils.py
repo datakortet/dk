@@ -22,7 +22,7 @@ def srcpath(base, pth):
        and we can't use relative paths since we don't know which folder
        the tests are run from.
 
-       In a test file datakortet/foo/test/test_foo.py::
+       In a test file xxxxxxx/foo/test/test_foo.py::
 
           path = 'foo/test'
           fp = open(srcpath(path, 'data/testdata.txt'))
@@ -49,10 +49,10 @@ def root():
 def dkpath(pth=None):
     """Usage::
 
-         dkpath() => (w:)/datakortet/
-                  => (/home)/datakortet/
+         dkpath() => (w:)/xxxxxxx/
+                  => (/home)/xxxxxxxx/
 
-         dkpath('tt3/') => ../datakortet/tt3/
+         dkpath('app/') => ../xxxxxxxx/app/
     """
     if not pth:
         pth = ''
