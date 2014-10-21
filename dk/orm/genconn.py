@@ -4,8 +4,6 @@ import logging
 
 from django.conf import settings
 from dk.collections import pset
-from datakortet.core.namedtuple import namedtuple
-from dba import dkenc
 
 import pymssql
 if pymssql.__version__ >= '2':

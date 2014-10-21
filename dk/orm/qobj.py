@@ -7,7 +7,7 @@
 
 import htmlentitydefs
 from genconn import quote_list
-from datakortet.core.orm.marker import marker
+from dk.orm.marker import marker
 
 
 __all__ = ['Q']

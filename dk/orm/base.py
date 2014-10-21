@@ -55,7 +55,7 @@ class OrmMeta(object):
         return self._metafields
         
     def __repr__(self):
-        from datakortet.core.modelinfo import shorten_line
+        from dk.modelinfo import shorten_line
         res = ['\nclass %s:' % self.cls.__name__]
         attrs = [
             shorten_line('name', self.name),
