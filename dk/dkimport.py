@@ -15,11 +15,9 @@ def dkimport(name):
            >>> item = dkimport('dk.core.dkimport.dkimport')
            >>> item.__name__
            'dkimport'
-           
+
     """
     name = str(name)  # can't import unicode, or special chars..
-    if name.startswith('/'):
-        name = 'datakortet.' + name[1:]
 
     if '.' in name:
         package, item = name.rsplit('.', 1)
