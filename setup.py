@@ -18,7 +18,7 @@ import setuptools
 from distutils.core import setup, Command
 
 #version = eval(open('./package.json').read())['version']
-version = '0.7.7'
+version = '0.7.8'
 
 
 class PyTest(Command):
