@@ -7,6 +7,12 @@
    :alt: Documentation Status
 
 
+.. image:: https://coveralls.io/repos/datakortet/dk/badge.png?branch=master
+   :target: https://coveralls.io/r/datakortet/dk?branch=master
+   :alt: Test Coverage
+
+
+
 DK utility classes
 ===============================
 
