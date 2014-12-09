@@ -11,7 +11,5 @@ docs/_build
 *.coverage
 atlassian-ide-plugin.xml
 .idea/workspace.xml
-.idea/workspace.xml
 .idea/misc.xml
-.idea/dk.iml
 .idea/dk.iml
