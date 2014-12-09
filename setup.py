@@ -39,7 +39,9 @@ setup(
     name='dk',
     version=version,
     requires=[],
-    install_requires=[],
+    install_requires=[
+        'six',
+    ],
     description=__doc__.strip(),
     classifiers=[line for line in classifiers.split('\n') if line],
     long_description=open('README.rst').read(),
