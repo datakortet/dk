@@ -15,7 +15,7 @@ Topic :: Software Development :: Libraries
 """
 
 import setuptools
-from distutils.core import setup, Command
+from setuptools import setup, Command
 
 #version = eval(open('./package.json').read())['version']
 version = '0.7.8'
