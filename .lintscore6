@@ -1,0 +1,506 @@
+{
+    "dk/__init__.py": {
+        "18061e4e": {
+            "score": 0.0, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 0.0, 
+                "size": 0.0
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/collections/__init__.py": {
+        "2975786c": {
+            "score": 10.0, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 10.0, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/collections/invdict.py": {
+        "184c9e89": {
+            "score": 8.87, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 8.57, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/collections/mmap.py": {
+        "870e92ea": {
+            "score": 8.58, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 8.28, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/collections/orderedset.py": {
+        "93e86f38": {
+            "score": 9.63, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 9.33, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/collections/page.py": {
+        "0e5c0ae1": {
+            "score": 8.44, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 8.44, 
+                "size": 0
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/collections/pset.py": {
+        "2cf0a24a": {
+            "score": 9.22, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 9.22, 
+                "size": 0
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/collections/sdict.py": {
+        "82dc4bff": {
+            "score": 9.19, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 8.89, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/collections/xmlrec.py": {
+        "f7473179": {
+            "score": 7.33, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 7.03, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/decorators.py": {
+        "70b1e489": {
+            "score": 7.8, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 7.5, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/dkhttp.py": {
+        "caa643b5": {
+            "score": 7.5967, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 1.0, 
+                "pylint": 7.93, 
+                "size": 0
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/dkimport.py": {
+        "74bbd4a3": {
+            "score": 9.81, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 9.51, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/dklogger.py": {
+        "876255cd": {
+            "score": 8.13, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 7.83, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/dksession.py": {
+        "75730794": {
+            "score": 9.1867, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 1.0, 
+                "pylint": 9.22, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/fstr.py": {
+        "beab69b0": {
+            "score": 8.3, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 8.0, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/getsettings.py": {
+        "d94bda6a": {
+            "score": 9.35, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 9.05, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/grid.py": {
+        "83adeda1": {
+            "score": 8.13, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 8.43, 
+                "size": -0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/html/__init__.py": {
+        "a11cad81": {
+            "score": 5.0, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 5.0, 
+                "size": 0.0
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/html/css.py": {
+        "6d0e8789": {
+            "score": 6.18, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 5.88, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/html/html.py": {
+        "caec6e2e": {
+            "score": 8.18, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 8.48, 
+                "size": -0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/html/theme.py": {
+        "1cb54fc3": {
+            "score": 8.22, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 7.92, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/html/uhtml.py": {
+        "0736c7ed": {
+            "score": 5.92, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 5.92, 
+                "size": 0
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/identifiers/__init__.py": {
+        "18061e4e": {
+            "score": 0.0, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 0.0, 
+                "size": 0.0
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/identifiers/kid.py": {
+        "a1ee2a01": {
+            "score": 9.93, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 9.63, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/identifiers/persnr.py": {
+        "31024f3c": {
+            "score": 9.99, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 9.69, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/js/__init__.py": {
+        "cb057739": {
+            "score": -5.0, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": -5.0, 
+                "size": 0.0
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/js/js.py": {
+        "af98e6bc": {
+            "score": 9.82, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 9.52, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/modelinfo/__init__.py": {
+        "44358547": {
+            "score": -3.33, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": -3.33, 
+                "size": 0.0
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/modelinfo/modelmetainfo.py": {
+        "2b4d2f32": {
+            "score": 8.1167, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 1.0, 
+                "pylint": 8.45, 
+                "size": 0
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/orm/__init__.py": {
+        "0d0f1172": {
+            "score": 4.6667, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 1.0, 
+                "pylint": 5.0, 
+                "size": 0.0
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/orm/base.py": {
+        "d08d143c": {
+            "score": 8.7767, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 1.0, 
+                "pylint": 9.41, 
+                "size": -0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/orm/fieldmapping.py": {
+        "55ee2c79": {
+            "score": 9.97, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 9.67, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/orm/genconn.py": {
+        "5eaf54dc": {
+            "score": 7.56, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 7.56, 
+                "size": 0
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/orm/information_schema.py": {
+        "6fd8c803": {
+            "score": 9.3, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 9.0, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/orm/marker.py": {
+        "791b5693": {
+            "score": 10.0, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 10.0, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/orm/mssql.py": {
+        "d91569da": {
+            "score": 7.5, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 7.2, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/orm/qobj.py": {
+        "73c3c5ad": {
+            "score": 8.9867, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 1.0, 
+                "pylint": 9.02, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/proxy.py": {
+        "53a90a28": {
+            "score": 10.0, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 10.0, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/text.py": {
+        "f9989686": {
+            "score": 9.2567, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 1.0, 
+                "pylint": 9.29, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/ttcal.py": {
+        "0d02f00d": {
+            "score": 3.7067, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 1.0, 
+                "pylint": 5.24, 
+                "size": -1.2
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/utidy.py": {
+        "088c0c29": {
+            "score": 8.4433, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 2.0, 
+                "pylint": 8.81, 
+                "size": 0.3
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }, 
+    "dk/utils.py": {
+        "a6e6ab53": {
+            "score": 9.22, 
+            "subscores": {
+                "doc": 0, 
+                "pep8": 0.0, 
+                "pylint": 9.22, 
+                "size": 0
+            }, 
+            "tstamp": "2014-12-23T13:56:16.968000"
+        }
+    }
+}
