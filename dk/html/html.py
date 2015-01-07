@@ -11,7 +11,7 @@ except ImportError:
 import string as _s
 import types as _types
 from .css import css
-from ..text import u8
+from ..text import u8, unicode_repr
 
 
 _map = map
