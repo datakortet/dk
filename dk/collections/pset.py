@@ -3,28 +3,29 @@
 """Mapping classes.
 """
 from __future__ import absolute_import
+from collections import namedtuple
 import six
 
 
-# keyval = namedtuple('keyval', 'key val')
+keyval = namedtuple('keyval', 'key val')
 
 
-# def xmlrepr(v, toplevel=False):
-#     "Return ``v`` as xml tag-soup."
-#     if toplevel:
-#         return '<?xml version="1.0" standalone="yes"?>\n' + xmlrepr(v)
+def xmlrepr(v, toplevel=False):
+    "Return ``v`` as xml tag-soup."
+    if toplevel:
+        return '<?xml version="1.0" standalone="yes"?>\n' + xmlrepr(v)
 
-#     if hasattr(v, '__xml__'):
-#         return v.__xml__()
-#     if isinstance(v, list):
-#         res = []
-#         for item in v:
-#             if hasattr(item, '__xml__'):
-#                 res.append(xmlrepr(item))
-#             else:
-#                 res.append('<item>%s</item>' % xmlrepr(item))
-#         return '<list>%s</list>' % (''.join(res))
-#     return str(v)
+    if hasattr(v, '__xml__'):
+        return v.__xml__()
+    if isinstance(v, list):
+        res = []
+        for item in v:
+            if hasattr(item, '__xml__'):
+                res.append(xmlrepr(item))
+            else:
+                res.append('<item>%s</item>' % xmlrepr(item))
+        return '<list>%s</list>' % (''.join(res))
+    return str(v)
 
 ########################################################################
 
