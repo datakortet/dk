@@ -168,7 +168,10 @@ VEKT2 = [5, 4, 3, 2, 7, 6, 5, 4, 3, 2, 1]
 
 def check_parity(pnr):
     "Check the last two digits, which are parity controls."
-    pnr = [int(v) for v in pnr]
+    try:
+        pnr = [int(v) for v in pnr]
+    except ValueError:
+        raise PersnrException('Kun tall i fødselsnr.')
 
     if multiply_reduce(pnr, VEKT1) % 11 != 0:
         raise PersnrException('Dette er ikke et gyldig fødselsnr. [ktrl-1]')
@@ -227,12 +230,28 @@ def list_pnr(day=None, gender='M'):  # pylint: disable=W0621
     return list(generate_pnr(day, gender))
 
 
+class TestingPersnr(object):
+    "Class to generate personnummer."
+    def __init__(self):
+        self.last_used = -1
+        self.persnrs = list_pnr(datetime.date(2050, 1, 2))
+
+    def next_persnr(self):
+        self.last_used += 1
+        return self.persnrs[self.last_used]
+
+
+_persnr = TestingPersnr()
+
+
 def testing_persnr(n=0):
     """Create a persnr for use in unit tests.
        If different tests need separate persnr, pass a unique small integer as
        a parameter.
     """
-    return list_pnr(datetime.date(2050, 1, 1))[n]
+    # return _persnr.next_persnr()
+    # Keeping old code, some tests fails because of the new one.
+    return list_pnr(datetime.date(2050, 1, 2))[n]
 
 
 if __name__ == "__main__":
