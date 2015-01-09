@@ -227,6 +227,20 @@ def list_pnr(day=None, gender='M'):  # pylint: disable=W0621
     return list(generate_pnr(day, gender))
 
 
+class TestingPersnr(object):
+    "Class to generate personnummer."
+    def __init__(self):
+        self.last_used = -1
+        self.persnrs = list_pnr(datetime.date(2050, 1, 2))
+
+    def next_persnr(self):
+        self.last_used += 1
+        return self.persnrs[self.last_used]
+
+
+_persnr = TestingPersnr()
+
+
 def testing_persnr(n=0):
     """Create a persnr for use in unit tests.
        If different tests need separate persnr, pass a unique small integer as
