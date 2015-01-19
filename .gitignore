@@ -14,3 +14,6 @@ atlassian-ide-plugin.xml
 .idea/misc.xml
 
 pypi-docs.zip
+.idea/dk.iml
+index.html
+tests/dksession-test.db
