@@ -28,6 +28,9 @@ def srcpath(base, pth):
           fp = open(srcpath(path, 'data/testdata.txt'))
           
     """
+
+    # XXX: this no longer works as intended!
+    
     srcroot = __file__.replace('\\', '/').rsplit('/', 1)[0]
 
     if not base:
