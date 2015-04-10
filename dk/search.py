@@ -3,6 +3,7 @@
 """Generic search algorithm.
 """
 from dk.collections import pset
+from dknorway import postnrcache
 
 import re
 import datetime
