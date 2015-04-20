@@ -793,6 +793,9 @@ class Month(RangeMixin, CompareMixin):
         "Create a Month from the date ``d``."
         return cls(year=d.year, month=d.month)
 
+    def rangetuple(self):
+        return self.first.datetime(), (self.last+1).datetime()
+
     @classmethod
     def parse(cls, txt):
         """Parse a textual representation into a Month object.
