@@ -19,8 +19,10 @@ def multiply_reduce(avec, bvec):
     return sum((aval * bval) for (aval, bval) in zip(avec, bvec))
 
 
-def is_persnr(pnr):
+def is_persnr(pnr, country='NO'):
     "Return True if ``pnr`` is a valid persnr."
+    if not country=='NO' and pnr and len(pnr)>7:
+        return True
     try:
         return check_pnr_structure(pnr)
 
