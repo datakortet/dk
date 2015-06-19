@@ -230,6 +230,21 @@ class Duration(datetime.timedelta):
         hours, minutes = divmod(minutes, 60)
         return '-' if sign < 0 else '', hours, minutes, seconds
 
+    @property
+    def hrs(self):
+        sgn, hr, mn, sc = self.duration_tuple()
+        return int(sgn == "") * hr
+
+    @property
+    def mins(self):
+        sgn, hr, mn, sc = self.duration_tuple()
+        return int(sgn == "") * mn
+
+    @property
+    def secs(self):
+        sgn, hr, mn, sc = self.duration_tuple()
+        return int(sgn == "") * sc
+
     def __str__(self):
         return '%s%d:%02d:%02d' % self.duration_tuple()
 
