@@ -23,3 +23,11 @@ def test_slug():
        ascii-string that can be used in an URI.
     """
     assert an.slug(u'Hårek den 1 hærlîge') == 'harek-den-1-haerlige'
+
+
+def test_basic():
+    "Basic tests."
+    assert 'bjorn-' == an.ascii_name(u'Bjørn 45')
+    assert 'aeoaei' == an.ascii_name(u'æøåéí')
+    assert 'bjorn-45' == an.slug(u'Bjørn 45')
+    assert 'aeoaei' == an.slug(u'æøå\uC2A0éí')
