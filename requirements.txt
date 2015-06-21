@@ -19,6 +19,3 @@ MarkupSafe==0.23
 Pygments==1.6
 colorama==0.3.2
 execnet==1.2.0
-
-# FIXME: must be included for the postnrcache that is used in dk.search
-dknorway==0.1.0
