@@ -209,10 +209,11 @@ class Duration(datetime.timedelta):
             minutes = kw.get('minutes', 0)
             seconds = kw.get('seconds', 0)
 
-        # an average year is 365.25 days..
+        # an average year is 365.2425 days..
+        leap_days = int(365.2425 * years - 365 * years)
         obj = super(Duration, cls).__new__(cls,
                                            days=days + years * 365,
-                                           hours=hours + years * 6,
+                                           hours=hours + leap_days,
                                            minutes=minutes,
                                            seconds=seconds)
         return obj
@@ -497,8 +498,8 @@ class Day(datetime.date, RangeMixin, CompareMixin):
         """
         if isinstance(x, Day):
             return self.toordinal() - x.toordinal()
-        # elif isinstance(x, Duration):
-        #     return Day.fromordinal(self.toordinal() - x.days)
+        elif isinstance(x, Duration):
+            return Day.fromordinal(self.toordinal() - x.days)
         elif isinstance(x, six.integer_types):
             return Day.fromordinal(self.toordinal() - x)
         else:
