@@ -15,7 +15,7 @@ from .fstr import fstr
 
 
 def chop(it, n):
-    "Chop iterator into `n` size chuchks."
+    """Chop iterator into `n` size chuchks."""
     while 1:
         s = list(islice(it, n))
         if not s:
@@ -27,7 +27,7 @@ class RangeMixin(object):
     """Requires other class to define .first and .last attributes.
     """
     def range(self):
-        "Return an iterator for the range of `self`."
+        """Return an iterator for the range of `self`."""
         if hasattr(self, 'dayiter'):
             return self.dayiter()
         return Days(self.first, self.last)
@@ -98,7 +98,7 @@ class CompareMixin(object):  # pylint:disable=R0903
 
 
 def isoweek(year, week):
-    "Iterate over the days in isoweek `week` of `year`."
+    """Iterate over the days in isoweek `week` of `year`."""
     # 4th of January is always in week 1
     wk1date = datetime.date(year, 1, 4)
 
@@ -118,7 +118,7 @@ def isoweek(year, week):
 
 
 def from_idtag(idtag):
-    "Return a class from idtag."
+    """Return a class from idtag."""
     assert len(idtag) > 1
     assert idtag[0] in 'wdmy'
 
@@ -131,7 +131,7 @@ def from_idtag(idtag):
 
 
 class Duration(datetime.timedelta):
-    "A duration of time."
+    """A duration of time."""
 
     @classmethod
     def sum(cls, sequence, start=None):
@@ -222,7 +222,7 @@ class Duration(datetime.timedelta):
         return '%sDuration(hours=%d, minutes=%d, seconds=%d)' % dt
 
     def duration_tuple(self):
-        "Return self as hours, minutes, seconds."
+        """Return self as hours, minutes, seconds."""
         seconds = self.toint()
         sign = -1 if seconds < 0 else 1
         seconds *= sign
@@ -252,7 +252,7 @@ class Duration(datetime.timedelta):
         return unicode(str(self))
     
     def toint(self):
-        "Convert self to integer."
+        """Convert self to integer."""
         return self.seconds + 3600 * 24 * self.days
 
     __hash__ = datetime.timedelta.__hash__
@@ -312,7 +312,8 @@ class Duration(datetime.timedelta):
 
 
 class Day(datetime.date, RangeMixin, CompareMixin):
-    "A calendar date."
+    """A calendar date.
+    """
     
     day_name = u'''mandag tirsdag onsdag torsdag fredag
                    lørdag søndag'''.split()
@@ -324,7 +325,8 @@ class Day(datetime.date, RangeMixin, CompareMixin):
 
     @classmethod
     def from_idtag(cls, tag):
-        "Return Day from idtag."
+        """Return Day from idtag.
+        """
         if len(tag) == 9:
             # d2008022002
             y, m, d = map(int, fstr(tag).split(1, 5, 7)[1:])
@@ -382,6 +384,7 @@ class Day(datetime.date, RangeMixin, CompareMixin):
         m = datere.match(strval)
         if not m:
             raise ValueError("Cannot parse %r as date." % strval)
+        prefix = ''
 
         g = m.groupdict()
         if g['isodate']:
@@ -427,7 +430,8 @@ class Day(datetime.date, RangeMixin, CompareMixin):
 
     @staticmethod
     def get_day_name(daynum, length=None):
-        "Return dayname for daynum."
+        """Return dayname for daynum.
+        """
         if length is None:
             return Day.day_name[daynum]
         else:
@@ -450,16 +454,19 @@ class Day(datetime.date, RangeMixin, CompareMixin):
             return self.__unicode__()
 
     def datetime(self, hour=0, minute=0, second=0):
-        "Extend `self` to datetime."
+        """Extend `self` to datetime.
+        """
         return datetime.datetime(self.year, self.month, self.day,
                                  hour, minute, second)
 
     def date(self):
-        "Excplicitly convert to datetime.date."
+        """Excplicitly convert to datetime.date.
+        """
         return datetime.date(self.year, self.month, self.day)
 
     def datetuple(self):
-        "Return year, month, day."
+        """Return year, month, day.
+        """
         return self.year, self.month, self.day
 
     def __add__(self, n):
@@ -469,12 +476,14 @@ class Day(datetime.date, RangeMixin, CompareMixin):
     # self.first = self.last = self creates too many cycles :-)
     @property
     def first(self):
-        "Define self == self.first for polymorphic usage with other classes."
+        """Define self == self.first for polymorphic usage with other classes.
+        """
         return self
 
     @property
     def last(self):
-        "Define self == self.last for polymorphic usage with other classes."
+        """Define self == self.last for polymorphic usage with other classes.
+        """
         return self
 
     def next(self):
@@ -484,9 +493,12 @@ class Day(datetime.date, RangeMixin, CompareMixin):
         return self - 1
 
     def __sub__(self, x):
-        "Return number of days between Days or Day n days ago."
+        """Return number of days between Days or Day n days ago.
+        """
         if isinstance(x, Day):
             return self.toordinal() - x.toordinal()
+        # elif isinstance(x, Duration):
+        #     return Day.fromordinal(self.toordinal() - x.days)
         elif isinstance(x, six.integer_types):
             return Day.fromordinal(self.toordinal() - x)
         else:
@@ -495,42 +507,50 @@ class Day(datetime.date, RangeMixin, CompareMixin):
 
     @property
     def dayname(self):
-        "The semi-localized name of self."
+        """The semi-localized name of self.
+        """
         return self.day_name[self.weekday]
 
     @property
     def code(self):
-        "One letter code representing the dayname."
+        """One letter code representing the dayname.
+        """
         return self.day_code[self.weekday]
 
     @property
     def weeknum(self):
-        "Return the isoweek of `self`."
+        """Return the isoweek of `self`.
+        """
         return self.isocalendar()[1]
 
     @property
     def isoyear(self):
-        "Return the `isoyear` of `self`."
+        """Return the `isoyear` of `self`.
+        """
         return self.isocalendar()[0]
 
     @property
     def week(self):
-        "Return a Week object representing the week `self` belongs to."
+        """Return a Week object representing the week `self` belongs to.
+        """
         return Week.weeknum(self.weeknum, self.isoyear)
 
     @property
     def Month(self):
-        "Return a Month object representing the month `self` belongs to."
+        """Return a Month object representing the month `self` belongs to.
+        """
         return Month(self.year, self.month)
 
     @property
     def Year(self):
-        "Return a Year object representing the year `self` belongs to."
+        """Return a Year object representing the year `self` belongs to.
+        """
         return Year(self.year)
 
     @property
     def display(self):
-        "Return the 'class' of self."
+        """Return the 'class' of self.
+        """
         res = set()
         if self.today and (self.membermonth == self.month):
             res.add('today')
@@ -547,37 +567,44 @@ class Day(datetime.date, RangeMixin, CompareMixin):
 
     @property
     def idtag(self):
-        "Return the idtag for `self`: dyyyymmddmm."
+        """Return the idtag for `self`: dyyyymmddmm.
+        """
         return 'd%d%02d%02d%02d' % (self.year, self.month, self.day,
                                     self.membermonth)
 
     @property
     def today(self):
-        "True if self is today."
+        """True if self is today.
+        """
         return self.compare(datetime.date.today()) == 'day'
 
     @property
     def weekday(self):
-        "True if self is a weekday."
+        """True if self is a weekday.
+        """
         return calendar.weekday(self.year, self.month, self.day)
 
     @property
     def weekend(self):
-        "True if self is Saturday or Sunday."
+        """True if self is Saturday or Sunday.
+        """
         return 5 <= self.weekday <= 6
 
     @property
     def special(self):  # pylint:disable=R0201
-        "True if the database has an entry for this date (sets special_hours)."
+        """True if the database has an entry for this date (sets special_hours).
+        """
         return False  # for now (XXX)
 
     @property
     def in_month(self):  # pylint:disable=R0201
-        "True iff the day is in its month."
+        """True iff the day is in its month.
+        """
         return self.month == self.membermonth
 
     def compare(self, other):
-        "Return how similar self is to other."
+        """Return how similar self is to other.
+        """
         if self.year == other.year:
             if self.month == other.month:
                 if self.day == other.day:
@@ -628,7 +655,8 @@ class Day(datetime.date, RangeMixin, CompareMixin):
                 yield ch
 
     def format(self, fmt=None):
-        "Emulate Django's date filter."
+        """Emulate Django's date filter.
+        """
         if fmt is None:
             fmt = "N j, Y"  # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-DATE_FORMAT
         tmp = list(self._format(list(fmt)))
@@ -636,7 +664,8 @@ class Day(datetime.date, RangeMixin, CompareMixin):
 
 
 class Today(Day):
-    "Special subclass for today's date."
+    """Special subclass for today's date.
+    """
     def __new__(cls, *args, **kw):
         t = datetime.date.today()
         y, m, d = t.year, t.month, t.day
@@ -651,7 +680,8 @@ class Today(Day):
 
 
 class Days(list, RangeMixin, CompareMixin):
-    "A contigous set of days."
+    """A contigous set of days.
+    """
     
     def __init__(self, start, end, start_week=False):
         super(Days, self).__init__()
@@ -664,12 +694,12 @@ class Days(list, RangeMixin, CompareMixin):
 
     @property
     def first(self):
-        "1st day"
+        """1st day"""
         return self[0]
 
     @property
     def last(self):
-        "last day"
+        """last day"""
         return self[-1]
 
 ########################################################################
@@ -703,7 +733,8 @@ class Week(RangeMixin, CompareMixin):
 
     @property
     def current(self):
-        "True if today is in week."
+        """True if today is in week.
+        """
         return any(d.today for d in self.days)
 
     def idtag(self):
@@ -711,16 +742,19 @@ class Week(RangeMixin, CompareMixin):
 
     @property
     def first(self):
-        "1st day of week."
+        """1st day of week.
+        """
         return self.days[0]
 
     @property
     def last(self):
-        "Last day of week."
+        """Last day of week.
+        """
         return self.days[-1]
 
     def datetuple(self):
-        "First day of this week."
+        """First day of this week.
+        """
         return self.year, self.month, self.first.day
 
     def __str__(self):
@@ -763,20 +797,24 @@ class Weeks(list, RangeMixin, CompareMixin):
 
     @property
     def first(self):
-        "First day in first week."
+        """First day in first week.
+        """
         return self[0][0]
 
     @property
     def last(self):
-        "Last day in last week."
+        """Last day in last week.
+        """
         return self[-1][-1]
 
     def datetuple(self):
-        "First day of first week."
+        """First day of first week.
+        """
         return self.first.datetuple()
 
     def dayiter(self):
-        "Iterate over all days in all the weeks."
+        """Iterate over all days in all the weeks.
+        """
         for wk in self:
             for day in wk:
                 yield day
@@ -789,7 +827,8 @@ class Weeks(list, RangeMixin, CompareMixin):
 #  Month
 
 class Month(RangeMixin, CompareMixin):
-    "A calendar month."
+    """A calendar month.
+    """
     
     month_name = ['', 'Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni',
                   'Juli', 'August', 'September', 'Oktober', 'November',
@@ -797,7 +836,8 @@ class Month(RangeMixin, CompareMixin):
 
     @classmethod
     def from_idtag(cls, tag):
-        "Parse idtag into `class`:Month."
+        """Parse idtag into `class`:Month.
+        """
         # m20082
         y = int(tag[1:5])
         m = int(tag[5:])
@@ -805,7 +845,8 @@ class Month(RangeMixin, CompareMixin):
 
     @classmethod
     def from_date(cls, d):
-        "Create a Month from the date ``d``."
+        """Create a Month from the date ``d``.
+        """
         return cls(year=d.year, month=d.month)
 
     def rangetuple(self):
@@ -854,7 +895,6 @@ class Month(RangeMixin, CompareMixin):
         self.weeks = [Week(days, self.month) for days in self._weeks()]
         #self.day = 1
 
-
     def __call__(self, daynum=None):
         """Return the given Day for this year.
 
@@ -868,7 +908,8 @@ class Month(RangeMixin, CompareMixin):
         return Day(self.year, self.month, daynum)
 
     def __reduce__(self):
-        "Deepcopy helper."
+        """Deepcopy helper.
+        """
         return Month, (self.year, self.month)        
 
     def __unicode__(self):
@@ -876,7 +917,8 @@ class Month(RangeMixin, CompareMixin):
 
     @property
     def Year(self):
-        "Return a Year object for the year-part of this month."
+        """Return a Year object for the year-part of this month.
+        """
         return Year(self.year)
 
     @property
@@ -897,15 +939,18 @@ class Month(RangeMixin, CompareMixin):
         return n
 
     def datetuple(self):
-        "First date in month."
+        """First date in month.
+        """
         return self.year, self.month, 1
 
     def numdays(self):  # for use in template
-        "The number of days in the month."
+        """The number of days in the month.
+        """
         return len(self)
 
     def __add__(self, n):
-        """Add n months to self."""
+        """Add n months to self.
+        """
         me = self.year * 12 + (self.month - 1)
         me += n
         q, r = divmod(me, 12)
@@ -942,7 +987,8 @@ class Month(RangeMixin, CompareMixin):
                 yield day
 
     def days(self):
-        "Return a list of days (`class`:ttcal.Day) in this month."
+        """Return a list of days (`class`:ttcal.Day) in this month.
+        """
         res = []
         for wk in self:
             for day in wk:
@@ -958,28 +1004,33 @@ class Month(RangeMixin, CompareMixin):
 
     @property
     def daycount(self):
-        "The number of days in this month (as an int)."
+        """The number of days in this month (as an int).
+        """
         n = calendar.mdays[self.month]
         if self.month == 2 and calendar.isleap(self.year):
             n += 1
         return n
 
     def prev(self):
-        "Previous month."
+        """Previous month.
+        """
         return self - 1
 
     def next(self):
-        "Next month."
+        """Next month.
+        """
         return self + 1
 
     @property
     def first(self):
-        "First day in month."
+        """First day in month.
+        """
         return Day(self.year, self.month, 1)
 
     @property
     def last(self):
-        "Last day in month."
+        """Last day in month.
+        """
         return Day(self.year, self.month, self.daycount)
 
     def _weeks(self):
@@ -1065,7 +1116,8 @@ class Year(RangeMixin, CompareMixin):
 
     @property
     def Month(self):
-        "For orthogonality in the api."
+        """For orthogonality in the api.
+        """
         return self.months[0]
 
     @property
@@ -1092,11 +1144,13 @@ class Year(RangeMixin, CompareMixin):
                 yield day
 
     def datetuple(self):
-        "January 1."
+        """January 1.
+        """
         return self.year, 1, 1
 
     def __add__(self, n):
-        """Add n years to self."""
+        """Add n years to self.
+        """
         return Year(self.year + n)
 
     def __radd__(self, n):
@@ -1108,49 +1162,59 @@ class Year(RangeMixin, CompareMixin):
     # rsub doesn't make sense
 
     def prev(self):
-        "Previous year."
+        """Previous year.
+        """
         return self - 1
 
     def next(self):
-        "Next year."
+        """Next year.
+        """
         return self + 1
 
     @property
     def H1(self):
-        "First half of this year."
+        """First half of this year.
+        """
         return self.months[:6]
 
     @property
     def H2(self):
-        "Last half of this year."
+        """Last half of this year.
+        """
         return self.months[6:]
 
     def halves(self):
-        "Both halves of the year."
+        """Both halves of the year.
+        """
         return [self.H1, self.H2]
 
     @property
     def Q1(self):
-        "1st quarter."
+        """1st quarter.
+        """
         return self.months[:3]
 
     @property
     def Q2(self):
-        "2nd quarter."
+        """2nd quarter.
+        """
         return self.months[3:6]
 
     @property
     def Q3(self):
-        "3rd quarter."
+        """3rd quarter.
+        """
         return self.months[6:9]
 
     @property
     def Q4(self):
-        "4th quarter."
+        """4th quarter.
+        """
         return self.months[9:]
 
     def quarters(self):
-        "Every quarter in this year."
+        """Every quarter in this year.
+        """
         return [self.Q1, self.Q2, self.Q3, self.Q4]
 
     #pylint:disable=C0111
@@ -1222,12 +1286,14 @@ class Year(RangeMixin, CompareMixin):
 
     @property
     def first(self):
-        "First day of first month."
+        """First day of first month.
+        """
         return self.months[0].first
 
     @property
     def last(self):
-        "Last day of last month."
+        """Last day of last month.
+        """
         return self.months[-1].last
 
     def __hash__(self):
