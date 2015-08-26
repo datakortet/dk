@@ -60,7 +60,6 @@ def asciify(s, spaces=None, legal=None, replacement=''):
     if spaces:
         res = re.sub(r'\s+', spaces, res)
 
-    print "s:", s, "res:", res
     return str(res)
 
 
