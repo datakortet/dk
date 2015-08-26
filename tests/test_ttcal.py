@@ -455,3 +455,11 @@ class TestDuration(TestCase):
         
         # Unable to catch the error.
         # self.assertRaises(ZeroDivisionError, self.duration2 / 0)
+
+
+def test_duration_rmeth():
+    class Foo(object):
+        def __req__(self, other):
+            return 42
+
+    assert (ttcal.Duration(years=2) == Foo()) == 42

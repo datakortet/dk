@@ -6,6 +6,7 @@
 # pylint:disable=W0141,R0904
 # W0141 using function `map`.
 # R0904: too many public methods.
+import operator
 
 import six
 import re
@@ -47,6 +48,19 @@ class RangeMixin(object):
         return Day.fromordinal(middle)
 
 
+def _cmp_ttuple(op):
+    rname = '__r{}__'.format(op.__name__)
+
+    def relop_meth(self, other):
+        if hasattr(other, rname):
+            return getattr(other, rname)(self)
+        try:
+            return op(self.timetuple(), other.timetuple())
+        except:
+            return False
+    return relop_meth
+
+
 class CompareMixin(object):  # pylint:disable=R0903
     """Mixin class that defines comparison operators, by comparing the
        (year, month, day) tuple returned by ``datetuple()``.
@@ -60,41 +74,12 @@ class CompareMixin(object):  # pylint:disable=R0903
         t = datetime.time()
         return datetime.datetime.combine(d, t)
 
-    def __le__(self, other):
-        try:
-            return self.timetuple() <= other.timetuple()
-        except:
-            return False
-    
-    def __lt__(self, other):
-        try:
-            return self.timetuple() < other.timetuple()
-        except:
-            return False
-    
-    def __eq__(self, other):
-        try:
-            return self.timetuple() == other.timetuple()
-        except:
-            return False
-
-    def __ne__(self, other):
-        try:
-            return not (self == other)
-        except:
-            return True
-
-    def __gt__(self, other):
-        try:
-            return self.timetuple() > other.timetuple()
-        except:
-            return False
-
-    def __ge__(self, other):
-        try:
-            return self.timetuple() >= other.timetuple()
-        except:
-            return False
+    __le__ = _cmp_ttuple(operator.le)
+    __lt__ = _cmp_ttuple(operator.lt)
+    __eq__ = _cmp_ttuple(operator.eq)
+    __ne__ = _cmp_ttuple(operator.ne)
+    __gt__ = _cmp_ttuple(operator.gt)
+    __ge__ = _cmp_ttuple(operator.ge)
 
 
 def isoweek(year, week):
@@ -259,6 +244,9 @@ class Duration(datetime.timedelta):
     __hash__ = datetime.timedelta.__hash__
 
     def __eq__(self, other):
+        if hasattr(other, '__req__'):
+            return other.__req__(self)
+
         if isinstance(other, datetime.timedelta):
             return super(Duration, self).__eq__(other)
         
@@ -270,17 +258,48 @@ class Duration(datetime.timedelta):
 
         return False
 
+    def __ne__(self, other):
+        if hasattr(other, '__rne__'):
+            return other.__rne__(self)
+
+        if isinstance(other, datetime.timedelta):
+            return super(Duration, self).__ne__(other)
+
+        if isinstance(other, Duration):
+            return self.duration_tuple() != other.duration_tuple()
+
+        if isinstance(other, int) and other == 0:
+            return self.toint() != 0
+
+        return False
+
     def __lt__(self, other):
+        if hasattr(other, '__rlt__'):
+            return other.__rlt__(self)
         if isinstance(other, datetime.timedelta):
             return super(Duration, self).__lt__(other)
-
         return self.toint() < other.toint()
 
+    def __lte__(self, other):
+        if hasattr(other, '__rlte__'):
+            return other.__rlte__(self)
+        if isinstance(other, datetime.timedelta):
+            return super(Duration, self).__lte__(other)
+        return self.toint() <= other.toint()
+
     def __gt__(self, other):
+        if hasattr(other, '__rgt__'):
+            return other.__rgt__(self)
         if isinstance(other, datetime.timedelta):
             return super(Duration, self).__gt__(other)
-
         return self.toint() > other.toint()
+
+    def __gte__(self, other):
+        if hasattr(other, '__rgte__'):
+            return other.__rgte__(self)
+        if isinstance(other, datetime.timedelta):
+            return super(Duration, self).__gte__(other)
+        return self.toint() >= other.toint()
 
     def __mul__(self, other):
         return Duration(super(Duration, self).__mul__(other))
