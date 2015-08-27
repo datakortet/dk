@@ -2,63 +2,48 @@
 from datetime import timedelta
 from unittest import TestCase
 from dk import ttcal
+import pytest
 
 
-class TestDuration(TestCase):
-    """Unit tests for the ttcal.Duration class.
-    """
+@pytest.fixture
+def dd():
+    return [
+        ttcal.Duration(days=1, hours=3, minutes=14, seconds=20),
+        ttcal.Duration(days=0, hours=1, minutes=10, seconds=0),
+        ttcal.Duration(days=0, hours=0, minutes=70, seconds=0),
+        ttcal.Duration(timedelta(minutes=70)),
+    ]
 
-    def setUp(self):
-        """SetUp initial data used by all tests in this case.
-        """
-        self.duration1 = ttcal.Duration(days=1, hours=3, minutes=14, seconds=20)
-        self.duration2 = ttcal.Duration(days=0, hours=1, minutes=10, seconds=0)
-        self.duration3 = ttcal.Duration(days=0, hours=0, minutes=70, seconds=0)
-        self.duration4 = ttcal.Duration(timedelta(minutes=70))
 
-    def test_duration_tuple(self):
-        """Test of the duration_tuple method.
-        """
-        self.assertEqual(self.duration1.duration_tuple(),
-                         tuple(('', 27, 14, 20)))
+def test_duration_tuple(dd):
+    assert dd[0].duration_tuple() == ('', 27, 14, 20)
 
-    def test_str_(self):
-        """Test of the __str__ method.
-        """
-        self.assertEqual(str(self.duration2), '1:10:00')
-        self.assertEqual(str(self.duration3), '1:10:00')
 
-    def test_parse(self):
-        """Test of the parse method.
-        """
-        self.assertEqual(self.duration1.parse('01:10:00'), self.duration2)
+def test_str(dd):
+    assert str(dd[1]) == '1:10:00'
+    assert str(dd[2]) == '1:10:00'
+    assert "%s" % dd[3] == '1:10:00'
 
-    def test_add_(self):
-        """Test of the __add__ method.
-        """
-        self.assertEqual(self.duration2 + self.duration3,
-                         ttcal.Duration(hours=2, minutes=20))
 
-    def test_sub_(self):
-        """Test of the __sub__ method.
-        """
-        self.assertEqual(self.duration1 - self.duration2,
-                         ttcal.Duration(days=1, hours=2, minutes=4, seconds=20))
+def test_parse(dd):
+    assert dd[1].parse('01:10:00') == dd[2]
 
-    def test_mul_(self):
-        """Test of the __mul__ method.
-        """
-        self.assertEqual(self.duration2 * 3,
-                         ttcal.Duration(hours=3, minutes=30))
 
-    def test_div_(self):
-        """Test of the __div__ method.
-        """
-        self.assertEqual(self.duration2 / 2,
-                         ttcal.Duration(minutes=35))
+def test_add(dd):
+    assert dd[2] + dd[3] == ttcal.Duration(hours=2, minutes=20)
 
-        # Unable to catch the error.
-        # self.assertRaises(ZeroDivisionError, self.duration2 / 0)
+
+def test_sub(dd):
+    tmp = ttcal.Duration(days=1, hours=2, minutes=4, seconds=20)
+    assert dd[0] - dd[1] == tmp
+
+
+def test_mul(dd):
+    assert dd[2] * 3 == ttcal.Duration(hours=3, minutes=30)
+
+
+def test_div(dd):
+    assert dd[2] / 2 == ttcal.Duration(minutes=35)
 
 
 def test_duration_rmeth():
