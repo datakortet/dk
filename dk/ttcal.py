@@ -16,7 +16,8 @@ from .fstr import fstr
 
 
 def chop(it, n):
-    """Chop iterator into `n` size chuchks."""
+    """Chop iterator into `n` size chuchks.
+    """
     while 1:
         s = list(islice(it, n))
         if not s:
@@ -27,8 +28,10 @@ def chop(it, n):
 class RangeMixin(object):
     """Requires other class to define .first and .last attributes.
     """
+
     def range(self):
-        """Return an iterator for the range of `self`."""
+        """Return an iterator for the range of `self`.
+        """
         if hasattr(self, 'dayiter'):
             return self.dayiter()
         return Days(self.first, self.last)
@@ -83,7 +86,8 @@ class CompareMixin(object):  # pylint:disable=R0903
 
 
 def isoweek(year, week):
-    """Iterate over the days in isoweek `week` of `year`."""
+    """Iterate over the days in isoweek `week` of `year`.
+    """
     # 4th of January is always in week 1
     wk1date = datetime.date(year, 1, 4)
 
@@ -103,7 +107,8 @@ def isoweek(year, week):
 
 
 def from_idtag(idtag):
-    """Return a class from idtag."""
+    """Return a class from idtag.
+    """
     assert len(idtag) > 1
     assert idtag[0] in 'wdmy'
 
@@ -116,7 +121,8 @@ def from_idtag(idtag):
 
 
 class Duration(datetime.timedelta):
-    """A duration of time."""
+    """A duration of time.
+    """
 
     @classmethod
     def sum(cls, sequence, start=None):
@@ -208,7 +214,8 @@ class Duration(datetime.timedelta):
         return '%sDuration(hours=%d, minutes=%d, seconds=%d)' % dt
 
     def duration_tuple(self):
-        """Return self as hours, minutes, seconds."""
+        """Return self as hours, minutes, seconds.
+        """
         seconds = self.toint()
         sign = -1 if seconds < 0 else 1
         seconds *= sign
@@ -238,7 +245,8 @@ class Duration(datetime.timedelta):
         return unicode(str(self))
     
     def toint(self):
-        """Convert self to integer."""
+        """Convert self to integer.
+        """
         return self.seconds + 3600 * 24 * self.days
 
     __hash__ = datetime.timedelta.__hash__
@@ -292,6 +300,8 @@ class Duration(datetime.timedelta):
             return other.__rgt__(self)
         if isinstance(other, datetime.timedelta):
             return super(Duration, self).__gt__(other)
+        if isinstance(other, int):
+            return self.toint() > other
         return self.toint() > other.toint()
 
     def __gte__(self, other):
@@ -325,6 +335,38 @@ class Duration(datetime.timedelta):
             except ZeroDivisionError:
                 return 0.0
         return Duration(super(Duration, self).__truediv__(other))
+
+
+    def __rsub__(self, other):
+        return other.__sub__(self)
+
+    def __rmul__(self, other):
+        return other.__mul__(self)
+
+    def __rfloordiv__(self, other):
+        return other.__floordiv__(self)
+
+    def __rdiv__(self, other):
+        return other.__div__(self)
+
+    def __radd__(self, other):
+        return other.__add__(self)
+
+    def __neg__(self, other):
+        return other.__neg__(selfself)
+
+    # def __le__(self, other):
+    #     return other.__le__(self)
+    #
+    # def __ge__(self, other):
+    #     return other.__ge__(self)
+
+    # def __floordiv__(self, other):
+    #     return other.__loordiv__(selfself)
+
+    # def __abs__(self, other):
+    #     return other.__bs__(self)
+
 
 
 ########################################################################
@@ -714,12 +756,14 @@ class Days(list, RangeMixin, CompareMixin):
 
     @property
     def first(self):
-        """1st day"""
+        """1st day
+        """
         return self[0]
 
     @property
     def last(self):
-        """last day"""
+        """last day
+        """
         return self[-1]
 
 ########################################################################
