@@ -53,7 +53,7 @@ class HtmlTag(object):
         # collapse multiple spaces
         self.text = re.subn(r'(\s+)', " ", txt)[0]
         m = re.match(r'<\s*(/)?\s*([-\w]+)(\s.*)?>', self.text)
-        if not m:
+        if not m:  # pragma:nocover
             print "NOT M:", txt
         g = m.groups()
         self.closing = g[0] is not None
@@ -190,6 +190,6 @@ def utidy(html, level=0, indent='    ', simplify=False):
 #     </div>
 #     ''')
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: nocover
     import sys
     print utidy(open(sys.argv[1]).read(), simplify=True)
