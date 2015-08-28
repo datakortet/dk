@@ -31,7 +31,7 @@ class Month(object):
         return cls(year=d.year, month=d.month)
 
     def rangetuple(self):
-        return self.first.datetime(), (self.last+1).datetime()
+        return self.first.datetime(), (self.last + 1).datetime()
 
     @classmethod
     def parse(cls, txt):

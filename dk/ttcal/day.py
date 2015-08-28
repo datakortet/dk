@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""Date (single day) operations.
+"""
+
 import calendar
 import datetime
 import re
@@ -18,6 +21,9 @@ class Day(datetime.date):
 
     def __reduce__(self):
         return Day, (self.year, self.month, self.day)
+
+    def __int__(self):
+        return self.toordinal()
 
     @classmethod
     def from_idtag(cls, tag):
@@ -140,7 +146,7 @@ class Day(datetime.date):
             return self.dayiter()
         return Days(self.first, self.last)
 
-    def between_tuple(self):  # pylint:disable=E0213
+    def between_tuple(self):
         """Return a tuple of datetimes that is convenient for sql
            `between` queries.
         """
@@ -204,9 +210,13 @@ class Day(datetime.date):
         return self
 
     def next(self):
+        """Return Tomorrow (for use in templates).
+        """
         return self + 1
 
     def prev(self):
+        """Return Yesterday (for use in templates).
+        """
         return self - 1
 
     def __sub__(self, x):
@@ -311,13 +321,13 @@ class Day(datetime.date):
         return 5 <= self.weekday <= 6
 
     @property
-    def special(self):  # pylint:disable=R0201
+    def special(self):
         """True if the database has an entry for this date (sets special_hours).
         """
         return False
 
     @property
-    def in_month(self):  # pylint:disable=R0201
+    def in_month(self):
         """True iff the day is in its month.
         """
         return self.month == self.membermonth
@@ -338,47 +348,34 @@ class Day(datetime.date):
 
     def _format(self, fmtchars):
         # http://blog.tkbe.org/archive/date-filter-cheat-sheet/
-        # pylint:disable=R0912
-        #        (too many branches)
+        simplefmt = {
+            'y': lambda: str(self.year)[-2:],
+            'Y': lambda: str(self.year),
+            'W': lambda: str(self.weeknum),
+            'w': lambda: str(self.weekday),
+            'n': lambda: str(self.month),
+            'm': lambda: '%02d' % self.month,
+            'b': lambda: self.Month.format('b'),
+            'M': lambda: self.Month.format('M'),
+            'N': lambda: self.Month.format('N'),
+            'F': lambda: self.Month.format('F'),
+            'j': lambda: str(self.day),
+            'd': lambda: '%02d' % self.day,
+            'D': lambda: self.dayname[:3],
+            'l': lambda: self.dayname,
+            'z': lambda: int(self) - int(Day(self.year, 1, 1)),
+        }
+        ch = ""
         for ch in fmtchars:
-            if ch == 'y':
-                yield str(self.year)[-2:]
-            elif ch == 'Y':
-                yield str(self.year)
-            elif ch == 'z':
-                yield str(self.toordinal() - Day(self.year, 1, 1).toordinal())
-            elif ch == 'W':
-                yield str(self.weeknum)
-            elif ch == 'w':
-                yield str(self.weekday)
-            elif ch == 'n':
-                yield str(self.month)
-            elif ch == 'm':
-                yield '%02d' % self.month
-            elif ch == 'b':
-                yield self.Month.format('b')
-            elif ch == 'M':
-                yield self.Month.format('M')
-            elif ch == 'N':
-                yield self.Month.format('N')
-            elif ch == 'F':
-                yield self.Month.format('F')
-            elif ch == 'j':
-                yield str(self.day)
-            elif ch == 'd':
-                yield '%02d' % self.day
-            elif ch == 'D':
-                yield self.dayname[:3]
-            elif ch == 'l':
-                yield self.dayname
-            else:
-                yield ch
+            yield simplefmt.get(ch, lambda: ch)()
 
     def format(self, fmt=None):
         """Emulate Django's date filter.
         """
         if fmt is None:
-            fmt = "N j, Y"  # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-DATE_FORMAT
+            # pylint:disable=C0301
+            # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-DATE_FORMAT
+            fmt = "N j, Y"
         tmp = list(self._format(list(fmt)))
         return ''.join(tmp)
 
@@ -433,10 +430,10 @@ class Days(list):
         """Return an iterator for the range of `self`.
         """
         if hasattr(self, 'dayiter'):
-            return self.dayiter()
+            return getattr(self, 'dayiter')()
         return Days(self.first, self.last)
 
-    def between_tuple(self):  # pylint:disable=E0213
+    def between_tuple(self):
         """Return a tuple of datetimes that is convenient for sql
            `between` queries.
         """

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+"""Extension of datetime.timedelta.
+"""
 import datetime
 import re
 
@@ -108,17 +110,23 @@ class Duration(datetime.timedelta):
 
     @property
     def hrs(self):
-        sgn, hr, mn, sc = self.duration_tuple()
+        """The number of hours in self.
+        """
+        sgn, hr, _mn, _sc = self.duration_tuple()
         return int(sgn == "") * hr
 
     @property
     def mins(self):
-        sgn, hr, mn, sc = self.duration_tuple()
+        """The number of minutes in self.
+        """
+        sgn, _hr, mn, _sc = self.duration_tuple()
         return int(sgn == "") * mn
 
     @property
     def secs(self):
-        sgn, hr, mn, sc = self.duration_tuple()
+        """The number of seconds in self.
+        """
+        sgn, _hr, _mn, sc = self.duration_tuple()
         return int(sgn == "") * sc
 
     def __str__(self):

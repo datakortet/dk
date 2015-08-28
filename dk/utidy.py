@@ -126,7 +126,38 @@ def tokenize_html(html):
     return tokens
 
 
-def utidy(html, level=0, indent='    '):
+def simplify_simple_tags(html):
+    """Put tags without any nested children on one line, i.e. turn::
+
+           <h1>
+               foo
+           </h1>
+
+       into::
+
+           <h1>foo</h1>
+           
+    """
+    def replacement(m):
+        grps = m.groups()
+        res = "<%s>%s</%s>" % (grps[0], grps[1].strip(), grps[0])
+        # print "REPLS:", grps, res
+        return res
+
+    import time
+    start = time.time()
+    res = re.sub(
+        r'<(\w+)>([^<]*)</\1>',
+        replacement,
+        html,
+        flags=re.MULTILINE|re.DOTALL
+    )
+    import sys
+    sys.stderr.write('done: %.3f\n' % (time.time() - start))
+    return res
+
+
+def utidy(html, level=0, indent='    ', simplify=False):
     """micro-tidy
 
        Normalizes the html.
@@ -147,7 +178,10 @@ def utidy(html, level=0, indent='    '):
             res.append(_indent(i) + str(token))
         elif kind == 'tag':
             res.append(_indent(i) + str(token))
-    return '\n'.join(res)
+    html = '\n'.join(res)
+    if simplify:
+        html = simplify_simple_tags(html)
+    return html
 
 
 # print utidy('''
@@ -155,3 +189,7 @@ def utidy(html, level=0, indent='    '):
 #     <input type=checkbox data-toggle="#foo" checked>
 #     </div>
 #     ''')
+
+if __name__ == "__main__":
+    import sys
+    print utidy(open(sys.argv[1]).read(), simplify=True)
