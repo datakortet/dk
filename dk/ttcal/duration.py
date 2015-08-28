@@ -141,8 +141,8 @@ class Duration(datetime.timedelta):
         if isinstance(other, datetime.timedelta):
             return super(Duration, self).__eq__(other)
 
-        if isinstance(other, Duration):
-            return self.duration_tuple() == other.duration_tuple()
+        # if isinstance(other, Duration):
+        #     return self.duration_tuple() == other.duration_tuple()
 
         if isinstance(other, int) and other == 0:
             return self.toint() == 0
@@ -156,8 +156,8 @@ class Duration(datetime.timedelta):
         if isinstance(other, datetime.timedelta):
             return super(Duration, self).__ne__(other)
 
-        if isinstance(other, Duration):
-            return self.duration_tuple() != other.duration_tuple()
+        # if isinstance(other, Duration):
+        #     return self.duration_tuple() != other.duration_tuple()
 
         if isinstance(other, int) and other == 0:
             return self.toint() != 0
@@ -169,14 +169,18 @@ class Duration(datetime.timedelta):
             return other.__rlt__(self)
         if isinstance(other, datetime.timedelta):
             return super(Duration, self).__lt__(other)
-        return self.toint() < other.toint()
+        if hasattr(other, 'toint'):
+            return self.toint() < other.toint()
+        return False
 
-    def __lte__(self, other):
-        if hasattr(other, '__rlte__'):
-            return other.__rlte__(self)
+    def __le__(self, other):
+        if hasattr(other, '__rle__'):
+            return other.__rle__(self)
         if isinstance(other, datetime.timedelta):
-            return super(Duration, self).__lte__(other)
-        return self.toint() <= other.toint()
+            return super(Duration, self).__le__(other)
+        if hasattr(other, 'toint'):
+            return self.toint() <= other.toint()
+        return False
 
     def __gt__(self, other):
         if hasattr(other, '__rgt__'):
@@ -185,14 +189,18 @@ class Duration(datetime.timedelta):
             return super(Duration, self).__gt__(other)
         if isinstance(other, int):
             return self.toint() > other
-        return self.toint() > other.toint()
+        if hasattr(other, 'toint'):
+            return self.toint() > other.toint()
+        return False
 
-    def __gte__(self, other):
-        if hasattr(other, '__rgte__'):
-            return other.__rgte__(self)
+    def __ge__(self, other):
+        if hasattr(other, '__rge__'):
+            return other.__rge__(self)
         if isinstance(other, datetime.timedelta):
-            return super(Duration, self).__gte__(other)
-        return self.toint() >= other.toint()
+            return super(Duration, self).__ge__(other)
+        if hasattr(other, 'toint'):
+            return self.toint() >= other.toint()
+        return False
 
     def __mul__(self, other):
         return Duration(super(Duration, self).__mul__(other))
@@ -212,11 +220,11 @@ class Duration(datetime.timedelta):
         return Duration(super(Duration, self).__div__(other))
 
     def __truediv__(self, other):
-        if isinstance(other, Duration):
-            try:
-                return float(self.toint()) / float(other.toint())
-            except ZeroDivisionError:
-                return 0.0
+        # if isinstance(other, Duration):
+        #     try:
+        #         return int(float(self.toint()) / float(other.toint()))
+        #     except ZeroDivisionError:
+        #         return 0
         return Duration(super(Duration, self).__truediv__(other))
 
     def __rsub__(self, other):

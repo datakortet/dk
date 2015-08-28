@@ -140,12 +140,12 @@ class Day(datetime.date):
             return self.dayiter()
         return Days(self.first, self.last)
 
-    def between_tuple(period):  # pylint:disable=E0213
+    def between_tuple(self):  # pylint:disable=E0213
         """Return a tuple of datetimes that is convenient for sql
            `between` queries.
         """
-        return (period.first.datetime(),
-                (period.last + 1).datetime() - datetime.timedelta(seconds=1))
+        return (self.first.datetime(),
+                (self.last + 1).datetime() - datetime.timedelta(seconds=1))
 
     @property
     def middle(self):
@@ -436,12 +436,12 @@ class Days(list):
             return self.dayiter()
         return Days(self.first, self.last)
 
-    def between_tuple(period):  # pylint:disable=E0213
+    def between_tuple(self):  # pylint:disable=E0213
         """Return a tuple of datetimes that is convenient for sql
            `between` queries.
         """
-        return (period.first.datetime(),
-                (period.last + 1).datetime() - datetime.timedelta(seconds=1))
+        return (self.first.datetime(),
+                (self.last + 1).datetime() - datetime.timedelta(seconds=1))
 
     @property
     def middle(self):
