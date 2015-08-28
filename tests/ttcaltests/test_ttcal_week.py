@@ -1,74 +1,102 @@
 # -*- coding: utf-8 -*-
-from datetime import date
+from datetime import date, datetime, timedelta
 from unittest import TestCase
 from dk import ttcal
+import pytest
 
 
-class TestWeek(TestCase):
-    """Unit tests for the ttcal.Week class.
+@pytest.fixture
+def week():
+    return [
+        ttcal.Week.weeknum(4, 2012),
+        ttcal.Week.weeknum(1),
+        ttcal.Week.weeknum(52, 2012),
+        ttcal.Week.weeknum(4, 2012),
+    ]
+
+
+def test_range(week):
+    days = week[0].range()
+    assert len(days) == 7
+
+
+def test_between_tuple(week):
+    a, b = week[0].between_tuple()
+    assert a < b
+    assert b - a == timedelta(days=6, hours=23, minutes=59, seconds=59)
+
+
+def test_middle(week):
+    assert week[0].middle.dayname == 'torsdag'
+
+
+def test_current(week):
+    assert week[0].current is False
+    assert ttcal.Today().week.current
+
+
+def test_repr(week):
+    assert repr(week[0]) == 'Week(4, month=1, year=2012)'
+
+
+def test_until_today(week):
+    w = ttcal.Today().week
+    assert len(list(w.until_today())) == ttcal.Today() - w.first
+
+
+def test_hash(week):
+    assert hash(week[0]) == hash(week[-1])
+    assert len(set(hash(w) for w in week)) == len(week) - 1  # first and last are equal
+    assert hash(ttcal.Today() + 1) == hash(ttcal.Today().next())
+
+
+def test_index(week):
+    today = ttcal.Today()
+    assert today in today.week
+    assert today.week[0] <= today
+
+
+def test_idtag(week):
+    assert week[0].idtag() == 'w20124'
+    assert week[1].idtag() == 'w%d1' % ttcal.Year()
+    assert week[2].idtag() == 'w201252'
+
+
+def test_datetuple(week):
+    assert week[0].datetuple() == (2012, 1, 23)
+
+
+def test_str(week):
+    assert str(week[0]) == 'Uke 4 (2012)'
+    assert str(week[2]) == 'Uke 52 (2012)'
+
+
+def test_eq(week):
+    """Test the __eq__ method defined in Week.
     """
-
-    def setUp(self):
-        """SetUp default data for the tests.
-        """
-        self.week1 = ttcal.Week.weeknum(4, 2012)
-        self.week2 = ttcal.Week.weeknum(1)
-        self.week3 = ttcal.Week.weeknum(52, 2012)
-        self.week4 = ttcal.Week.weeknum(4, 2012)
-
-    def test_idtag(self):
-        """Test the idtag method.
-        """
-        currentyear = date.today().year
-        self.assertEqual(self.week1.idtag(), 'w20124')
-        self.assertEqual(self.week2.idtag(), 'w%s1' % currentyear)
-        self.assertEqual(self.week3.idtag(), 'w201252')
-
-    def test_datetuple(self):
-        """Test the datetuple method.
-        """
-        self.assertEqual(self.week1.datetuple(), tuple((2012, 1, 23)))
-
-    def test_str_(self):
-        """Test the __str__ method.
-        """
-        self.assertEqual(str(self.week1), 'Uke 4 (2012)')
-        self.assertEqual(str(self.week3), 'Uke 52 (2012)')
-
-    def test_eq_(self):
-        """Test the __eq__ method defined in Week.
-        """
-        self.assertFalse(self.week1 == self.week2)
-        self.assertTrue(self.week1 == self.week4)
-
-    def test_from_idtag(self):
-        """Test the from_idtag method.
-        """
-        self.assertEqual(ttcal.Week.from_idtag('w20124'), self.week1)
+    assert not (week[0] == week[1])
+    assert week[0] == week[3]
 
 
-class TestWeeks(TestCase):
-    """Unit tests for the ttcal.Weeks class.
+def test_from_idtag(week):
+    """Test the from_idtag method.
     """
+    assert ttcal.Week.from_idtag('w20124') == week[0]
 
-    def setUp(self):
-        """SetUp default data for the tests.
-        """
-        self.weeks = ttcal.Weeks(5, 10)  # 5, 6, 7, 8, 9, 10 (n=6)
-        self.first = self.weeks.first
-        self.last = self.weeks.last
 
-    def test_first(self):
-        """Test the first property.
-        """
-        self.assertEqual(self.weeks.first, self.last - 7 * 6 + 1)
-
-    def test_last(self):
-        """Test the last property.
-        """
-        self.assertEqual(self.weeks.last, self.first + 7 * 6 - 1)
-
-    def test_datetuple(self):
-        """Test the datetuple method.
-        """
-        self.assertEqual(self.weeks.datetuple(), self.first.datetuple())
+# @pytest.fixture
+# def weeks():
+#     return ttcal.Weeks(1, 10)  # 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 (n=11)
+#
+#
+# def test_weeks_first(weeks):
+#     print weeks
+#     assert weeks.first == ttcal.Year().first
+#
+#
+# def test_weeks_last(weeks):
+#     assert weeks.last == ttcal.Year().first + 70
+#
+#
+# def test_datetuple(weeks):
+#     assert weeks.datetuple() == ttcal.Year().first.datetuple()

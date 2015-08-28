@@ -14,12 +14,13 @@ class Year(object):
         self.year = year
         self.months = [Month(year, i + 1) for i in range(12)]
 
+    def __int__(self):
+        return self.year
+
     def range(self):
         """Return an iterator for the range of `self`.
         """
-        if hasattr(self, 'dayiter'):
-            return self.dayiter()
-        return Days(self.first, self.last)
+        return self.dayiter()
 
     def between_tuple(self):  # pylint:disable=E0213
         """Return a tuple of datetimes that is convenient for sql
@@ -35,13 +36,13 @@ class Year(object):
         middle = (self.first.toordinal() + self.last.toordinal()) // 2
         return Day.fromordinal(middle)
 
-    def timetuple(self):
-        """Create timetuple from datetuple.
-           (to interact with datetime objects).
-        """
-        d = datetime.date(*self.datetuple())
-        t = datetime.time()
-        return datetime.datetime.combine(d, t)
+    # def timetuple(self):
+    #     """Create timetuple from datetuple.
+    #        (to interact with datetime objects).
+    #     """
+    #     d = datetime.date(*self.datetuple())
+    #     t = datetime.time()
+    #     return datetime.datetime.combine(d, t)
 
     def __unicode__(self):
         return unicode(self.year)
@@ -253,7 +254,7 @@ class Year(object):
     def mark(self, d, value='mark'):
         try:
             self[d].mark = value
-        except KeyError:
+        except KeyError:  # pragma:nocover
             pass
 
     def _format(self, fmtchars):

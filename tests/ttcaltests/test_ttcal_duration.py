@@ -15,6 +15,14 @@ def dd():
     ]
 
 
+@pytest.fixture
+def toint_obj():
+    class Foo(object):
+        def toint(self):
+            return 42
+    return Foo()
+
+
 def test_sum(dd):
     assert ttcal.Duration.sum(dd) == ttcal.Duration(days=1, hours=6, minutes=44, seconds=20)
 
@@ -75,19 +83,23 @@ def test_ne(dd):
     assert not (dd[1] != 'foo')
 
 
-def test_lt(dd):
+def test_lt(dd, toint_obj):
     assert dd[1] < dd[0]
     assert dd[1] <= dd[0]
     assert not (dd[1] < 'Foo')
     assert not (dd[1] <= 'Foo')
+    assert not dd[0] < toint_obj
+    assert not dd[0] <= toint_obj
 
 
-def test_gt(dd):
+def test_gt(dd, toint_obj):
     assert dd[0] > dd[1]
     assert dd[0] >= dd[1]
     assert not (dd[1] > 'Foo')
     assert not (dd[1] >= 'foo')
     assert dd[1] > 1
+    assert dd[0] > toint_obj
+    assert dd[0] >= toint_obj
 
 
 def test_repr(dd):

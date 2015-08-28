@@ -142,8 +142,6 @@ class Day(datetime.date):
     def range(self):
         """Return an iterator for the range of `self`.
         """
-        if hasattr(self, 'dayiter'):
-            return self.dayiter()
         return Days(self.first, self.last)
 
     def between_tuple(self):
@@ -170,7 +168,7 @@ class Day(datetime.date):
     def __unicode__(self):
         return u'%04d-%02d-%02d' % (self.year, self.month, self.day)
 
-    def __str__(self):
+    def __str__(self):  # pragma:nocover
         if six.PY2:
             return self.__unicode__().encode('u8')
         elif six.PY3:
@@ -256,6 +254,9 @@ class Day(datetime.date):
         """
         return self.isocalendar()[0]
 
+    # week, Month, and Year, are added later (don't uncomment them here, since
+    # that leads to nasty circular dependencies.
+    #
     # @property
     # def week(self):
     #     """Return a Week object representing the week `self` belongs to.
@@ -363,7 +364,7 @@ class Day(datetime.date):
             'd': lambda: '%02d' % self.day,
             'D': lambda: self.dayname[:3],
             'l': lambda: self.dayname,
-            'z': lambda: int(self) - int(Day(self.year, 1, 1)),
+            'z': lambda: str(int(self) - int(Day(self.year, 1, 1))),
         }
         ch = ""
         for ch in fmtchars:
@@ -429,8 +430,6 @@ class Days(list):
     def range(self):
         """Return an iterator for the range of `self`.
         """
-        if hasattr(self, 'dayiter'):
-            return getattr(self, 'dayiter')()
         return Days(self.first, self.last)
 
     def between_tuple(self):
@@ -447,10 +446,10 @@ class Days(list):
         middle = (self.first.toordinal() + self.last.toordinal()) // 2
         return Day.fromordinal(middle)
 
-    def timetuple(self):
-        """Create timetuple from datetuple.
-           (to interact with datetime objects).
-        """
-        d = datetime.date(*self.datetuple())
-        t = datetime.time()
-        return datetime.datetime.combine(d, t)
+    # def timetuple(self):
+    #     """Create timetuple from datetuple.
+    #        (to interact with datetime objects).
+    #     """
+    #     d = datetime.date(*self.datetuple())
+    #     t = datetime.time()
+    #     return datetime.datetime.combine(d, t)

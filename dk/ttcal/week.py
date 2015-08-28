@@ -8,8 +8,6 @@ class Week(object):
     def range(self):
         """Return an iterator for the range of `self`.
         """
-        if hasattr(self, 'dayiter'):
-            return self.dayiter()
         return Days(self.first, self.last)
 
     def between_tuple(self):  # pylint:disable=E0213
@@ -26,13 +24,13 @@ class Week(object):
         middle = (self.first.toordinal() + self.last.toordinal()) // 2
         return Day.fromordinal(middle)
 
-    def timetuple(self):
-        """Create timetuple from datetuple.
-           (to interact with datetime objects).
-        """
-        d = datetime.date(*self.datetuple())
-        t = datetime.time()
-        return datetime.datetime.combine(d, t)
+    # def timetuple(self):
+    #     """Create timetuple from datetuple.
+    #        (to interact with datetime objects).
+    #     """
+    #     d = datetime.date(*self.datetuple())
+    #     t = datetime.time()
+    #     return datetime.datetime.combine(d, t)
 
     @classmethod
     def from_idtag(cls, tag):
@@ -112,68 +110,66 @@ class Week(object):
         return date in self.days
 
 
-class Weeks(list):
-    def __init__(self, start, end):
-        super(Weeks, self).__init__()
-        assert start <= end
-        for i in range(start, end + 1):
-            self.append(Week.weeknum(i))
-
-    def range(self):
-        """Return an iterator for the range of `self`.
-        """
-        if hasattr(self, 'dayiter'):
-            return self.dayiter()
-        return Days(self.first, self.last)
-
-    def between_tuple(self):  # pylint:disable=E0213
-        """Return a tuple of datetimes that is convenient for sql
-           `between` queries.
-        """
-        return (self.first.datetime(),
-                (self.last + 1).datetime() - datetime.timedelta(seconds=1))
-
-    @property
-    def middle(self):
-        """Return the day that splits the date range in half.
-        """
-        middle = (self.first.toordinal() + self.last.toordinal()) // 2
-        return Day.fromordinal(middle)
-
-    def timetuple(self):
-        """Create timetuple from datetuple.
-           (to interact with datetime objects).
-        """
-        d = datetime.date(*self.datetuple())
-        t = datetime.time()
-        return datetime.datetime.combine(d, t)
-
-    @property
-    def first(self):
-        """First day in first week.
-        """
-        return self[0][0]
-
-    @property
-    def last(self):
-        """Last day in last week.
-        """
-        return self[-1][-1]
-
-    def datetuple(self):
-        """First day of first week.
-        """
-        return self.first.datetuple()
-
-    def dayiter(self):
-        """Iterate over all days in all the weeks.
-        """
-        for wk in self:
-            for day in wk:
-                yield day
-
-    def __repr__(self):
-        return '[' + ', '.join(map(str, iter(self))) + ']'
+# class Weeks(list):
+#     def __init__(self, start, end):
+#         super(Weeks, self).__init__()
+#         assert start <= end
+#         for i in range(start, end + 1):
+#             self.append(Week.weeknum(i))
+#
+#     def range(self):
+#         """Return an iterator for the range of `self`.
+#         """
+#         return self.dayiter()
+#
+#     def between_tuple(self):  # pylint:disable=E0213
+#         """Return a tuple of datetimes that is convenient for sql
+#            `between` queries.
+#         """
+#         return (self.first.datetime(),
+#                 (self.last + 1).datetime() - datetime.timedelta(seconds=1))
+#
+#     @property
+#     def middle(self):
+#         """Return the day that splits the date range in half.
+#         """
+#         middle = (self.first.toordinal() + self.last.toordinal()) // 2
+#         return Day.fromordinal(middle)
+#
+#     def timetuple(self):
+#         """Create timetuple from datetuple.
+#            (to interact with datetime objects).
+#         """
+#         d = datetime.date(*self.datetuple())
+#         t = datetime.time()
+#         return datetime.datetime.combine(d, t)
+#
+#     @property
+#     def first(self):
+#         """First day in first week.
+#         """
+#         return self[0][0]
+#
+#     @property
+#     def last(self):
+#         """Last day in last week.
+#         """
+#         return self[-1][-1]
+#
+#     def datetuple(self):
+#         """First day of first week.
+#         """
+#         return self.first.datetuple()
+#
+#     def dayiter(self):
+#         """Iterate over all days in all the weeks.
+#         """
+#         for wk in self:
+#             for day in wk:
+#                 yield day
+#
+#     def __repr__(self):
+#         return '[' + ', '.join(map(str, iter(self))) + ']'
 
 
 def _Week(self):
