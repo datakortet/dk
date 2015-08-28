@@ -12,8 +12,12 @@ docs/_build
 atlassian-ide-plugin.xml
 .idea/workspace.xml
 .idea/misc.xml
-
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/modules.xml
+dk.svg
 pypi-docs.zip
 .idea/dk.iml
 index.html
 tests/dksession-test.db
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/modules.xml
