@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-"""XXX: many of these really should go in their own modules...
+"""FIXME: many of these really should go in their own modules...
 """
 
 
 import re, os, datetime
 
 
-def identity(x):
+def identity(x):    # XXX: replace any usages of this function with lambda x:x!
     """Return the argument unchanged.
        This function is often called `identity` in programming language
        and type theory (the type is t -> t, which turns out to be a
@@ -28,7 +28,7 @@ def srcpath(base, pth):
           fp = open(srcpath(path, 'data/testdata.txt'))
           
     """
-
+    # FIXME: __file__ is not srcroot when this file has been moved!
     # XXX: this no longer works as intended!
     
     srcroot = __file__.replace('\\', '/').rsplit('/', 1)[0]
@@ -44,12 +44,12 @@ def srcpath(base, pth):
     return srcroot + base + pth.replace('\\', '/')
         
 
-def root():
+def root():     # FIXME: this is fubar (__file__ isn't near the root of the source tree when utils is here...)
     "Return the root of the source tree."
     return __file__.replace('\\', '/').rsplit('/', 1)[0]
 
 
-def dkpath(pth=None):
+def dkpath(pth=None):   # FIXME: this doesn't work since srcpath doesn't work!
     """Usage::
 
          dkpath() => (w:)/xxxxxxx/
@@ -64,19 +64,19 @@ def dkpath(pth=None):
     return os.path.normcase(os.path.normpath(srcpath('', pth)))
 
 
-def hour_minute(v):
+def hour_minute(v):     # XXX: move to ttcal?
     "Convert 7.5 (hours) to (7, 30) i.e. 7 hours and 30 minutes."
     h = int(v)
     m = int((v - h) * 60)
     return h, m
 
 
-def HourMinute(v):
+def HourMinute(v):      # XXX: move to ttcal?
     "Format 7.10 as 7t 06m."
     return '%dt %02dm' % hour_minute(v)
 
 
-def hm_to_float(h, m):
+def hm_to_float(h, m):      # XXX: move to ttcal?
     "Convert 7, 30 to 7.5 hours."
     return float(h) + (float(m) / 60.0)
 
@@ -298,7 +298,7 @@ def mk_post(model):
     return res
 
 
-class Ordered(dict):
+class Ordered(dict):        # FIXME: should be removed asap.
     """
     Mapping that maintains insertion order.
     (Should be removed and the adt versions should be used).

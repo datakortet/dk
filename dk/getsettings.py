@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+# FIXME: this module doesn't belong in dk.
+
+
 """Get settings from a specified settings.py module, using a separate
    process to prevent pollution of our namespace.
 """

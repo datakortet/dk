@@ -11,6 +11,7 @@ u"""Strukturen på våre kid-nummer:
 # pylint:disable=W0141
 
 
+# FIXME: this so does not belong here..!
 def generate_kids(sensornr, count, start=0):
     """Generate ``count`` kid numbers for sensor with ``sensornr`` (prefix),
        starting at ``start`` (for the counting part of the kid).
@@ -22,6 +23,7 @@ def generate_kids(sensornr, count, start=0):
         count -= 1
 
 
+# FIXME: this so does not belong here..!
 def create_kids(tctr, sequencenum):
     "BFP-8"
     tctrtype, tctrnum = tctr.split('-', 1)
@@ -34,6 +36,7 @@ def create_kids(tctr, sequencenum):
     return res
 
 
+# XXX: this may belong in dkmath/ctrlnum, but is probably higher level..
 def is_valid_kid(s):
     """Test if s is a valid kid number.
     """
@@ -49,9 +52,9 @@ def is_valid_kid(s):
         return kontroll_10(str(data)) == str(kontroll)
     except:
         return False
-    return True
 
 
+# FIXME: this should move to dkmath/ctrlnum.py
 def vekt(n, base):
     """Funksjon som gir en repeterende serie med siffer fra ``base``, som
        har lengde ``n``.
@@ -62,7 +65,8 @@ def vekt(n, base):
     for i in range(n):
         yield base[i % len(base)]
 
-        
+
+# FIXME: this should move to dkmath/ctrlnum.py
 def kontroll_10(s):
     u"""MOD10 algoritmen.
 
@@ -84,6 +88,7 @@ def kontroll_10(s):
     return str(kontrollsiffer)
 
 
+# FIXME: this should move to dkmath/ctrlnum.py
 def kontroll_11(s):
     u"""MOD11 algoritmen.
 
