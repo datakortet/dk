@@ -31,7 +31,7 @@ class Month(object):
         return cls(year=d.year, month=d.month)
 
     def rangetuple(self):
-        return self.first.datetime(), (self.last+1).datetime()
+        return self.first.datetime(), (self.last + 1).datetime()
 
     @classmethod
     def parse(cls, txt):
@@ -84,7 +84,7 @@ class Month(object):
                return ttcal.Year().december(23)
 
         """
-        if daynum is None:
+        if daynum is None:  # pragma:nocover
             return self  # for when django tries to do value = value() *sigh*
         return Day(self.year, self.month, daynum)
 
@@ -240,7 +240,7 @@ class Month(object):
                 else:
                     day.mark = value
 
-        except KeyError:
+        except KeyError:  # pragma:nocover
             pass
 
     def marked_days(self):
@@ -284,8 +284,8 @@ class Month(object):
     def range(self):
         """Return an iterator for the range of `self`.
         """
-        if hasattr(self, 'dayiter'):
-            return self.dayiter()
+        # if hasattr(self, 'dayiter'):
+        #     return self.dayiter()
         return Days(self.first, self.last)
 
     def between_tuple(self):  # pylint:disable=E0213
@@ -302,13 +302,13 @@ class Month(object):
         middle = (self.first.toordinal() + self.last.toordinal()) // 2
         return Day.fromordinal(middle)
 
-    def timetuple(self):
-        """Create timetuple from datetuple.
-           (to interact with datetime objects).
-        """
-        d = datetime.date(*self.datetuple())
-        t = datetime.time()
-        return datetime.datetime.combine(d, t)
+    # def timetuple(self):
+    #     """Create timetuple from datetuple.
+    #        (to interact with datetime objects).
+    #     """
+    #     d = datetime.date(*self.datetuple())
+    #     t = datetime.time()
+    #     return datetime.datetime.combine(d, t)
 
 
 # noinspection PyPep8Naming

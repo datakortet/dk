@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# FIXME: this module doesn't belong in dk ).
+
+
 """Module for finding all apps folders.
 """
 

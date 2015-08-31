@@ -47,5 +47,3 @@ def isoweek(year, week):
 
     for n in range(start, stop):
         yield datetime.date.fromordinal(n)
-
-

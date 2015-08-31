@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import date
+from datetime import date, datetime
 from unittest import TestCase
 import pickle
 import six
@@ -70,6 +70,32 @@ def test_sub(days):
 
     with pytest.raises(ValueError):
         days[0] - 'foo'
+
+
+def test_timetuple(days):
+    assert isinstance(days[0].timetuple(), datetime)
+    assert ttcal.Today().timetuple() == ttcal.Day().timetuple()
+
+
+def test_display(days):
+    d = ttcal.Today()
+    d.mark = 'foo'
+    assert 'foo' in d.display
+    noday = ttcal.Day.from_idtag('d201502011')
+    assert 'noday' in noday.display
+    assert noday.special is False
+
+
+def test_days_startweek(days):
+    dd = ttcal.Days(days[1], days[0], start_week=True)
+    assert dd.first <= days[1]
+    assert dd.last == days[0]
+
+
+def test_days_between_tuple(days):
+    dd = ttcal.Days(days[1], days[0])
+    a, b = dd.between_tuple()
+    assert a < b
 
 
 class TestDay(TestCase):

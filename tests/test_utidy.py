@@ -1,15 +1,40 @@
 # -*- coding: utf-8 -*-
-from dk.utidy import utidy
+import textwrap
+
+from dk import utidy
 
 
-def test_text():
-    text = utidy('''<form name="FirmaForm" id="FirmaForm" method="POST" autocomplete="off"
-        action="." class="fForm"><input type="hidden" name="__cmd"
-        value="FirmaForm"></form>hello
-        ''')
+def hcmp(a, b):
+    ua = utidy.utidy(a)
+    print "UA:", ua
+    ub = textwrap.dedent(b).strip()
+    print "UB:", ub
+    return ua == ub
 
-    result = '''<form action="." autocomplete="off" class="fForm" id="FirmaForm" method="POST" name="FirmaForm">
-    <input name="__cmd" type="hidden" value="FirmaForm">
-</form>
-hello'''
-    assert text == result
+
+def test_basic():
+    assert hcmp("<p>a</p>", """
+    <p>
+        a
+    </p>
+    """)
+
+
+def test_self_closing():
+    assert hcmp("<p><br></p>", """
+    <p>
+        <br>
+    </p>
+    """)
+
+
+def test_attributes():
+    assert hcmp("<p class='foo' style='color:red' foo=bar>a</p>", """
+    <p class="foo" foo="bar" style="color:red;">
+        a
+    </p>""")
+
+
+def test_simplify():
+    ua = utidy.utidy("<h1>a</h1>", simplify=True)
+    assert ua == "<h1>a</h1>"

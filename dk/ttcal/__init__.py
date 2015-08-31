@@ -7,7 +7,7 @@ from .day import Day, Days, Today
 from .duration import Duration
 from .calfns import chop, isoweek
 from .month import Month
-from .week import Week, Weeks
+from .week import Week  #, Weeks
 from .year import Year
 
 

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+"""Extension of datetime.timedelta.
+"""
 import datetime
 import re
 
@@ -108,17 +110,23 @@ class Duration(datetime.timedelta):
 
     @property
     def hrs(self):
-        sgn, hr, mn, sc = self.duration_tuple()
+        """The number of hours in self.
+        """
+        sgn, hr, _mn, _sc = self.duration_tuple()
         return int(sgn == "") * hr
 
     @property
     def mins(self):
-        sgn, hr, mn, sc = self.duration_tuple()
+        """The number of minutes in self.
+        """
+        sgn, _hr, mn, _sc = self.duration_tuple()
         return int(sgn == "") * mn
 
     @property
     def secs(self):
-        sgn, hr, mn, sc = self.duration_tuple()
+        """The number of seconds in self.
+        """
+        sgn, _hr, _mn, sc = self.duration_tuple()
         return int(sgn == "") * sc
 
     def __str__(self):
@@ -219,40 +227,25 @@ class Duration(datetime.timedelta):
                 return 0.0
         return Duration(super(Duration, self).__div__(other))
 
-    def __truediv__(self, other):
-        # if isinstance(other, Duration):
-        #     try:
-        #         return int(float(self.toint()) / float(other.toint()))
-        #     except ZeroDivisionError:
-        #         return 0
-        return Duration(super(Duration, self).__truediv__(other))
+    # def __truediv__(self, other):
+    #     # if isinstance(other, Duration):
+    #     #     try:
+    #     #         return int(float(self.toint()) / float(other.toint()))
+    #     #     except ZeroDivisionError:
+    #     #         return 0
+    #     return Duration(super(Duration, self).__truediv__(other))
 
-    def __rsub__(self, other):
-        return other.__sub__(self)
-
-    def __rmul__(self, other):
-        return other.__mul__(self)
-
-    def __rfloordiv__(self, other):
-        return other.__floordiv__(self)
-
-    def __rdiv__(self, other):
-        return other.__div__(self)
-
-    def __radd__(self, other):
-        return other.__add__(self)
-
-    # def __neg__(self, other):
-    #     return other.__neg__(selfself)
-
-    # def __le__(self, other):
-    #     return other.__le__(self)
+    # def __rsub__(self, other):
+    #     return other.__sub__(self)
     #
-    # def __ge__(self, other):
-    #     return other.__ge__(self)
-
-    # def __floordiv__(self, other):
-    #     return other.__loordiv__(selfself)
-
-    # def __abs__(self, other):
-    #     return other.__bs__(self)
+    # def __rmul__(self, other):
+    #     return other.__mul__(self)
+    #
+    # def __rfloordiv__(self, other):
+    #     return other.__floordiv__(self)
+    #
+    # def __rdiv__(self, other):
+    #     return other.__div__(self)
+    #
+    # def __radd__(self, other):
+    #     return other.__add__(self)
