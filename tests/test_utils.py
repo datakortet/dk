@@ -3,13 +3,13 @@ from dk.utils import *
 
 
 def test_srcpath():
-    assert srcpath(base=None, pth='foo/bar/things.py') == 'c:/srv/lib/dk/dk/foo/bar/things.py'
-    assert srcpath(base='foo', pth='bar/things.py') == 'c:/srv/lib/dk/dk/foo/bar/things.py'
-    assert srcpath(base='foo\\bar', pth='things.py') == 'c:/srv/lib/dk/dk/foo/bar/things.py'
+    assert srcpath(base=None, pth='foo/bar/things.py')[-27:] == 'lib/dk/dk/foo/bar/things.py'
+    assert srcpath(base='foo', pth='bar/things.py')[-27:] == 'lib/dk/dk/foo/bar/things.py'
+    assert srcpath(base='foo\\bar', pth='things.py')[-27:] == 'lib/dk/dk/foo/bar/things.py'
 
 
 def test_root():
-    assert root() == 'c:/srv/lib/dk/dk'
+    assert root()[-10:] == '/lib/dk/dk'
 
 
 def test_dkpath():
