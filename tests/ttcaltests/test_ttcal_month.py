@@ -189,7 +189,7 @@ def test_contains():
     assert ttcal.Today() in ttcal.Month()
 
     with pytest.raises(KeyError):
-        ttcal.Month().next()[ttcal.Today()]
+        (ttcal.Month() + 2)[ttcal.Today()]
 
 
 def test_mark(months):
