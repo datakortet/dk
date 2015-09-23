@@ -1,3 +1,5 @@
+ipaddr==2.1.11
+
 # compatibility
 six==1.5.2
 

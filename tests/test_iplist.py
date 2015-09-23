@@ -6,41 +6,82 @@
 # R0904: Too many public methods
 
 import ipaddr
-from dktest import TestCase
 from dk.iplist import IPList
-from dkjs import jason
+import pytest
 
 
-class TestIPList(TestCase):
-    "Unit test for the IPList module"
-    
-    def setUp(self):        
-        a1 = ipaddr.IPv4Address('81.0.132.118')
-        a2 = ipaddr.IPv4Address('81.0.132.119')
-        a3 = ipaddr.IPv4Address('81.0.132.109')
-        a4 = ipaddr.IPv4Address('81.0.132.123')        
-        self.iplist = IPList([a1, a2, a3, a4])
-        self.iplist2 = IPList()
-    
-    def test_pack_unpack(self):
-        "Test of the pack and unpack methods"        
-        self.iplist2.unpack(self.iplist.pack())
-        self.assertEqual(self.iplist, self.iplist2)
-    
-    def test_add(self):
-        "Test of the add method"
-        self.iplist2.unpack(self.iplist.pack())
-        self.iplist2.add(ipaddr.IPv4Address('81.0.132.42'))
-        self.assertNotEqual(self.iplist, self.iplist2)
+@pytest.fixture
+def iplist():
+    return IPList([a1, a2, a3, a4])
 
-    def test_encode(self):
-        "Test ascii encoding of values"
-        pval = self.iplist.pack()
-        self.assertEqual(pval, 'eJwLZGjJDWRoKQPiciCuBgAptQUq')
-        self.assertEqual(pval.encode('ascii'), 'eJwLZGjJDWRoKQPiciCuBgAptQUq')
-                
-    def test_json(self):
-        "Test json dumps of iplist"
-        self.assertEqual(jason.dumps(self.iplist, indent=None),
-                         ('["81.0.132.109", "81.0.132.118",'
-                          ' "81.0.132.119", "81.0.132.123"]'))
+
+@pytest.fixture
+def a1():
+    return ipaddr.IPv4Address('81.0.132.118')
+
+
+@pytest.fixture
+def a2():
+    return ipaddr.IPv4Address('81.0.132.119')
+
+
+@pytest.fixture
+def a3():
+    return ipaddr.IPv4Address('81.0.132.109')
+
+
+@pytest.fixture
+def a4():
+    return ipaddr.IPv4Address('81.0.132.123')
+
+
+@pytest.fixture
+def iplist(a1, a2, a3, a4):
+    return IPList([a1, a2, a3, a4])
+
+
+@pytest.fixture
+def iplist2():
+    return IPList()
+
+
+def test_pack_unpack(iplist, iplist2):
+    """Test of the pack and unpack methods.
+    """
+    iplist2.unpack(iplist.pack())
+    assert iplist == iplist2
+
+
+def test_add(iplist, iplist2):
+    """Test of the add method.
+    """
+    iplist2.unpack(iplist.pack())
+    iplist2.add(ipaddr.IPv4Address('81.0.132.42'))
+    assert iplist != iplist2
+
+
+def test_encode(iplist):
+    """Test ascii encoding of values.
+    """
+    pval = iplist.pack()
+    assert pval == 'eJwLZGjJDWRoKQPiciCuBgAptQUq'
+    assert pval.encode('ascii') == 'eJwLZGjJDWRoKQPiciCuBgAptQUq'
+
+
+try:
+    from dkjs import jason
+
+    def test_json(iplist):
+        """Test json dumps of iplist.
+        """
+        assert jason.dumps(iplist, indent=None) == (
+            '["81.0.132.109", "81.0.132.118", "81.0.132.119", "81.0.132.123"]'
+        )
+
+except ImportError:
+    pass
+
+
+
+
+
