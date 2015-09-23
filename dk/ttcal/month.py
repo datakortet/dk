@@ -302,13 +302,13 @@ class Month(object):
         middle = (self.first.toordinal() + self.last.toordinal()) // 2
         return Day.fromordinal(middle)
 
-    # def timetuple(self):
-    #     """Create timetuple from datetuple.
-    #        (to interact with datetime objects).
-    #     """
-    #     d = datetime.date(*self.datetuple())
-    #     t = datetime.time()
-    #     return datetime.datetime.combine(d, t)
+    def timetuple(self):
+        """Create timetuple from datetuple.
+           (to interact with datetime objects).
+        """
+        d = datetime.date(*self.datetuple())
+        t = datetime.time()
+        return datetime.datetime.combine(d, t)
 
 
 # noinspection PyPep8Naming
