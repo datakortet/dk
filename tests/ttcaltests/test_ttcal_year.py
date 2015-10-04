@@ -34,7 +34,7 @@ def test_unicode(years):
 
 
 def test_datetuple(years):
-    assert years[0].datetuple() == years[0].Month.datetuple()
+    assert years[0].datetuple()[:1] == years[0].Month.datetuple()[:1]
 
 
 def test_month(years):
@@ -131,12 +131,17 @@ def test_mark_period(years):
     assert days == res
 
 
-def test_eq(years):
-    """Test the __eq__ method.
+def test_cmp(years):
+    """Test the compare methods.
     """
     assert years[1] == ttcal.Year(date.today().year)
     assert not (years[0] == years[2])
-    assert not (years[0] == 'foo')
+    # assert not (years[0] == 'foo')
+    assert ttcal.Year(2015) < ttcal.Year(2016)
+    assert ttcal.Year(2015) <= ttcal.Year(2016)
+    assert ttcal.Year(2016) > ttcal.Year(2015)
+    assert ttcal.Year(2016) >= ttcal.Year(2015)
+    assert ttcal.Year(2015) == ttcal.Week.weeknum(1, 2015)
 
 
 def test_contains(years):

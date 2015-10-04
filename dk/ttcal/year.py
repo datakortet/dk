@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
-from .calfns import chop
+from .calfns import chop, rangecmp, rangetuple
 from .day import Days, Day
 from .month import Month
 
@@ -21,6 +21,24 @@ class Year(object):
         """Return an iterator for the range of `self`.
         """
         return self.dayiter()
+
+    def rangetuple(self):
+        return self.first.datetime(), (self+1).first.datetime()
+
+    def __lt__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) < 0
+
+    def __le__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) <= 0
+
+    def __eq__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) == 0
+
+    def __gt__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) > 0
+
+    def __ge__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) >= 0
 
     def between_tuple(self):  # pylint:disable=E0213
         """Return a tuple of datetimes that is convenient for sql
@@ -79,7 +97,7 @@ class Year(object):
     def datetuple(self):
         """January 1.
         """
-        return self.year, 1, 1
+        return self.year, None, None
 
     def __add__(self, n):
         """Add n years to self.
@@ -232,10 +250,10 @@ class Year(object):
     def __hash__(self):
         return self.year
 
-    def __eq__(self, other):
-        if hasattr(other, 'year'):
-            return self.year == other.year
-        return False
+    # def __eq__(self, other):
+    #     if hasattr(other, 'year'):
+    #         return self.year == other.year
+    #     return False
 
     def __contains__(self, date):
         return date.year == self.year

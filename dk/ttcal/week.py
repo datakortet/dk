@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 from .day import Day, Days
-from .calfns import isoweek
+from .calfns import isoweek, rangecmp, rangetuple
 
 
 class Week(object):
@@ -40,7 +40,9 @@ class Week(object):
         return cls.weeknum(w, y)
 
     @classmethod
-    def weeknum(cls, n, year=None):
+    def weeknum(cls, n=None, year=None):
+        if n is None and year is None:
+            year, n = datetime.date.today().isocalendar()[:2]
         if year is None:
             year = datetime.date.today().year
         days = list(isoweek(year, n))
@@ -100,8 +102,54 @@ class Week(object):
     def __hash__(self):
         return self.year * 100 + self.num
 
+    def rangetuple(self):
+        return self.days[0].rangetuple()[0], self.days[-1].rangetuple()[-1]
+
+    def __lt__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) < 0
+
+    def __le__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) <= 0
+
     def __eq__(self, other):
-        return self.year == other.year and self.num == other.num
+        return rangecmp(self.rangetuple(), rangetuple(other)) == 0
+
+    def __gt__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) > 0
+
+    def __ge__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) >= 0
+
+
+        # t = (self.year, self.num)
+        # if isinstance(other, Week):
+        #     return cmp(t, (other.year, other.num))
+        # if isinstance(other, Day):
+        #     if self.days[-1] > other:
+        #         return 1
+        #     if self.days[0] < other:
+        #         return -1
+        #     return 0
+        # if hasattr(other, 'year'):
+        #     if self.year < other.year:
+        #         return -1
+        #     if self.year > other.year:
+        #         return 1
+        #     if hasattr(other, 'month'):
+        #         if self.days[0] < other:
+        #             return -1
+        #         if self.days[-1] > other:
+        #             return 1
+        #         if hasattr(other, 'day'):
+        #             if self.days[0] < other:
+        #                 return -1
+        #             if self.days[-1] > other:
+        #                 return 1
+        #             return 0
+        # return 0
+
+    # def __eq__(self, other):
+    #     return self.year == other.year and self.num == other.num
 
     def __getitem__(self, n):
         return self.days[n]

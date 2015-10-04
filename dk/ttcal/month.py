@@ -4,7 +4,7 @@ import calendar
 import datetime
 from .day import Day, Days
 from .week import Week
-from .calfns import chop
+from .calfns import chop, rangecmp, rangetuple
 
 
 class Month(object):
@@ -109,12 +109,12 @@ class Month(object):
     def __hash__(self):
         return self.year * 100 + self.month
 
-    def __eq__(self, other):
-        # noinspection PyBroadException
-        try:
-            return self.year == other.year and self.month == other.month
-        except:
-            return False
+    # def __eq__(self, other):
+    #     noinspection PyBroadException
+        # try:
+        #     return self.year == other.year and self.month == other.month
+        # except:
+        #     return False
 
     def __len__(self):
         _, n = calendar.monthrange(self.year, self.month)
@@ -124,6 +124,21 @@ class Month(object):
         """First date in month.
         """
         return self.year, self.month, 1
+
+    def __lt__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) < 0
+
+    def __le__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) <= 0
+
+    def __eq__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) == 0
+
+    def __gt__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) > 0
+
+    def __ge__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) >= 0
 
     def numdays(self):  # for use in template
         """The number of days in the month.

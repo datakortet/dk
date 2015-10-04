@@ -3,6 +3,7 @@ from datetime import date, datetime, timedelta
 from unittest import TestCase
 from dk import ttcal
 import pytest
+from dk.ttcal import Day
 
 
 @pytest.fixture
@@ -28,6 +29,28 @@ def test_between_tuple(week):
 
 def test_middle(week):
     assert week[0].middle.dayname == 'torsdag'
+
+
+def test_compare(week):
+    assert ttcal.Week.weeknum() > week[0]
+    assert ttcal.Week.weeknum(2015, 40) > ttcal.Week.weeknum(2015, 4)
+    d14 = Day(2014, 10, 4)
+    d15 = Day(2015, 10, 4)
+    d16 = Day(2016, 10, 4)
+    w = ttcal.Week.weeknum(2, 2015)
+    y14 = ttcal.Year(2014)
+    y15 = ttcal.Year(2015)
+    y16 = ttcal.Year(2016)
+
+    assert w > y14
+    assert w < y16
+    assert w == y15
+
+    assert w < d16
+    assert w <= d16
+    assert w > d14
+    assert w >= d14
+    assert w == Day(2015, 1, 8)
 
 
 def test_current(week):

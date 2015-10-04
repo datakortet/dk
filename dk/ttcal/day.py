@@ -7,6 +7,7 @@ import datetime
 import re
 import six
 from dk.fstr import fstr
+from dk.ttcal.calfns import rangecmp, rangetuple
 from .duration import Duration
 
 
@@ -143,6 +144,9 @@ class Day(datetime.date):
         """Return an iterator for the range of `self`.
         """
         return Days(self.first, self.last)
+
+    def rangetuple(self):
+        return self.datetime(), (self+1).datetime()
 
     def between_tuple(self):
         """Return a tuple of datetimes that is convenient for sql
@@ -387,6 +391,21 @@ class Day(datetime.date):
         d = datetime.date(*self.datetuple())
         t = datetime.time()
         return datetime.datetime.combine(d, t)
+
+    def __lt__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) < 0
+
+    def __le__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) <= 0
+
+    def __eq__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) == 0
+
+    def __gt__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) > 0
+
+    def __ge__(self, other):
+        return rangecmp(self.rangetuple(), rangetuple(other)) >= 0
 
 
 class Today(Day):

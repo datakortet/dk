@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import date
+from datetime import date, datetime
 import pickle
 from dk import ttcal
 import pytest
@@ -28,8 +28,33 @@ def test_rangetuple(months):
     assert a < b
 
 
+def test_compare(months):
+    a, b = ttcal.Month(2015, 10), ttcal.Month(2013, 3)
+    print
+    print "ab:", a > b
+    print "ab:", a > b
+    print
+    print "Month compare:", ttcal.Month(2015, 10) > ttcal.Month(2013, 3)
+    print "Month compare:", ttcal.Month(2015, 10) > ttcal.Month(2013, 3)
+    assert ttcal.Month(2015, 10) > ttcal.Month(2013, 3)
+    assert ttcal.Month() > months[0]
+    assert months[0] < months[1]
+    assert months[0] <= months[1]
+    assert months[1] > months[0]
+    assert months[1] >= months[0]
+    assert ttcal.Day(2015, 1, 1) < ttcal.Month(2015, 2)
+    assert ttcal.Day(2015, 1, 1) <= ttcal.Month(2015, 2)
+    assert ttcal.Day(2015, 2, 1) == ttcal.Month(2015, 2)
+    assert ttcal.Day(2015, 3, 1) >= ttcal.Month(2015, 2)
+    assert ttcal.Day(2015, 3, 1) > ttcal.Month(2015, 2)
+
+
 def test_middle(months):
     assert months[0].middle == months[0].first + 14
+
+
+def test_next(months):
+    assert months[0].next() == months[0] + 1
 
 
 def test_parse(months):
@@ -89,12 +114,12 @@ def test_unicode(months):
     assert str(months[0]) == '2012-04'
 
 
-def test_eq(months):
-    """Test the __eq__ method.
+def test_qmp(months):
+    """Test the cmp methods.
     """
     assert months[0] == date(2012, 4, 5)
     assert not (months[1] == months[0])
-    assert not (months[0] == 'foo')
+    # assert not (months[0] == 'foo')
 
 
 def test_len(months):
@@ -185,6 +210,10 @@ def test_format(months):
     assert months[0].format('M') == 'Apr'
 
 
+def test_timetuple():
+    assert ttcal.Month(2015, 10).timetuple() == datetime(2015, 10, 1, 0)
+
+
 def test_contains():
     assert ttcal.Today() in ttcal.Month()
 
@@ -205,4 +234,3 @@ def test_mark(months):
 
     # with pytest.raises(KeyError):
     #     m.mark(ttcal.Day(2000, 1, 1), 'foobarbaz')
-

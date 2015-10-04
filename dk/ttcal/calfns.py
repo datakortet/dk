@@ -3,21 +3,6 @@ import datetime
 from itertools import islice
 
 
-# def _cmp_ttuple(op):
-#     rname = '__r{}__'.format(op.__name__)
-#
-#     def relop_meth(self, other):
-#         if hasattr(other, rname):
-#             return getattr(other, rname)(self)
-#         try:
-#             return op(self.timetuple(), other.timetuple())
-#         except:
-#             return False
-#     return relop_meth
-#
-#
-
-
 def chop(it, n):
     """Chop iterator into `n` size chuchks.
     """
@@ -47,3 +32,34 @@ def isoweek(year, week):
 
     for n in range(start, stop):
         yield datetime.date.fromordinal(n)
+
+
+def rangetuple(x):
+    if hasattr(x, 'rangetuple'):
+        return x.rangetuple()
+    if isinstance(x, datetime.date):
+        return (datetime.datetime.combine(x, datetime.time()),
+                datetime.datetime.combine(
+                    datetime.date.fromordinal(1 + x.toordinal()), datetime.time())
+                )
+    return x
+
+
+def rangecmp((a, b), (c, d)):
+    """Compare half-open intervals [a, b) and [c, d)
+       They compare equal if there is overlap.
+    """
+    if (a, b) == (c, d):
+        return 0
+    if (a, b) > (c, d):
+        return -rangecmp((c,d), (a, b))
+
+    if c < b < d:
+        return 0
+    if a < c < b:
+        return 0
+    if b <= c:
+        return -1
+    if b > c:
+        return 1
+    raise ValueError(a, b, c, d)  # pragma: no cover
