@@ -52,6 +52,12 @@ def test_compare(week):
     assert w >= d14
     assert w == Day(2015, 1, 8)
 
+    assert not w < None
+    assert not w <= None
+    assert not w == None
+    assert not w >= None
+    assert not w > None
+
 
 def test_current(week):
     assert week[0].current is False

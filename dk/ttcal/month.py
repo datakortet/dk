@@ -126,19 +126,34 @@ class Month(object):
         return self.year, self.month, 1
 
     def __lt__(self, other):
-        return rangecmp(self.rangetuple(), rangetuple(other)) < 0
+        othr = rangetuple(other)
+        if othr is other:
+            return False
+        return rangecmp(self.rangetuple(), othr) < 0
 
     def __le__(self, other):
-        return rangecmp(self.rangetuple(), rangetuple(other)) <= 0
+        othr = rangetuple(other)
+        if othr is other:
+            return False
+        return rangecmp(self.rangetuple(), othr) <= 0
 
     def __eq__(self, other):
-        return rangecmp(self.rangetuple(), rangetuple(other)) == 0
+        othr = rangetuple(other)
+        if othr is other:
+            return False
+        return rangecmp(self.rangetuple(), othr) == 0
 
     def __gt__(self, other):
-        return rangecmp(self.rangetuple(), rangetuple(other)) > 0
+        othr = rangetuple(other)
+        if othr is other:
+            return False
+        return rangecmp(self.rangetuple(), othr) > 0
 
     def __ge__(self, other):
-        return rangecmp(self.rangetuple(), rangetuple(other)) >= 0
+        othr = rangetuple(other)
+        if othr is other:
+            return False
+        return rangecmp(self.rangetuple(), othr) >= 0
 
     def numdays(self):  # for use in template
         """The number of days in the month.

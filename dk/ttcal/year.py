@@ -26,19 +26,34 @@ class Year(object):
         return self.first.datetime(), (self+1).first.datetime()
 
     def __lt__(self, other):
-        return rangecmp(self.rangetuple(), rangetuple(other)) < 0
+        othr = rangetuple(other)
+        if othr is other:
+            return False
+        return rangecmp(self.rangetuple(), othr) < 0
 
     def __le__(self, other):
-        return rangecmp(self.rangetuple(), rangetuple(other)) <= 0
+        othr = rangetuple(other)
+        if othr is other:
+            return False
+        return rangecmp(self.rangetuple(), othr) <= 0
 
     def __eq__(self, other):
-        return rangecmp(self.rangetuple(), rangetuple(other)) == 0
+        othr = rangetuple(other)
+        if othr is other:
+            return False
+        return rangecmp(self.rangetuple(), othr) == 0
 
     def __gt__(self, other):
-        return rangecmp(self.rangetuple(), rangetuple(other)) > 0
+        othr = rangetuple(other)
+        if othr is other:
+            return False
+        return rangecmp(self.rangetuple(), othr) > 0
 
     def __ge__(self, other):
-        return rangecmp(self.rangetuple(), rangetuple(other)) >= 0
+        othr = rangetuple(other)
+        if othr is other:
+            return False
+        return rangecmp(self.rangetuple(), othr) >= 0
 
     def between_tuple(self):  # pylint:disable=E0213
         """Return a tuple of datetimes that is convenient for sql

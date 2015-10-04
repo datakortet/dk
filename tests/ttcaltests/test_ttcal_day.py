@@ -49,6 +49,14 @@ def test_middle(days):
     assert days[1].middle == days[1]
 
 
+def test_cmp():
+    assert not ttcal.Day(2015, 1, 1) < None
+    assert not ttcal.Day(2015, 1, 1) <= None
+    assert not ttcal.Day(2015, 1, 1) == None
+    assert not ttcal.Day(2015, 1, 1) > None
+    assert not ttcal.Day(2015, 1, 1) >= None
+
+
 def test_repr(days):
     assert repr(days[1]) == '2012-4-8-4'
     assert str(days[1]) == '2012-04-08'

@@ -48,6 +48,12 @@ def test_compare(months):
     assert ttcal.Day(2015, 3, 1) >= ttcal.Month(2015, 2)
     assert ttcal.Day(2015, 3, 1) > ttcal.Month(2015, 2)
 
+    assert not ttcal.Month(2015, 1) < None
+    assert not ttcal.Month(2015, 1) <= None
+    assert not ttcal.Month(2015, 1) == None
+    assert not ttcal.Month(2015, 1) > None
+    assert not ttcal.Month(2015, 1) >= None
+
 
 def test_middle(months):
     assert months[0].middle == months[0].first + 14

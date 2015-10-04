@@ -142,6 +142,12 @@ def test_cmp(years):
     assert ttcal.Year(2016) > ttcal.Year(2015)
     assert ttcal.Year(2016) >= ttcal.Year(2015)
     assert ttcal.Year(2015) == ttcal.Week.weeknum(1, 2015)
+    assert not ttcal.Year(2015) in [None]
+    assert not ttcal.Year(2015) < None
+    assert not ttcal.Year(2015) <= None
+    assert not ttcal.Year(2015) == None
+    assert not ttcal.Year(2015) > None
+    assert not ttcal.Year(2015) >= None
 
 
 def test_contains(years):
