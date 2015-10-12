@@ -38,11 +38,11 @@ def test_age():
     age4 = age.age(date(2011, 12, 31), date(2012, 1, 1))
     age5 = age.age(date(2000, 4, 1), date(2012, 3, 2))
 
-    age1 == AgePlaceholder(36, 5, 10)
-    age2 == AgePlaceholder(26, 0, 0)
-    age3 == AgePlaceholder(-1, 11, 27)
-    age4 == AgePlaceholder(0, 0, 1)
-    age5 == AgePlaceholder(11, 11, 1)
+    assert age1 == AgePlaceholder(36, 5, 10)
+    assert age2 == AgePlaceholder(26, 0, 0)
+    assert age3 == AgePlaceholder(-1, 11, 27)
+    assert age4 == AgePlaceholder(0, 0, 1)
+    assert age5 == AgePlaceholder(11, 11, 1)
 
 
 def test_next_birthday():
