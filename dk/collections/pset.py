@@ -134,8 +134,15 @@ class pset(dict):
         return ''.join(res)
 
     def __unicode__(self):
-        vals = u', '.join([u'%s=%s' % (k, repr(v))
-                           for (k, v) in self if k != 'name'])
+        vals = []
+        for k, v in self:
+            if k != 'name':
+                try:
+                    vals.append(u'%s=%s' % (k, repr(v)))
+                except:
+                    vals.append(u'%s=UNPRINTABLE' % k)
+
+        vals = u', '.join(vals)
 
         return u'%s(%s)' % (self._name(), vals)
 

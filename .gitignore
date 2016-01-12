@@ -21,3 +21,9 @@ index.html
 tests/dksession-test.db
 .idea/inspectionProfiles/profiles_settings.xml
 .idea/modules.xml
+.md5
+.listscore6
+dk-pylint-tidy*.html
+.cache/v/cache/lastfailed
+dk/identifiers/tmp.txt
+*.lintscore6
