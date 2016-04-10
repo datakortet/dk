@@ -18,6 +18,8 @@ def dkimport(name):
 
     """
     name = str(name)  # can't import unicode, or special chars..
+    if name.startswith('/'):
+        raise ValueError("Cannot import from implicit root.")
 
     if '.' in name:
         package, item = name.rsplit('.', 1)
