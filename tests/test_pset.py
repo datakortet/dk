@@ -2,9 +2,8 @@
 
 "dk.collections.pset"
 
-import datetime
+import pytest
 from dk.collections import pset, defset
-#from datakortet.core.forms import POSTProxy
 
 
 def test_add1():
@@ -24,7 +23,7 @@ def test_remove():
 def test_eq_():
     "Test the __eq__ method."
     p1 = pset(foo='bar', knights=9)
-    p3 = defset(lambda:'bar')
+    p3 = defset(lambda: 'bar')
     ps1 = pset(foo='bar', knights=9)
     ps2 = pset(foo='bar', knights=8)
     ps3 = pset(foo='bar')
@@ -36,14 +35,6 @@ def test_eq_():
     assert getattr(p1, 'foo') == getattr(p3, 'foo')
 
 
-# def test_xml_():
-#     "Test the __xml__ method."
-#     p1 = pset(foo='bar', knights=9)
-#     p2 = defset('test')
-#     assert xmlrepr(p1) == '<pset><knights>9</knights><foo>bar</foo></pset>'
-#     assert xmlrepr(p2) == '<defset><foo>bar</foo><knights>9</knights></defset>'
-
-
 def test_pprint():
     "Test the pprint method."
     # Method does not return a value so just make sure it
@@ -53,11 +44,106 @@ def test_pprint():
     assert p1.pprint(indent=2) is None
 
 
-# def test_add2():
-#     "Test the __add__ and __radd__ methods."
-#     p1 = pset(foo='bar')
-#     p2 = defset(lambda:'bar')
-#     p2.ny = 'test'
-#     assert p1 + pset(ny='test') == p2
-#     assert pset(ny='test') + p1 == p2
+def test_internal():
+    """Test the add method.
+    """
+    p1 = pset(foo='bar', knights=9)
+    # noinspection PyProtectedMember
+    p1._add('round', 'table')  # pylint:disable=W0212
+    assert p1.round == 'table'
+    p1._foo = 42    # pylint:disable=W0212
+    assert p1 == pset(foo='bar', knights=9, round='table')
+    # noinspection PyProtectedMember
+    assert p1._foo == 42    # pylint:disable=W0212
 
+    with pytest.raises(AttributeError):
+        # noinspection PyStatementEffect
+        p1.xxx  # pylint:disable=W0104
+
+
+# def test_init2():
+#     p1 = pset({'a': 1, 'b': 2})
+#     assert p1 == {'a': 1, 'b': 2}
+
+
+def test_remove2():
+    """Test the remove method.
+    """
+    p1 = pset(foo='bar', knights=9)
+    p1.remove('foo')
+    assert str(p1) == "pset(knights=9)"
+
+
+def test_eq_():
+    """Test the __eq__ method.
+    """
+    p1 = pset(foo='bar', knights=9)
+    ps1 = pset(foo='bar', knights=9)
+    ps2 = pset(foo='bar', knights=8)
+    ps3 = pset(foo='bar')
+    ps4 = pset(knights=9, foo='bar')
+    assert p1 == ps1
+    assert p1 != ps2
+    assert p1 != ps3
+    assert p1 == ps4
+    # noinspection PyComparisonWithNone
+    assert not p1 == None
+    assert p1 != None
+
+
+def test_eq_order():
+    p1 = pset()
+    p2 = pset()
+    assert p1 == p2
+    p1.a = 1
+    p2.a = 1
+    assert p1 == p2
+    p1.b = 2
+    p2.b = 2
+
+
+def test_delattr():
+    p1 = pset(a=1, b=2)
+    del p1.a
+    assert p1 == pset(b=2)
+
+
+def test_delitem():
+    p1 = pset(a=1, b=2)
+    del p1['a']
+    assert p1 == pset(b=2)
+
+
+def test_items_keys_values():
+    p1 = pset()
+    p1.a = 1
+    p1.b = 2
+    assert p1.keys() == ['a', 'b']
+    assert p1.values() == [1, 2]
+    assert list(p1.items()) == [('a', 1), ('b', 2)]
+
+
+def test_iadd():
+    p1 = pset()
+    p2 = pset(a=1, b=2)
+    p1 += p2
+    assert p1 == p2
+
+
+def test_radd():
+    p1 = pset(a=1)
+    p2 = {'b': 2}
+    p3 = pset(a=1, b=2)
+    assert p2 + p1 == p3
+
+
+def test_add():
+    p1 = pset(a=1)
+    p2 = pset(b=2)
+    p3 = pset()
+    p3.a = 1
+    p3.b = 2
+    assert p1 + p2 == p3
+    print 'p1 + p2:', p1 + p2
+    print 'p2 + p1:', p2 + p1
+    assert p1 + p2 == p2 + p1  # key order not considered for equality
