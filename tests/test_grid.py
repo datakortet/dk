@@ -132,7 +132,7 @@ def test_nsquared_grid():
             g[i, j] = i + j
 
     print "G:"
-    print dedent(str(g))
+    print _s(g)
     expected = '''\
         0 1 2 3 4
         1 2 3 4 5
@@ -140,7 +140,7 @@ def test_nsquared_grid():
         3 4 5 6 7
         4 5 6 7 8'''
 
-    assert dedent(str(g)) == dedent(expected)
+    assert _s(g) == _s(expected)
 
 
 def test_isomorphic_assign():
@@ -162,7 +162,7 @@ def test_isomorphic_assign():
     h[5, 5] = 1
     print h
     print
-    assert dedent(str(h)) == dedent('''\
+    assert _s(h) == _s('''\
        None None None None None None
        None None None None None None
        None None None None None None
@@ -173,7 +173,7 @@ def test_isomorphic_assign():
     h[2:4, :5] = g[1:3, :5]  # assignment to same shaped area
     print h
     print
-    assert dedent(str(h)) == dedent('''\
+    assert _s(h) == _s('''\
        None None None None None None
        None None None None None None
           1    2    3    4    5 None
@@ -185,7 +185,7 @@ def test_isomorphic_assign():
     h[1:3, -1] = [4, 2]
     print h
     print
-    assert dedent(str(h)) == dedent('''\
+    assert _s(h) == _s('''\
        None None None None None None
        None None None None None    4
           1    2    3    4    5    2
@@ -197,7 +197,7 @@ def test_isomorphic_assign():
     h[:, -2] = range(5)
     print h
     print
-    assert dedent(str(h)) == dedent('''\
+    assert _s(h) == _s('''\
        None None None None    0 None
        None None None None    1    4
           1    2    3    4    2    2
@@ -210,7 +210,7 @@ def test_isomorphic_assign():
     h[1:, -3] = g[-1, :]
     print "H (same shape):"
     print h
-    assert dedent(str(h)) == dedent('''\
+    assert _s(h) == _s('''\
        None None None None    0 None
        None None None    4    1    4
           1    2    3    5    2    2

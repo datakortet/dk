@@ -15,6 +15,7 @@ import dk.html.theme
 import dk.html.uhtml
 import dk.identifiers.kid
 import dk.identifiers.persnr
+import dk.identifiers.navn
 import dk.js.js
 import dk.dkimport
 import dk.dklogger
@@ -42,6 +43,7 @@ def test_import_dk():
     assert dk.html.uhtml
     assert dk.identifiers.kid
     assert dk.identifiers.persnr
+    assert dk.identifiers.navn
     assert dk.js.js
     assert dk.dkimport
     assert dk.dklogger
