@@ -41,6 +41,7 @@ setup(
     requires=[],
     install_requires=[
         'six',
+        'ipaddr',  # from dk.iplist
     ],
     description=__doc__.strip(),
     classifiers=[line for line in classifiers.split('\n') if line],
