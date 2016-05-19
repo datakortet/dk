@@ -20,7 +20,6 @@ import dk.js.js
 import dk.dkimport
 import dk.dklogger
 import dk.fstr
-import dk.getsettings
 import dk.grid
 import dk.proxy
 import dk.text
@@ -48,7 +47,6 @@ def test_import_dk():
     assert dk.dkimport
     assert dk.dklogger
     assert dk.fstr
-    assert dk.getsettings
     assert dk.grid
     assert dk.proxy
     assert dk.text
