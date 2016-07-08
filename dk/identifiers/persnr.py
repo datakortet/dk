@@ -220,7 +220,11 @@ def generate_pnr(day, gndr):
 
     for inr in inrs:
         try:
-            yield calc_parity('%s%03d' % (datepart, inr))
+            _pnr = calc_parity('%s%03d' % (datepart, inr))
+            if check_pnr_structure(_pnr):
+                yield _pnr
+            else:
+                print _pnr, 'error'
         except PersnrException:
             pass
 
@@ -258,5 +262,5 @@ def testing_persnr(n=0):
 
 if __name__ == "__main__":
     # invoke with python -m core.persnr
-    for _pnr in list_pnr():
+    for _pnr in list_pnr(datetime.date(1975, 6, 24), 'F'):
         print _pnr
