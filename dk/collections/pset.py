@@ -51,7 +51,7 @@ class pset(dict):
     def __init__(self, items=(), **attrs):
         object.__setattr__(self, '_order', [])
         super(pset, self).__init__()
-        for k, v in items:
+        for k, v in self._get_iterator(items):
             self._add(k, v)
         for k, v in attrs.items():
             self._add(k, v)
@@ -95,8 +95,18 @@ class pset(dict):
             return True
         return False
 
+    def _get_iterator(self, val):
+        if not val:
+            return []
+        if isinstance(val, pset):
+            return val
+        elif isinstance(val, dict):
+            return val.items()
+        else:
+            return val
+
     def __iadd__(self, other):
-        for k, v in other:
+        for k, v in self._get_iterator(other):
             self._add(k, v)
         return self
 
