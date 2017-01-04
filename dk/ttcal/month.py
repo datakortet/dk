@@ -206,7 +206,7 @@ class Month(object):
     #     return iter(self.weeks)
 
     def dayiter(self):
-        for wk in self:
+        for wk in iter(self.weeks):
             for day in wk:
                 yield day
 
@@ -214,7 +214,7 @@ class Month(object):
         """Return a list of days (`class`:ttcal.Day) in this month.
         """
         res = []
-        for wk in self:
+        for wk in iter(self.weeks):
             for day in wk:
                 if day.month == self.month:
                     res.append(day)  # yield day
