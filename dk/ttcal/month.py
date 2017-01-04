@@ -14,6 +14,8 @@ class Month(object):
     month_name = ['', 'Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni',
                   'Juli', 'August', 'September', 'Oktober', 'November',
                   'Desember']
+    year = None
+    month = None
 
     @classmethod
     def from_idtag(cls, tag):
@@ -185,13 +187,23 @@ class Month(object):
     # rsub doesn't make sense
 
     def __repr__(self):
-        return 'Month(%d, %d)' % (self.year, self.month)
+        return 'Month(%s, %s)' % (self.year, self.month)
 
     def __str__(self):
         return '%04d-%02d' % (self.year, self.month)
 
-    def __iter__(self):
-        return iter(self.weeks)
+    # NOTE: Django's query engine calls both __call__ and __iter__ on values
+    #       that are passed in, and uses the return values instead of the value
+    #       itself (i.e. with the implementation below, the queryset would get
+    #       a list of Week objects instead of a Month object).
+    # NB: W:\srv\venv\dev\Lib\site-packages\django\db\models\sql\where.py
+    # NB: temp comment
+    # NB:  if is_iterator(value):
+    # NB:        # Consume any generators immediately, so that we can determine
+    # NB:        # emptiness and transform any non-empty values correctly.
+    # NB:        value = list(value)
+    # def __iter__(self):
+    #     return iter(self.weeks)
 
     def dayiter(self):
         for wk in self:

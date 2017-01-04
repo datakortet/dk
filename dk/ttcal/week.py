@@ -5,6 +5,11 @@ from .calfns import isoweek, rangecmp, rangetuple
 
 
 class Week(object):
+    year = None
+    num = None
+    days = None
+    month = None
+
     def range(self):
         """Return an iterator for the range of `self`.
         """
@@ -88,7 +93,7 @@ class Week(object):
         return 'Uke %d (%d)' % (self.num, self.year)
 
     def __repr__(self):
-        return 'Week(%d, month=%d, year=%d)' % (self.num, self.month, self.year)
+        return 'Week(%s, month=%s, year=%s)' % (self.num, self.month, self.year)
 
     def __iter__(self):
         return iter(self.days)
