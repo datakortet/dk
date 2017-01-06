@@ -55,6 +55,11 @@ class Year(object):
             return False
         return rangecmp(self.rangetuple(), othr) >= 0
 
+    def timetuple(self):
+        d = datetime.date(*self.first.datetuple())
+        t = datetime.time()
+        return datetime.datetime.combine(d, t)
+
     def between_tuple(self):  # pylint:disable=E0213
         """Return a tuple of datetimes that is convenient for sql
            `between` queries.
