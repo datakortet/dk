@@ -338,8 +338,12 @@ class Day(datetime.date):
         return self.month == self.membermonth
 
     def compare(self, other):
-        """Return how similar self is to other.
+        """Return how similar self is to other, i.e. the smallest factor
+           they have in common ('day', 'month', or 'year').
+           Returns None if the Days are in different years.
         """
+        if not hasattr(other, 'year'):
+            None
         if self.year == other.year:
             if self.month == other.month:
                 if self.day == other.day:
