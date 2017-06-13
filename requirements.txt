@@ -3,12 +3,6 @@ ipaddr==2.1.11
 # compatibility
 six==1.5.2
 
-# running test suite
-pytest>=2.6.3
-pytest-cov>=1.8.0
-pytest-xdist>=1.11
-coverage==4.0.3
-
 # building documentation
 Sphinx==1.2.3
 docutils==0.12

@@ -10,7 +10,7 @@ install:
   - pip install coveralls
 
 script:
-  python runtests.py --cov=dk
+  py.test -v --cov==dk .
 
 after_success:
   coveralls
