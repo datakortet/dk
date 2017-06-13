@@ -4,6 +4,7 @@ ipaddr==2.1.11
 six==1.5.2
 
 # running test suite
+pytest
 pytest-cov
 pytest-xdist
 coverage
