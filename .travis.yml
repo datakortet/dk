@@ -9,13 +9,15 @@ python:
 before_install:
   - pip install -U pip
   - pip install -U pytest
+  - pip install -U pytest-cov
+  - pip install -U coverage
 
 install:
   - pip install -r requirements.txt
   - pip install coveralls
 
 script:
-  py.test -v --cov==dk .
+  pytest -v --cov==dk .
 
 after_success:
   coveralls
