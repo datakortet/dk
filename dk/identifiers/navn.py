@@ -45,7 +45,7 @@ def forkort_navn(lengde, fornavn, etternavn):
 
 
 def shorten_fname(length, fname):
-    """Try to shorten the first-name `fname' to `length' characters
+    """Try to shorten the first-name `fname` to `length` characters
        (raise ValueError if we fail).
 
        Algorithm: Consider the last of the person's first names and replace it
@@ -67,7 +67,7 @@ def shorten_fname(length, fname):
 
 
 def shorten_lname(length, lname):
-    """Try to shorten the last-name `lname' to `length' characters
+    """Try to shorten the last-name `lname` to `length` characters
        (raise ValueError if we fail).
 
        Algorithm: Consider the first of the person's last names and replace it

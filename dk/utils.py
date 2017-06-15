@@ -49,13 +49,16 @@ def root():     # FIXME: this is fubar (__file__ isn't near the root of the sour
     return __file__.replace('\\', '/').rsplit('/', 1)[0]
 
 
-def dkpath(pth=None):   # FIXME: this doesn't work since srcpath doesn't work!
-    """Usage::
+# FIXME: this doesn't work since srcpath doesn't work!
+def dkpath(pth=None):
+    """Usage
+       ::
 
-         dkpath() => (w:)/xxxxxxx/
-                  => (/home)/xxxxxxxx/
+           dkpath() => (w:)/xxxxxxx/
+                    => (/home)/xxxxxxxx/
 
-         dkpath('app/') => ../xxxxxxxx/app/
+           dkpath('app/') => ../xxxxxxxx/app/
+
     """
     if not pth:
         pth = ''

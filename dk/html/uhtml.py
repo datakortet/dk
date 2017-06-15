@@ -104,11 +104,12 @@ def quote(v):
 
 
 def norm_attr_name(a):
-    """_foo_bar => _foo_bar,  class_ => class, max_height => max-height
-       >>> norm_attr_name(u'class_')
-       u'class'
-       >>> norm_attr_name(u'z_index')
-       u'z-index'
+    """``_foo_bar => _foo_bar``,  ``class_ => class``, ``max_height => max-height``
+
+           >>> norm_attr_name(u'class_')
+           u'class'
+           >>> norm_attr_name(u'z_index')
+           u'z-index'
     """
     if a[0] == u'_':
         return a
@@ -120,8 +121,9 @@ def norm_attr_name(a):
 class xtag(object):
     """x(ml-style)tag: a tag without content or a closing tag.
        E.g. <br/> would be xtag('br')
-       [2009-03-11] w3 validator complains that 4.01 loose should not use
-                    <foo />  but <foo>.
+
+       .. note:: [2009-03-11] w3 validator complains that 4.01 loose should not
+                              use <foo />  but <foo>.
     """
     def __init__(self, tag_name, **kw):
         self._attr = {}
@@ -195,7 +197,7 @@ class tag(xtag):
          >> table(tr(td(i) for i in range(5)), tr(td(i**i) for i in range(5)))
 
        NB: Attributes that conflict with Python keywords have an underline
-       appended, e.g.:  mytag.class_ = ...
+       appended, e.g.:  ``mytag.class_ = ...``
     """
     def __init__(self, tag_name, *content, **kw):
         xtag.__init__(self, tag_name, **kw)
@@ -461,12 +463,15 @@ class tabledesc(object):
 
 def test_doctest():
     """
-       >>> br()
-       u'<br>'
-       >>> div('hello', b('world'))
-       u'<div>hello<b>world</b></div>\\n'
-       >>> print select(options=[u'a', u'b'], name='foo')
-       u'<select name="foo" id="id_foo"><option value="a">a</option>\\n<option value="b">b</option>\\n</select>'
+       ::
+
+           >>> br()
+           u'<br>'
+           >>> div('hello', b('world'))
+           u'<div>hello<b>world</b></div>\\n'
+           >>> print select(options=[u'a', u'b'], name='foo')
+           u'<select name="foo" id="id_foo"><option value="a">a</option>\\n<option value="b">b</option>\\n</select>'
+
     """
     import doctest
     doctest.testmod()

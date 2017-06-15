@@ -65,7 +65,7 @@ def dkimport_star(modname, **kw):
 
            from modname import *
 
-       Available **kw arguments:
+       Available ``**kw`` arguments:
 
            filefilter      A function that receives a filename (with extension
                            but without path) that should return True if the

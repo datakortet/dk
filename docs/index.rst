@@ -16,12 +16,10 @@ Contents:
    :maxdepth: 2
 
    projectinfo
+   modules
 
-   ttcal
-   fstr
-   collections
-   html
-   text
+..
+   .. include:: modules.rst
 
 
 

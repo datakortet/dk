@@ -41,13 +41,14 @@ class Day(datetime.date):
 
     @classmethod
     def parse(cls, strval):
-        """Parse date value from a string.  Allowed syntax include::
+        """Parse date value from a string.  Allowed syntax include
+           ::
 
-              yyyy-mm-dd, yyyy-m-dd, yyyy-mm-d, yyyy-m-d
-              dd-mm-yyyy, etc.
-              dd/mm/yyyy, ...
-              dd.mm.yyyy, ...
-              ddmmyyyy
+               yyyy-mm-dd, yyyy-m-dd, yyyy-mm-d, yyyy-m-d
+               dd-mm-yyyy, etc.
+               dd/mm/yyyy, ...
+               dd.mm.yyyy, ...
+               ddmmyyyy
 
         """
         if not strval or not strval.strip():
