@@ -20,7 +20,7 @@ import setuptools
 from setuptools import setup, Command
 from setuptools.command.test import test as TestCommand
 
-version = '0.7.9'
+version = '0.7.10'
 
 
 class PyTest(TestCommand):
