@@ -21,6 +21,7 @@ index.html
 tests/dksession-test.db
 .idea/inspectionProfiles/profiles_settings.xml
 .idea/modules.xml
+.idea/deployment.xml
 .md5
 .listscore6
 dk-pylint-tidy*.html
