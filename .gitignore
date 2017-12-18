@@ -28,3 +28,4 @@ dk-pylint-tidy*.html
 .cache/v/cache/lastfailed
 dk/identifiers/tmp.txt
 *.lintscore6
+.idea/codeStyles
