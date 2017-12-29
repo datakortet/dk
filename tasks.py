@@ -27,11 +27,14 @@ will fit your use case.
 """
 # pragma: nocover
 import os
-
 from dkfileutils.changed import changed
 from dkfileutils.path import Path
-from invoke import ctask as task, collection
+try:
+    from invoke import ctask as tasks
+except ImportError:
+    from invoke import task
 
+from invoke import collection
 from dktasklib import docs as doctools
 from dktasklib import jstools
 from dktasklib import lessc

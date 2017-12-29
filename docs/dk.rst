@@ -15,96 +15,104 @@ Subpackages
 Submodules
 ----------
 
-dk\.age module
---------------
+dk.age module
+-------------
 
 .. automodule:: dk.age
     :members:
     :undoc-members:
     :show-inheritance:
 
-dk\.asciify module
-------------------
+dk.apps module
+--------------
+
+.. automodule:: dk.apps
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+dk.asciify module
+-----------------
 
 .. automodule:: dk.asciify
     :members:
     :undoc-members:
     :show-inheritance:
 
-dk\.dkimport module
--------------------
+dk.dkimport module
+------------------
 
 .. automodule:: dk.dkimport
     :members:
     :undoc-members:
     :show-inheritance:
 
-dk\.dklogger module
--------------------
+dk.dklogger module
+------------------
 
 .. automodule:: dk.dklogger
     :members:
     :undoc-members:
     :show-inheritance:
 
-dk\.findapps module
--------------------
+dk.findapps module
+------------------
 
 .. automodule:: dk.findapps
     :members:
     :undoc-members:
     :show-inheritance:
 
-dk\.fstr module
----------------
+dk.fstr module
+--------------
 
 .. automodule:: dk.fstr
     :members:
     :undoc-members:
     :show-inheritance:
 
-dk\.grid module
----------------
+dk.grid module
+--------------
 
 .. automodule:: dk.grid
     :members:
     :undoc-members:
     :show-inheritance:
 
-dk\.iplist module
------------------
+dk.iplist module
+----------------
 
 .. automodule:: dk.iplist
     :members:
     :undoc-members:
     :show-inheritance:
 
-dk\.proxy module
-----------------
+dk.proxy module
+---------------
 
 .. automodule:: dk.proxy
     :members:
     :undoc-members:
     :show-inheritance:
 
-dk\.text module
----------------
+dk.text module
+--------------
 
 .. automodule:: dk.text
     :members:
     :undoc-members:
     :show-inheritance:
 
-dk\.utidy module
-----------------
+dk.utidy module
+---------------
 
 .. automodule:: dk.utidy
     :members:
     :undoc-members:
     :show-inheritance:
 
-dk\.utils module
-----------------
+dk.utils module
+---------------
 
 .. automodule:: dk.utils
     :members:
