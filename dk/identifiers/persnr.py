@@ -6,6 +6,9 @@
 
 import datetime
 
+MIN_PERSNR = '01010000382'
+MAX_PERSNR = '31129999813'
+
 
 class PersnrException(ValueError):
     "Base exception for persnr module."
