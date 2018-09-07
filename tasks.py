@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Base version of package/tasks.py, created by
+Base version of package/tasks.py, created by version 0.3.0 of
 
     package/root/dir> dk-tasklib install
 
@@ -11,9 +11,8 @@ This file defines tasks for the Invoke tool: http://www.pyinvoke.org
 Basic usage::
 
     inv -l               # list all available tasks
-    inv -e ...           # echo commands as tasks are executed
-    inv -e build -f      # build everything, forcefully
-    inv -e build --docs  # only build the docs
+    inv build -f         # build everything, forcefully
+    inv build --docs     # only build the docs
 
 dk-tasklib is a library of basic tasks that tries to automate common tasks.
 dk-tasklib will attempt to install any tools/libraries/etc. that are required,
@@ -26,15 +25,15 @@ will fit your use case.
 
 """
 # pragma: nocover
+from __future__ import print_function
 import os
+import warnings
+
 from dkfileutils.changed import changed
 from dkfileutils.path import Path
-try:
-    from invoke import ctask as tasks
-except ImportError:
-    from invoke import task
+from dktasklib.wintask import task
+from invoke import Collection
 
-from invoke import collection
 from dktasklib import docs as doctools
 from dktasklib import jstools
 from dktasklib import lessc
@@ -44,7 +43,6 @@ from dktasklib.package import Package, package
 from dktasklib.watch import Watcher
 from dktasklib.publish import publish
 
-
 #: where tasks.py is located (root of package)
 DIRNAME = Path(os.path.dirname(__file__))
 
@@ -53,8 +51,8 @@ DIRNAME = Path(os.path.dirname(__file__))
 # Specify which settings file should be used when running
 # `python manage.py collectstatic` (must be on the path or package root
 # directory).
-# DJANGO_SETTINGS_MODULE = ''
-#
+DJANGO_SETTINGS_MODULE = ''
+
 # .less
 # ------
 # there should be a mypkg/mypkg/less/mypkg.less file that imports any other
@@ -65,6 +63,16 @@ DIRNAME = Path(os.path.dirname(__file__))
 # list any .jsx files here. Only filename.jsx (don't include the path).
 # The files should reside in mypkg/mypkg/js/ directory.
 JSX_FILENAMES = []
+
+# ============================================================================
+# autodoc is in a separate process, so can't use settings.configure().
+HAVE_SETTINGS = bool(DJANGO_SETTINGS_MODULE)
+if not HAVE_SETTINGS and (DIRNAME / 'settings.py').exists():
+    # look for a dummy settings.py module in the root of the package.
+    DJANGO_SETTINGS_MODULE = 'settings'
+if DJANGO_SETTINGS_MODULE:
+    os.environ['DJANGO_SETTINGS_MODULE'] = DJANGO_SETTINGS_MODULE
+WARN_ABOUT_SETTINGS = not bool(DJANGO_SETTINGS_MODULE)
 
 
 @task
@@ -97,16 +105,24 @@ def build(ctx, less=False, docs=False, js=False, force=False):
                 force=force
             )
         elif less:
-            print "WARNING: build --less specified, but no file at:", less_fname
+            warnings.warn(
+                "WARNING: build --less specified, but no file at: " + less_fname
+            )
 
     if buildall or docs:
+        if WARN_ABOUT_SETTINGS:
+            warnings.warn(
+                "autodoc might need a dummy settings file in the root of "
+                "your package. Since it runs in a separate process you cannot"
+                "use settings.configure()"
+            )
         doctools.build(ctx, force=force)
 
     if buildall or js:
         build_js(ctx, force)
 
-    # if DJANGO_SETTINGS_MODULE and (force or changed(ctx.pkg.staticdir)):
-    #     collectstatic(ctx, DJANGO_SETTINGS_MODULE)
+    if HAVE_SETTINGS and (force or changed(ctx.pkg.django_static)):
+        collectstatic(ctx, DJANGO_SETTINGS_MODULE, force=force)
 
 
 @task
@@ -130,7 +146,7 @@ def watch(ctx):
 
 
 # individual tasks that can be run from this project
-ns = collection.Collection(
+ns = Collection(
     build,
     watch,
     build_js,
@@ -142,5 +158,8 @@ ns = collection.Collection(
     publish,
 )
 ns.configure({
-    'pkg': Package()
+    'pkg': Package(),
+    'run': {
+        'echo': True
+    }
 })
