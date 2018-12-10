@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """FIXME: many of these really should go in their own modules...
 """
 
@@ -30,8 +29,7 @@ def srcpath(base, pth):
     """
     # FIXME: __file__ is not srcroot when this file has been moved!
     # XXX: this no longer works as intended!
-    
-    srcroot = __file__.replace('\\', '/').rsplit('/', 1)[0]
+    srcroot = root()
 
     if not base:
         base = '/'
@@ -44,9 +42,13 @@ def srcpath(base, pth):
     return srcroot + base + pth.replace('\\', '/')
         
 
-def root():     # FIXME: this is fubar (__file__ isn't near the root of the source tree when utils is here...)
+def root():
+    # FIXME: This code was created for the src/datakortet tree.
+    #  It should be changed to support the lib/ tree.
     "Return the root of the source tree."
-    return __file__.replace('\\', '/').rsplit('/', 1)[0]
+    srcroot = __file__.replace('\\', '/').rsplit('/', 1)[0]
+    srcroot = srcroot.replace("lib/dk/dk", "src/datakortet")
+    return srcroot
 
 
 # FIXME: this doesn't work since srcpath doesn't work!
