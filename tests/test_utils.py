@@ -3,18 +3,18 @@ from dk.utils import *
 
 
 def test_srcpath():
-    assert srcpath(base=None, pth='foo/bar/things.py')[-23:] == 'dk/dk/foo/bar/things.py'
-    assert srcpath(base='foo', pth='bar/things.py')[-23:] == 'dk/dk/foo/bar/things.py'
-    assert srcpath(base='foo\\bar', pth='things.py')[-23:] == 'dk/dk/foo/bar/things.py'
+    assert srcpath(base=None, pth='foo/bar/things.py')[-28:] == 'datakortet/foo/bar/things.py'
+    assert srcpath(base='foo', pth='bar/things.py')[-28:] == 'datakortet/foo/bar/things.py'
+    assert srcpath(base='foo\\bar', pth='things.py')[-28:] == 'datakortet/foo/bar/things.py'
 
 
 def test_root():
-    assert root()[-6:] == '/dk/dk'
+    assert root()[-11:] == '/datakortet'
 
 
 def test_dkpath():
-    win = dkpath('foo')[-9:] == 'dk\\dk\\foo'
-    unix = dkpath('foo')[-9:] == 'dk/dk/foo'
+    win = dkpath('foo')[-14:] == 'datakortet\\foo'
+    unix = dkpath('foo')[-14:] == 'datakortet/foo'
     assert win or unix
 
 
