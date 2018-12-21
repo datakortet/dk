@@ -44,10 +44,14 @@ def srcpath(base, pth):
     return srcroot + base + pth.replace('\\', '/')
         
 
-def root():     # FIXME: this is fubar (__file__ isn't near the root of the source tree when utils is here...)
-    "Return the root of the source tree."
-    return __file__.replace('\\', '/').rsplit('/', 1)[0]
-
+#def root():     # FIXME: this is fubar (__file__ isn't near the root of the source tree when utils is here...)
+#    "Return the root of the source tree."
+#    return __file__.replace('\\', '/').rsplit('/', 1)[0]
+def root():
+    "Return the root of the source tree."    
+    srcroot = __file__.replace('\\', '/').rsplit('/', 1)[0]
+    srcroot = srcroot.replace("lib/dk/dk", "src/datakortet")
+    return srcroot
 
 # FIXME: this doesn't work since srcpath doesn't work!
 def dkpath(pth=None):
