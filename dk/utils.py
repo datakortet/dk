@@ -26,11 +26,11 @@ def srcpath(base, pth):
 
           path = 'foo/test'
           fp = open(srcpath(path, 'data/testdata.txt'))
-          
+
     """
     # FIXME: __file__ is not srcroot when this file has been moved!
     # XXX: this no longer works as intended!
-    
+
     srcroot = __file__.replace('\\', '/').rsplit('/', 1)[0]
 
     if not base:
@@ -40,15 +40,15 @@ def srcpath(base, pth):
         base = '/' + base
     if base[-1] != '/':
         base += '/'
-    
+
     return srcroot + base + pth.replace('\\', '/')
-        
+
 
 #def root():     # FIXME: this is fubar (__file__ isn't near the root of the source tree when utils is here...)
 #    "Return the root of the source tree."
 #    return __file__.replace('\\', '/').rsplit('/', 1)[0]
 def root():
-    "Return the root of the source tree."    
+    "Return the root of the source tree."
     srcroot = __file__.replace('\\', '/').rsplit('/', 1)[0]
     srcroot = srcroot.replace("lib/dk/dk", "src/datakortet")
     return srcroot
@@ -83,7 +83,7 @@ def HourMinute(v):      # XXX: move to ttcal?
     return '%dt %02dm' % hour_minute(v)
 
 
-def hm_to_float(h, m):      # XXX: move to ttcal?
+def hm_to_float(h, m):  # XXX: move to ttcal?
     "Convert 7, 30 to 7.5 hours."
     return float(h) + (float(m) / 60.0)
 
@@ -126,6 +126,7 @@ def utitle_case(val):
     if not isinstance(val, unicode):
         raise ValueError(repr(val) + ' of type ' + str(type(val)))
     return val.title()
+
 
 _mixedcase = re.compile(ur'[A-ZÆØÅ][a-zæøå]+[A-ZÆØÅ]')
 _mcmac = re.compile(ur'(Mc)|(Mac)|(Van)|(Von)')
@@ -193,12 +194,12 @@ u8 = utf8
 
 def unhtml(s, toencoding=None):
     "Convert charrefs for Norwegian vowels to their unicode counterparts."
-    
+
     if type(s) not in (str, unicode):
         return s
     if type(s) is str:
         s = unicode(s)
-        
+
     tr = {
         u'&nbsp;': u' ',
         u'&Aring;': u'Å',
@@ -220,19 +221,19 @@ def unhtml(s, toencoding=None):
 
 
 def html2u8(s):
-    "Convert charrefs for Norwegian vowels to their utf-8 counterparts."    
+    "Convert charrefs for Norwegian vowels to their utf-8 counterparts."
     return unhtml(s, 'u8')
 
 
 def normalize(v):
     """Return a string version of v such that
-    
+
          normalize(u) == normalize(v) iff **not** (u != v)
 
        e.g.:
 
          normalize(None) == normalize('') == normalize(u'')
-         
+
     """
     if type(v) == unicode:
         return v.encode('u8')
@@ -258,11 +259,11 @@ def kronestring(kr):
         kr = -kr
     else:
         sign = ''
-        
+
     while kr:
         kr, tusen = divmod(kr, 1000)
         res = ' '.join(['%03d' % tusen, res])
-        
+
     return sign + res.rstrip(' ').lstrip('0')
 
 
@@ -290,7 +291,7 @@ def mk_post(model):
 
        Note:: this function is superceeded by maint.client._encode_date
               which does this transparently for unit tests.
-              
+
     """
     res = {}
     for key, val in model.items():
@@ -313,7 +314,6 @@ class Ordered(dict):        # FIXME: should be removed asap.
     def __init__(self):
         super(Ordered, self).__init__()
         self._ordered = []
-        
     def __setitem__(self, key, val):
         super(Ordered, self).__setitem__(key, val)
         self._ordered.append(key)
@@ -333,3 +333,4 @@ class Ordered(dict):        # FIXME: should be removed asap.
     def items(self):
         for key in self._ordered:
             yield (key, self[key])
+
