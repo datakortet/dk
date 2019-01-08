@@ -50,8 +50,7 @@ class sindex(str):
 
            sindex('a b c')['b':]  == 'c'
            sindex('a b c')[:'b']  == 'a'
-           sindex('a b c')['a':'c']  == 'b'
-        
+           sindex('a b c')['a':'c']  == 'a'
     """
     def __getitem__(self, key):
         """Return the substring defined by two substrings:
@@ -79,3 +78,20 @@ class sindex(str):
             elif isinstance(key.stop, tuple):
                 indices = []
                 for end in key.stop:
+                    try:
+                        indices.append(_index(self, end))
+                    except IndexError:
+                        pass
+
+                if len(indices) == 0:
+                    raise IndexError(
+                        "IndexError: none of '%s' found." % key.stop)
+
+                stop = min(indices)
+            else:
+                stop = _index(self, key.stop, start)
+
+            return super(sindex, self).__getitem__(slice(start, stop)).strip()
+
+        else:
+            return super(sindex, self).__getitem__(key)
