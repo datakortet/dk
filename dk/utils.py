@@ -128,8 +128,8 @@ def utitle_case(val):
     return val.title()
 
 
-_mixedcase = re.compile(ur'[A-ZÆØÅ][a-zæøå]+[A-ZÆØÅ]')
-_mcmac = re.compile(ur'(Mc)|(Mac)|(Van)|(Von)')
+_mixedcase = re.compile(u'[A-ZÆØÅ][a-zæøå]+[A-ZÆØÅ]')
+_mcmac = re.compile(u'(Mc)|(Mac)|(Van)|(Von)')
 
 
 def title_case_lastname(s, encoding='u8'):
