@@ -34,7 +34,7 @@
 # W0201: attribute defined outside __init__ (descriptors).
 from __future__ import print_function
 import sys
-from builtins import str as text
+from builtins import str
 from past.builtins import long
 try:
     from new import instancemethod
@@ -530,13 +530,13 @@ class grid(object):
         widths = [0] * self.x
         for i in range(self.x):
             col = [r[i] for r in self._rows]
-            widths[i] = max(len(text(v)) for v in col) + 1
+            widths[i] = max(len(str(v)) for v in col) + 1
 
         res = []
         for r in self._rows:
             row = ''
             for x in range(self.x):
-                row += text(r[x]).rjust(widths[x])
+                row += str(r[x]).rjust(widths[x])
             res.append(row)
 
         return u'\n'.join(res)
