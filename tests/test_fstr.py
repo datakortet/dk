@@ -6,7 +6,7 @@
 # R0904: Too many public methods
 
 from unittest import TestCase
-from dk.fstr import fstr
+from dk.fstr import fstr, sindex
 
 
 class TestFstr(TestCase):
@@ -26,3 +26,15 @@ class TestFstr(TestCase):
             fstr('0123456789').split(3, 6), ['012', '345', '6789'])
         self.assertEqual(
             fstr('0123456789').split(2, 4, 6), ['01', '23', '45', '6789'])
+
+
+class TestSql(TestCase):
+    "Test the sql module."
+
+    def test_sindex(self):
+        "Test the sindex method."
+        s = sindex('Hello Fine World')
+        self.assertEqual("Fine", s['hello':'world'])
+        self.assertEqual("", s['hello':('fine', 'world')])
+        self.assertEqual("World", s['fine':])
+        self.assertEqual("Hello", s[:'fine'])

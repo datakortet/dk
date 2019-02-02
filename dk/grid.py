@@ -32,8 +32,16 @@
 # W0141: Used builtin map
 # E1102: grid.copy_area t is not callable (t is derived from __sub__)
 # W0201: attribute defined outside __init__ (descriptors).
-
-import new
+from __future__ import print_function
+import sys
+from builtins import str
+from past.builtins import long
+try:
+    from new import instancemethod
+    newmethod = instancemethod
+except ImportError:  # py3
+    from types import MethodType
+    newmethod = lambda m, o, c: MethodType(m, o)
 from . import proxy
 
 
@@ -77,7 +85,7 @@ def point_yiter(start, end):
 def indexiter(length, ndx):
     def _indxiter(length, ndx):
         if isinstance(ndx, slice):
-            for x in xrange(*ndx.indices(length)):
+            for x in range(*ndx.indices(length)):
                 yield x
         elif isinstance(ndx, (int, long)):
             if ndx < 0:
@@ -121,7 +129,8 @@ class rect(object):
         return ((self.w == other.w) and (self.h == other.h) or
                 (self.w == other.h) and (self.h == other.w))
 
-    def __contains__(self, (y, x)):
+    def __contains__(self, yx):
+        y, x = yx
         return ((self.y <= y < self.y + self.h) and
                 (self.x <= x < self.x + self.w))
 
@@ -129,7 +138,8 @@ class rect(object):
         sx, sy = self.x, self.y
         ox, oy = other.x, other.y
 
-        def transpose((y, x)):
+        def transpose(yx):
+            y, x = yx
             if self.w == other.w:
                 return point(y + sy - oy, x + sx - ox)
             else:
@@ -267,13 +277,14 @@ class table_iterator(object):
         if instance is None:
             raise AttributeError('keys is an instance method.')
         self.instance = instance
-        self.iterator = new.instancemethod(self.iterfn, instance, owner)
+        self.iterator = newmethod(self.iterfn, instance, owner)
         return self
 
     def __iter__(self):
         return self.iterator((slice(None), slice(None)))
 
-    def __getitem__(self, (ykey, xkey)):
+    def __getitem__(self, yx):
+        ykey, xkey = yx
         if self.instance._ispoint(ykey, xkey):
             return self.instance.get_cell(ykey, xkey)
         else:
@@ -283,7 +294,8 @@ class table_iterator(object):
         for y, x in self.iterator(key):
             self.instance.del_cell(y, x)
 
-    def __setitem__(self, (ykey, xkey), val):
+    def __setitem__(self, yx, val):
+        ykey, xkey = yx
         ndx = self.iterator((ykey, xkey))
         if self.instance._ispoint(ykey, xkey):
             y, x = ndx[0]
@@ -401,7 +413,9 @@ class grid(object):
     ####################################################################
     # mutation
 
-    def copy_area(self, (srcy, srcx, h, w), (dsty, dstx)):
+    def copy_area(self, _src, _dst):
+        srcy, srcx, h, w = _src
+        dsty, dstx = _dst
         src = rect(y=srcy, x=srcx, w=w, h=h)
         dst = rect(y=dsty, x=dstx, w=w, h=h)
         t = dst - src
@@ -414,7 +428,10 @@ class grid(object):
         for p in point_xiter(corner, src.opposite(corner)):
             self[t(p)] = self[p]
 
-    def move_area(self, (srcy, srcx, h, w), (dsty, dstx)):
+    def move_area(self, _src, _dst):
+        srcy, srcx, h, w = _src
+        dsty, dstx = _dst
+
         src = rect(y=srcy, x=srcx, w=w, h=h)
         dst = rect(y=dsty, x=dstx, w=w, h=h)
         t = dst - src
@@ -509,23 +526,29 @@ class grid(object):
 
         return '\n'.join(res)
 
-    def __unicode__(self):
+    def stringrep(self):
         widths = [0] * self.x
         for i in range(self.x):
             col = [r[i] for r in self._rows]
-            widths[i] = max(len(unicode(v)) for v in col) + 1
+            widths[i] = max(len(str(v)) for v in col) + 1
 
         res = []
         for r in self._rows:
             row = ''
             for x in range(self.x):
-                row += unicode(r[x]).rjust(widths[x])
+                row += str(r[x]).rjust(widths[x])
             res.append(row)
 
         return u'\n'.join(res)
 
+    def __unicode__(self):
+        return self.stringrep()
+
     def __str__(self):
-        return unicode(self).encode('u8')
+        if sys.version_info.major < 3:
+            return self.stringrep().encode('u8')
+        else:
+            return self.stringrep()
 
     def print_row(self, y):
         rows = [self._rows[y]]
@@ -550,7 +573,7 @@ class grid(object):
         """Resize so that self[yndx,xndx] is valid.
         """
         if pr:
-            print "RESIZE", yndx, xndx
+            print("RESIZE", yndx, xndx)
         y, x = yndx + 1, xndx + 1  # lengths are one more than the index
 
         if self.y < y:
@@ -631,10 +654,12 @@ class grid(object):
         for x in range(self.x):
             yield self.get_col(x)
 
-    def key_iterator(self, (ys, xs)):
+    def key_iterator(self, yx):
+        ys, xs = yx
         return iter(self.keyiter(ys, xs))
 
-    def reverse_key_iterator(self, (ykey, xkey)):
+    def reverse_key_iterator(self, yx):
+        ykey, xkey = yx
         yx, ymin, ymax = indexiter(self.y, ykey)
         xx, xmin, xmax = indexiter(self.x, xkey)
         self.resize(ymax, xmax)
@@ -645,13 +670,14 @@ class grid(object):
     reversed = table_iterator(reverse_key_iterator)
     keys = table_iterator(key_iterator)
 
-    def value_iterator(self, (ykey, xkey)):
+    def value_iterator(self, yx):
+        ykey, xkey = yx
         for y, x in self.keyiter(ykey, xkey):
             yield self._rows[y][x]
 
     values = table_iterator(value_iterator)
 
-    def apply_iterator(self, (ykey, xkey)):
+    def apply_iterator(self, yx):
         """You can implement the game of life style actions with this
            iterator::
 
@@ -660,6 +686,7 @@ class grid(object):
               t.apply[:2, :2] = lambda value, key: average(key)
 
         """
+        ykey, xkey = yx
         for y, x in self.keyiter(ykey, xkey):
             yield self, y, x, self._rows[y][x]
 
@@ -695,14 +722,16 @@ class grid(object):
         h = yy - y + 1
         return rect(x, y, w, h)
 
-    def __getitem__(self, (ykey, xkey)):
+    def __getitem__(self, yx):
+        ykey, xkey = yx
         if self._ispoint(ykey, xkey):
             y, x = self.keyiter(ykey, xkey)[0]
             return self.get_cell(y, x)
         else:
             return value_iterator(self, ykey, xkey)
 
-    def __setitem__(self, (ykey, xkey), val):
+    def __setitem__(self, yx, val):
+        ykey, xkey = yx
         ndx = self.keyiter(ykey, xkey)
 
         if len(ndx) == 1:
@@ -734,6 +763,7 @@ class grid(object):
             for y, x in ndx:
                 self.set_cell(y, x, val)
 
-    def __delitem__(self, (ykey, xkey)):
+    def __delitem__(self, yx):
+        ykey, xkey = yx
         for y, x in self.keyiter(ykey, xkey):
             self.del_cell(y, x)
