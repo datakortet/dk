@@ -60,6 +60,7 @@ def test_anonymize_persnr():
         aparts = persnr.splitpnr(apnr)
         parts = persnr.splitpnr(pnr)
         assert parts['year'] == aparts['year']
+        assert persnr.year(pnr) == persnr.year(apnr)
         assert parts['gender'] == aparts['gender']
 
 
