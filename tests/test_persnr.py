@@ -49,6 +49,21 @@ def test_gender():
     assert persnr.gender(pnr4) == 'F'
 
 
+def test_is_anonymized():
+    assert persnr.is_anonymized('92345678901')
+
+
+def test_anonymize_persnr():
+    for pnr in persnr.list_pnr(gender='F') + persnr.list_pnr(gender='M'):
+        apnr = persnr.anonymize_persnr(pnr)
+        assert persnr.is_anonymized(apnr)
+        aparts = persnr.splitpnr(apnr)
+        parts = persnr.splitpnr(pnr)
+        assert parts['year'] == aparts['year']
+        assert persnr.year(pnr) == persnr.year(apnr)
+        assert parts['gender'] == aparts['gender']
+
+
 def test_dnr():
     """Test D-nummer.
        (http://www.skatteetaten.no/no/Artikler/Hvem-kan-rekvirere-D-nummer/

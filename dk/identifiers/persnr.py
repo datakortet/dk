@@ -3,7 +3,7 @@
 """Norwegian 'Personnummer' module.
 
 """
-
+import random
 import datetime
 
 MIN_PERSNR = '01010000382'
@@ -50,12 +50,23 @@ def splitpnr(pnr):
         'k1': pnr[9:10],
         'k2': pnr[10:11],
         'dnr': False,
+        'anonymous': False,
     }
-    if pnr[0] >= '4':
+    first = int(pnr[0])
+    if 4 <= first < 9:
         res['dnr'] = True
         res['day'] = str(int(res['day']) - 40)
+    if first == 9:
+        res['anonymous'] = True
+        res['day'] = pnr[1]
         
     return res
+
+
+def is_anonymized(pnr):
+    """Returns True iff the pnr has been anonymized.
+    """
+    return pnr[0] == '9'
 
 
 def calc_year(yr2, inr):
@@ -188,22 +199,20 @@ def check_parity(pnr):
 
 def calc_par1(ppnr):
     "Calculate the first parity digit."
-    for i in range(1, 10):
-        tmp = [int(v) for v in ppnr[:9]] + [i]
-        val = multiply_reduce(tmp, VEKT1)
-        if val % 11 == 0:
-            return i
-    raise PersnrException(ppnr)
+    tmp = [int(v) for v in ppnr[:9]]
+    val = 11 - multiply_reduce(tmp, VEKT1[:9]) % 11
+    if val >= 10:
+        raise PersnrException("%s is not a valid persnr, ctrl-1 is 10" % ppnr)
+    return val
 
 
 def calc_par2(ppnr):
     "Calculate the second parity digit."
-    for i in range(1, 10):
-        tmp = [int(v) for v in ppnr[:10]] + [i]
-        val = multiply_reduce(tmp, VEKT2)
-        if val % 11 == 0:
-            return i
-    raise PersnrException(ppnr)
+    tmp = [int(v) for v in ppnr[:10]]
+    val = 11 - multiply_reduce(tmp, VEKT2[:10]) % 11
+    if val >= 10:
+        raise PersnrException("%s is not a valid persnr, ctrl-1 is 10" % ppnr)
+    return val
 
 
 def calc_parity(ppnr):
@@ -237,6 +246,31 @@ def list_pnr(day=None, gender='M'):  # pylint: disable=W0621
     if day is None:
         day = datetime.date.today()
     return list(generate_pnr(day, gender))
+
+
+def anonymize_persnr(pnr):
+    """Anonymize persnr according to spec.
+       https://datakortet.sharepoint.com/:w:/r/sites/NorskTest/_layouts/15/Doc.aspx?sourcedoc=%7B35B28277-B033-4639-A925-6B2ADE70397D%7D&file=Pseudonymisering%20og%20Anonymisering.docx
+    """
+    def random_inr(year):
+        if year < 2000:
+            return '%02d' % random.randrange(50)    # random 00-49
+        else:
+            return '%02d' % random.randrange(75, 100)
+
+    parts = splitpnr(pnr)
+    dob_year = year(pnr)
+    res = '9'                                   # first digit is always 9
+    res += str(random.randrange(10))            # random 0-9
+    res += '%02d' % random.randrange(1, 13)     # random 01-12
+    res += pnr[4:6]                             # keep year value
+    gender_digit = str(random.randrange(0 if parts['gender'] == 'F' else 1, 10, 2))
+    while True:
+        try:
+            return calc_parity(res + random_inr(dob_year) + gender_digit)
+        except PersnrException:
+            # generate new inr and try again.
+            pass
 
 
 class TestingPersnr(object):
