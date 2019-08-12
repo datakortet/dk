@@ -3,11 +3,12 @@
     HTML helper file.
 
 """
+from __future__ import absolute_import
 import six
 try:
     import htmlentitydefs as _h
 except ImportError:
-    import html.entities as _h
+    from . import html.entities as _h
 import string as _s
 import types as _types
 from .css import css

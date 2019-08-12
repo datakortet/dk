@@ -1,3 +1,4 @@
+from __future__ import print_function
 import textwrap
 from dk.grid import grid
 
@@ -131,8 +132,8 @@ def test_nsquared_grid():
         for j in range(5):
             g[i, j] = i + j
 
-    print "G:"
-    print _s(g)
+    print("G:")
+    print(_s(g))
     expected = '''\
         0 1 2 3 4
         1 2 3 4 5
@@ -150,18 +151,18 @@ def test_isomorphic_assign():
         for j in range(5):
             g[i, j] = i + j
 
-    print g
+    print(g)
     
-    print "G select:"
-    print g[1:3, :5]
+    print("G select:")
+    print(g[1:3, :5])
 
-    print
-    print
-    print 'h'
+    print()
+    print()
+    print('h')
     h = grid()
     h[5, 5] = 1
-    print h
-    print
+    print(h)
+    print()
     assert _s(h) == _s('''\
        None None None None None None
        None None None None None None
@@ -171,8 +172,8 @@ def test_isomorphic_assign():
        None None None None None    1''')
     
     h[2:4, :5] = g[1:3, :5]  # assignment to same shaped area
-    print h
-    print
+    print(h)
+    print()
     assert _s(h) == _s('''\
        None None None None None None
        None None None None None None
@@ -183,8 +184,8 @@ def test_isomorphic_assign():
 
     # assign 4 and 2 to rows 1..3 in the last column
     h[1:3, -1] = [4, 2]
-    print h
-    print
+    print(h)
+    print()
     assert _s(h) == _s('''\
        None None None None None None
        None None None None None    4
@@ -195,8 +196,8 @@ def test_isomorphic_assign():
 
     # assign range(5) to all rows in the next-to-last column
     h[:, -2] = range(5)
-    print h
-    print
+    print(h)
+    print()
     assert _s(h) == _s('''\
        None None None None    0 None
        None None None None    1    4
@@ -206,10 +207,10 @@ def test_isomorphic_assign():
        None None None None None    1''')
 
     # assign the last row of g to the third-to-last *column* of h.
-    print "GRange:", g[-1, :]
+    print("GRange:", g[-1, :])
     h[1:, -3] = g[-1, :]
-    print "H (same shape):"
-    print h
+    print("H (same shape):")
+    print(h)
     assert _s(h) == _s('''\
        None None None None    0 None
        None None None    4    1    4

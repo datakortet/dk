@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 "dk.collections.pset"
+from __future__ import print_function
 
 import pytest
 from dk.collections import pset, defset
@@ -144,6 +145,6 @@ def test_add():
     p3.a = 1
     p3.b = 2
     assert p1 + p2 == p3
-    print 'p1 + p2:', p1 + p2
-    print 'p2 + p1:', p2 + p1
+    print('p1 + p2:', p1 + p2)
+    print('p2 + p1:', p2 + p1)
     assert p1 + p2 == p2 + p1  # key order not considered for equality

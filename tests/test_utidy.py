@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 import textwrap
 
 from dk import utidy
@@ -6,9 +7,9 @@ from dk import utidy
 
 def hcmp(a, b):
     ua = utidy.utidy(a)
-    print "UA:", ua
+    print("UA:", ua)
     ub = textwrap.dedent(b).strip()
-    print "UB:", ub
+    print("UB:", ub)
     return ua == ub
 
 

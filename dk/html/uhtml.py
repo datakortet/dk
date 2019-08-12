@@ -4,6 +4,7 @@
    New version of html.py module that works on/with Unicode.
 
 """
+from __future__ import print_function
 
 from dk.text import u8, unicode_repr
 import types as _types
@@ -251,7 +252,7 @@ class tag(xtag):
                 res.append(unicode_repr(item))
             except TypeError:
                 # generator found for some reason
-                print type(item), dir(item)
+                print(type(item), dir(item))
                 raise
         return ''.join(res)
 

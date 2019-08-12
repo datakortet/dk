@@ -119,7 +119,7 @@ def combine(fornavn, etternavn):
     """Combine `fornavn` and `etternavn` with a space in-between.
        Remove any double spaces and fix capitalization.
     """
-    return u' '.join(shorten(sys.maxint, *normalize(fornavn, etternavn)))
+    return u' '.join(shorten(sys.maxsize, *normalize(fornavn, etternavn)))
 
 
 # old code that works on utf-8 strings (should be removed..):

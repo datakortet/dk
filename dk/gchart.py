@@ -1,3 +1,4 @@
+from __future__ import print_function
 
 import math
 from dk.html import html
@@ -135,12 +136,12 @@ class XYLineChart(Chart):
         self.params['chm'] = 'o,cfffdf,0,-1,7,0'
 
         x = self.data[0]
-        print x.xrange
-        print x.yrange
+        print(x.xrange)
+        print(x.yrange)
 
         src = 'http://chart.apis.google.com/chart?'
         src += '&'.join('%s=%s' % x for x in self.params.items())
-        print "LENGTH:", len(src)
+        print("LENGTH:", len(src))
         return str(html.img(src=src))
 
 #     def set_chart_data_scale(self):
@@ -225,7 +226,7 @@ class GChart(object):
     def axes_range(self):
         xaxis = '0,%.1f,%.1f' % (min(self.xvals), max(self.xvals))
         yaxis = '1,%.1f,%.1f' % (min(self.yvals), max(self.yvals))
-        print '|'.join([xaxis, yaxis])
+        print('|'.join([xaxis, yaxis]))
         return '|'.join([xaxis, yaxis])
 
     def html(self):
@@ -255,4 +256,4 @@ if __name__ == "__main__":
     gc['cht'] = 'lc'
     gc['chs'] = '700x350'
     gc['chf'] = 'c,lg,45,ffffff,0,76a4fb,0.75|bg,s,EFEFEF'
-    print gc
+    print(gc)

@@ -16,6 +16,7 @@
        hello
 
 """
+from __future__ import print_function
 
 import re
 
@@ -54,7 +55,7 @@ class HtmlTag(object):
         self.text = re.subn(r'(\s+)', " ", txt)[0]
         m = re.match(r'<\s*(/)?\s*([-\w]+)(\s.*)?>', self.text)
         if not m:  # pragma:nocover
-            print "NOT M:", txt
+            print("NOT M:", txt)
         g = m.groups()
         self.closing = g[0] is not None
         self.name = g[1]
@@ -192,4 +193,4 @@ def utidy(html, level=0, indent='    ', simplify=False):
 
 if __name__ == "__main__":  # pragma: nocover
     import sys
-    print utidy(open(sys.argv[1]).read(), simplify=True)
+    print(utidy(open(sys.argv[1]).read(), simplify=True))

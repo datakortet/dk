@@ -3,6 +3,7 @@
 """Norwegian 'Personnummer' module.
 
 """
+from __future__ import print_function
 import random
 import datetime
 
@@ -236,7 +237,7 @@ def generate_pnr(day, gndr):
             if check_pnr_structure(_pnr):
                 yield _pnr
             else:
-                print _pnr, 'error'
+                print(_pnr, 'error')
         except PersnrException:
             pass
 
@@ -300,4 +301,4 @@ def testing_persnr(n=0):
 if __name__ == "__main__":
     # invoke with python -m core.persnr
     for _pnr in list_pnr(datetime.date(1975, 6, 24), 'F'):
-        print _pnr
+        print(_pnr)

@@ -6,6 +6,7 @@
 
 """Module for finding all apps folders.
 """
+from __future__ import print_function
 
 import os
 from dk.utils import root as dkroot
@@ -67,8 +68,8 @@ def appnames():
 if __name__ == "__main__":
     import sys
     if len(sys.argv) != 2:
-        print "Usage: %s appfolders | appnames" % __file__
+        print("Usage: %s appfolders | appnames" % __file__)
         sys.exit(1)
 
     for item in globals()[sys.argv[1]]():
-        print item
+        print(item)

@@ -39,7 +39,7 @@ def _index(s, v, start=None):
             return s.lower().index(v)
         else:
             return s.lower().index(v, start)
-    except ValueError, e:
+    except ValueError as e:
         raise IndexError(e.message + ' "%s"' % v)
 
 
