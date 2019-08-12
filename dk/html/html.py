@@ -8,7 +8,7 @@ import six
 try:
     import htmlentitydefs as _h
 except ImportError:
-    from . import html.entities as _h
+    import html.entities as _h
 import string as _s
 import types as _types
 from .css import css
@@ -22,7 +22,7 @@ _map = map
 raw_string_encodings = ('utf-8', 'iso-8859-1')
 
 
-class color:
+class color(object):
     black = '"#000000"'
     silver = '"#COCOCO"'
     gray = '"#808080"'
