@@ -17,7 +17,7 @@ install:
   - pip install coveralls
 
 script:
-  pytest -v --cov=dk .
+  pytest --color=no -vv --cov=dk tests
 
 after_success:
   coveralls
