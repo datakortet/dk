@@ -8,8 +8,8 @@ from dk.utils import *
 #     assert srcpath(base='foo\\bar', pth='things.py')[-28:] == '/lib/dk/dk/foo/bar/things.py'
 
 
-def test_root():
-    assert root()[-11:] == '/datakortet'
+# def test_root():
+#     assert root()[-11:] == '/datakortet'
 
 
 # def test_dkpath():

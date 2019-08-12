@@ -50,9 +50,10 @@ def srcpath(base, pth):
 #    return __file__.replace('\\', '/').rsplit('/', 1)[0]
 def root():
     "Return the root of the source tree."
-    srcroot = __file__.replace('\\', '/').rsplit('/', 1)[0]
-    srcroot = srcroot.replace("lib/dk/dk", "src/datakortet")
-    return srcroot
+    raise EnvironmentError("dk.utils.root no longer does anything useful.")
+    # srcroot = __file__.replace('\\', '/').rsplit('/', 1)[0]
+    # srcroot = srcroot.replace("lib/dk/dk", "src/datakortet")
+    # return srcroot
 
 # FIXME: this doesn't work since srcpath doesn't work!
 def dkpath(pth=None):
@@ -65,11 +66,12 @@ def dkpath(pth=None):
            dkpath('app/') => ../xxxxxxxx/app/
 
     """
-    if not pth:
-        pth = ''
-    if pth.startswith('/'):
-        pth = pth[1:]
-    return os.path.normcase(os.path.normpath(srcpath('', pth)))
+    raise EnvironmentError("dk.utils.dkpath no longer does anything useful.")
+    # if not pth:
+    #     pth = ''
+    # if pth.startswith('/'):
+    #     pth = pth[1:]
+    # return os.path.normcase(os.path.normpath(srcpath('', pth)))
 
 
 def hour_minute(v):     # XXX: move to ttcal?
