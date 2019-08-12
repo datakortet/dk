@@ -28,20 +28,21 @@ def srcpath(base, pth):
           fp = open(srcpath(path, 'data/testdata.txt'))
 
     """
-    # FIXME: __file__ is not srcroot when this file has been moved!
-    # XXX: this no longer works as intended!
-
-    srcroot = __file__.replace('\\', '/').rsplit('/', 1)[0]
-
-    if not base:
-        base = '/'
-    base = base.replace('\\', '/')
-    if base[0] != '/':
-        base = '/' + base
-    if base[-1] != '/':
-        base += '/'
-
-    return srcroot + base + pth.replace('\\', '/')
+    raise EnvironmentError("dk.utils.srcpath no longer does anything useful.")
+    # # FIXME: __file__ is not srcroot when this file has been moved!
+    # # XXX: this no longer works as intended!
+    #
+    # srcroot = __file__.replace('\\', '/').rsplit('/', 1)[0]
+    #
+    # if not base:
+    #     base = '/'
+    # base = base.replace('\\', '/')
+    # if base[0] != '/':
+    #     base = '/' + base
+    # if base[-1] != '/':
+    #     base += '/'
+    #
+    # return srcroot + base + pth.replace('\\', '/')
 
 
 #def root():     # FIXME: this is fubar (__file__ isn't near the root of the source tree when utils is here...)
