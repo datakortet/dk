@@ -185,3 +185,7 @@ wheels/
 yarn-debug.log*
 yarn-error.log*
 
+
+# from dk gitignore fix
+
+/.dkdeps
