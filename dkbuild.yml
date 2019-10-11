@@ -1,0 +1,10 @@
+_schema: https://static.datakortet.no/schema/dkbuild.schema.yaml
+
+package:
+  name: dk
+  description:
+  version: 1.0.2
+  created: 2014
+
+build:
+  venv: dk
