@@ -2,7 +2,7 @@ _schema: https://static.datakortet.no/schema/dkbuild.schema.yaml
 
 package:
   name: dk
-  description: 'The Datakortet Basic utilities package: `dk`.'
+  description: utility classes
   version: 1.0.2
   created: 2014
 
