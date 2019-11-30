@@ -5,6 +5,7 @@ sudo: false
 python:
   - "2.7"
   - "3.7"
+  - "3.8"
 
 before_install:
   - pip install -U pip
