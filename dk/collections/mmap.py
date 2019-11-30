@@ -38,4 +38,3 @@ class mmap(list):
         for k, v in self:
             if key == k:
                 yield v
-        raise StopIteration

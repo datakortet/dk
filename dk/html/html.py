@@ -5,6 +5,8 @@
 """
 from __future__ import absolute_import
 import six
+from past.builtins import basestring
+from builtins import int
 try:
     import htmlentitydefs as _h
 except ImportError:
@@ -14,6 +16,10 @@ import types as _types
 from .css import css
 from ..text import u8, unicode_repr
 
+try:
+    unicode
+except NameError:
+    unicode = str
 
 _map = map
 
@@ -274,7 +280,7 @@ class tag(xtag):
 
     def _flatten(self, lst):
         for item in lst:
-            if isinstance(item, (str, unicode, int, long, float)):
+            if isinstance(item, (basestring, int, float)):
                 yield item
             elif isinstance(item, xtag):
                 for subitem in item.flatten():
@@ -305,7 +311,8 @@ class tag(xtag):
         res = []
         for item in self.flatten():
             try:
-                res.append(u8(item))
+                # res.append(u8(item))
+                res.append(item)
             except TypeError:
                 # generator found for some reason
                 six.print_(type(item), dir(item))

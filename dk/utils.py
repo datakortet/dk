@@ -3,8 +3,12 @@
 """FIXME: many of these really should go in their own modules...
 """
 
-
+from past.builtins import basestring
 import re, os, datetime
+try:
+    unicode
+except NameError:
+    unicode = str
 
 
 def identity(x):    # XXX: replace any usages of this function with lambda x:x!
@@ -198,7 +202,7 @@ u8 = utf8
 def unhtml(s, toencoding=None):
     "Convert charrefs for Norwegian vowels to their unicode counterparts."
 
-    if type(s) not in (str, unicode):
+    if not isinstance(s, basestring):
         return s
     if type(s) is str:
         s = unicode(s)

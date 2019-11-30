@@ -35,7 +35,7 @@
 from __future__ import print_function
 import sys
 from builtins import str
-from past.builtins import long
+from past.builtins import long, basestring
 try:
     from new import instancemethod
     newmethod = instancemethod
@@ -53,6 +53,13 @@ def _direction(start, end):
         y = -1
     return y, x
 
+
+try:
+    cmp
+except NameError:
+    def cmp(a, b):
+        return a - b
+        
 
 def point_xiter(start, end):
     y, x = _direction(start, end)

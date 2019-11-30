@@ -6,16 +6,19 @@
 
 """
 import sys
-
 import re
+try:
+    unicode
+except NameError:
+    unicode = str
 
 
 class Name2Long(ValueError):
     "The name is too long and cannot be shortened."
 
 
-_mixedcase = re.compile(ur'[A-ZÆØÅ][a-zæøå]+[A-ZÆØÅ]')
-_mcmac = re.compile(ur'(?P<prefix>(Mc)|(Mac)|(Van)|(Von))(?P<sfx>.*)',
+_mixedcase = re.compile(u'[A-ZÆØÅ][a-zæøå]+[A-ZÆØÅ]')
+_mcmac = re.compile(u'(?P<prefix>(Mc)|(Mac)|(Van)|(Von))(?P<sfx>.*)',
                     re.IGNORECASE)
 
 

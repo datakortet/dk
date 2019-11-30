@@ -1,4 +1,8 @@
-
+try:
+    unicode
+except NameError:
+    unicode = str
+    
 
 def tagtester(htmlmod):
     assert str(unicode(htmlmod.a('a', b='c'))) == '<a b="c">a</a>'

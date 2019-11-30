@@ -23,18 +23,20 @@ class TestRecord(TestCase):
 
     def test_trans(self):
         "Test the trans method."
-        self.assertEqual(self.ni.trans(),
-            adt.record(id=2, band='Nirvana', genre='Grunge'))
+        t = self.ni.trans()
+        assert set(t.keys()) == {b'id', b'band', b'genre'}
+        assert t[b'id'] == 2
+        assert t[b'band'] == b'Nirvana'
+        assert t[b'genre'] == b'Grunge'
 
     def test_commit(self):
         "Test the commit method."
-        self.assertEqual(self.ff.commit(), self.ff)
+        assert self.ff.commit() == self.ff
 
     def test_changed(self):
         "Test the changed and rollback methods."
         self.ff.commit()
         self.ff.genre = 'Indie-rock'
-        self.assertEqual(self.ff.changed(), ['genre'])
+        assert self.ff.changed() == ['genre']
         self.ff.rollback()
-        self.assertEqual(self.ff,
-            adt.record(id=1, band='Foo Fighters', genre='Rock'))
+        assert self.ff == adt.record(id=1, band='Foo Fighters', genre='Rock')

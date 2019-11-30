@@ -64,8 +64,8 @@ def test_encode(iplist):
     """Test ascii encoding of values.
     """
     pval = iplist.pack()
-    assert pval == 'eJwLZGjJDWRoKQPiciCuBgAptQUq'
-    assert pval.encode('ascii') == 'eJwLZGjJDWRoKQPiciCuBgAptQUq'
+    assert pval == u'eJwLZGjJDWRoKQPiciCuBgAptQUq'
+    assert pval.encode('ascii') == b'eJwLZGjJDWRoKQPiciCuBgAptQUq'
 
 
 try:

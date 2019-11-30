@@ -5,6 +5,7 @@
 import struct
 import base64
 import ipaddr
+import codecs
 
 
 class IPList(object):
@@ -41,15 +42,15 @@ class IPList(object):
            This fits ~124 ip addys into 250 bytes, if they are sufficiently
            contigous.
         """
-        pstr = ''.join([a.packed for a in self])
-        pzip = pstr.encode('zip')
+        pstr = b''.join([a.packed for a in self])
+        pzip = codecs.encode(pstr, 'zip')
         b64val = base64.urlsafe_b64encode(pzip)
-        return b64val
+        return b64val.decode('ascii')
 
     def unpack(self, b64val):
         "Reverse steps in pack()."
-        pzip = base64.urlsafe_b64decode(b64val)
-        pstr = pzip.decode('zip')
+        pzip = base64.urlsafe_b64decode(b64val.encode('ascii'))
+        pstr = codecs.decode(pzip, 'zip')
         
         while pstr:
             val, pstr = pstr[:4], pstr[4:]

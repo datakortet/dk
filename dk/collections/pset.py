@@ -3,9 +3,13 @@
 """Mapping classes.
 """
 from __future__ import absolute_import
+import sys
 from collections import namedtuple
 import six
-
+try:
+    unicode
+except NameError:
+    unicode = str
 
 keyval = namedtuple('keyval', 'key val')
 
@@ -143,7 +147,7 @@ class pset(dict):
         res.append('</%s>' % self._name())
         return ''.join(res)
 
-    def __unicode__(self):
+    def __unicode(self):
         vals = []
         for k, v in self:
             if k != 'name':
@@ -156,8 +160,20 @@ class pset(dict):
 
         return u'%s(%s)' % (self._name(), vals)
 
+    def __unicode__(self):
+        return self.__unicode()
+
+    def __str__(self):
+        val =  self.__unicode()
+        if sys.version_info < (3,0):
+            return val.encode('utf-8')
+        return val
+
     def __repr__(self):
-        return unicode(self).encode('utf-8')  # .encode('ascii', 'ignore')
+        val = self.__unicode()
+        if sys.version_info < (3, 0):
+            return val.encode('utf-8')
+        return val
 
     def pprint(self, indent=0, tab='   ', seen=None):
         "Pretty print the pset, indented."
@@ -331,7 +347,7 @@ class record(pset):  # pylint:disable=R0904
         "Decode using ``encoding``."
         def decodeval(v):
             "Helper function to decode value ``v``."
-            if type(v) is str:
+            if type(v) is bytes:
                 return v.decode(encoding)
             else:
                 return v

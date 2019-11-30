@@ -1,4 +1,9 @@
+try:
+    unicode
+except NameError:
+    unicode = str
 
+    
 def unicode_repr(obj):
     """Return obj as a unicode string. If obj is a (non-)unicode string, then
        first try to decode it as utf-8, then as iso-8859-1.

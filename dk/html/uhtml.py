@@ -5,10 +5,14 @@
 
 """
 from __future__ import print_function
-
+from past.builtins import basestring
+from builtins import int
 from dk.text import u8, unicode_repr
 import types as _types
-import htmlentitydefs as _h
+try:
+    import html.entities as _h
+except ImportError:
+    import htmlentitydefs as _h
 import string as _s
 from .css import css
 _map = map
@@ -27,6 +31,12 @@ BLOCKLEVEL_ELEMENTS = '''
    li tbody td tfoot th thead tr applet button del iframe ins map object
    script
    '''.split()
+
+
+try:
+    unicode
+except NameError:
+    unicode = str
 
 
 class EscapedString(unicode):
@@ -172,11 +182,11 @@ class xtag(object):
     def __unicode__(self):
         return u'<' + self._name + self.attributes() + u'>'
 
-    def __xxstr__(self):
-        return unicode(self).encode('u8')
+    def __str__(self):
+        return '<' + self._name + self.attributes() + u'>'
 
     def __repr__(self):
-        return repr(unicode(self))
+        return '<' + self._name + self.attributes() + u'>'
 
 
 class stag(xtag):
@@ -184,6 +194,9 @@ class stag(xtag):
     """
     def __unicode__(self):
         return u'<' + self._name + self.attributes() + u'>'
+
+    def __str__(self):
+        return '<' + self._name + self.attributes() + u'>'
 
 
 class tag(xtag):
@@ -218,7 +231,7 @@ class tag(xtag):
 
     def _flatten(self, lst):
         for item in lst:
-            if isinstance(item, (str, unicode, int, long, float)):
+            if isinstance(item, (basestring, int, float)):
                 yield item
             elif isinstance(item, xtag):
                 for subitem in item.flatten():
@@ -255,6 +268,8 @@ class tag(xtag):
                 print(type(item), dir(item))
                 raise
         return ''.join(res)
+
+    __str__ = __unicode__
 
 
 class opentag(tag):

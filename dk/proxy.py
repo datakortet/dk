@@ -35,6 +35,9 @@ class proxy(object):
     def __len__(self):
         return len(self._value)
 
+    def __index__(self):
+        return self._value
+
     def __iter__(self):
         return iter(self._value)
 
@@ -83,6 +86,9 @@ class proxy(object):
     def __and__(self, other):
         return self._value and other
 
+    def __bool__(self):
+        return bool(self._value)
+
     ####################################################################
     # numerical
 
@@ -109,8 +115,17 @@ class proxy(object):
     def __rdiv__(self, other):
         return other / self._value
 
+    def __truediv__(self, other):
+        return self._value / other
+
+    def __rtruediv__(self, other):
+        return other / self._value
+
     def __floordiv__(self, other):
         return self._value // other
+
+    def __rfloordiv__(self, other):
+        return other // self._value
 
     def __mul__(self, other):
         return self._value * other

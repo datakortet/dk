@@ -46,18 +46,18 @@ def test_single_line():
 
 
 def test_lower_case():
-    lower_case('This is JUST a test!!') == 'this is just a test!!'
-    lower_case('Gåsa flyr over Høybukta') == 'gåsa flyr over høybukta'
-    lower_case('Gåsa flyr over Høybukta', 'l1') == 'gåsa flyr over høybukta'
+    lower_case('This is JUST a test!!') == b'this is just a test!!'
+    lower_case('Gåsa flyr over Høybukta') == u'gåsa flyr over høybukta'.encode('u8')
+    lower_case('Gåsa flyr over Høybukta', 'l1') == u'gåsa flyr over høybukta'.encode('l1')
 
 
 def test_ulower_case():
     assert ulower_case(None) == u''
-    assert lower_case('Tømmer og biller') == 'tømmer og biller'
+    assert lower_case('Tømmer og biller') == u'tømmer og biller'.encode('u8')
 
 
 def test_title_case():
-    assert title_case('høna verper egg') == 'Høna Verper Egg'
+    assert title_case('høna verper egg') == u'Høna Verper Egg'.encode('u8')
 
 
 def test_utitle_case():
@@ -65,9 +65,9 @@ def test_utitle_case():
 
 
 def test_title_case_lastname():
-    assert title_case_lastname('ole olsen') == 'Ole Olsen'
-    assert title_case_lastname(u'jan jönson') == 'Jan J\xc3\xb6nson'
-    assert title_case_lastname(u'jan jönson', 'l1') == 'Jan J\xf6nson'
+    assert title_case_lastname('ole olsen') == b'Ole Olsen'
+    assert title_case_lastname(u'jan jönson') == b'Jan J\xc3\xb6nson'
+    assert title_case_lastname(u'jan jönson', 'l1') == b'Jan J\xf6nson'
 
 
 def test_utitle_case_lastname():
@@ -88,7 +88,7 @@ def test_unhtml():
 
 def test_html2u8():
     string = u'&nbsp;&Aring;&AElig;&Oslash;&aring;&aelig;&oslash;&eacute;'
-    result = ' ÅÆØåæøé'
+    result = u' ÅÆØåæøé'.encode('u8')
     assert html2u8(string) == result
 
 

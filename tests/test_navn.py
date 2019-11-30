@@ -45,7 +45,7 @@ class NameTest(unittest.TestCase):
         self.assertEqual(b, navn.normalize2u8(u'Bjørn'.encode('u8')))
         self.assertEqual(b, navn.normalize2u8(u'BJørn'))
         self.assertEqual(b, navn.normalize2u8(u'BJØrn'))
-        self.assertEqual(u'Geir-Arne', navn.normalize2u8(u'geir-arne'))
+        self.assertEqual(b'Geir-Arne', navn.normalize2u8(u'geir-arne'))
 
     def test_normalize_uni(self):
         "Normalization tests."

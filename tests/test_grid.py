@@ -29,7 +29,7 @@ def test_grid1():
 def test_copy():
     t = grid(emptyval=0)
     t[1, 1] = 42
-    t2 = grid.copy(t, lambda orig, (y, x): orig[y, x] / 2)
+    t2 = grid.copy(t, lambda orig, yx: orig[yx[0], yx[1]] // 2)
     assert _s(t2) == _s('''
         0  0
         0 21
