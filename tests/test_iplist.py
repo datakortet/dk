@@ -69,19 +69,14 @@ def test_encode(iplist):
 
 
 try:
-    from dkjs import jason
+    import json
 
     def test_json(iplist):
         """Test json dumps of iplist.
         """
-        assert jason.dumps(iplist, indent=None) == (
+        assert json.dumps(iplist.__json__(), indent=None) == (
             '["81.0.132.109", "81.0.132.118", "81.0.132.119", "81.0.132.123"]'
         )
 
 except ImportError:
     pass
-
-
-
-
-
