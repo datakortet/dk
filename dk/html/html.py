@@ -315,7 +315,7 @@ class tag(xtag):
                     res.append(item.encode("u8"))
                 else:
                     # res.append(u8(item))
-                    res.append(item)
+                    res.append(str(item))
             except TypeError:
                 # generator found for some reason
                 six.print_(type(item), dir(item))
