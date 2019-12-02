@@ -311,8 +311,11 @@ class tag(xtag):
         res = []
         for item in self.flatten():
             try:
-                # res.append(u8(item))
-                res.append(item)
+                if isinstance(item, unicode):
+                    res.append(item.encode("u8"))
+                else:
+                    # res.append(u8(item))
+                    res.append(item)
             except TypeError:
                 # generator found for some reason
                 six.print_(type(item), dir(item))
