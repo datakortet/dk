@@ -8,7 +8,6 @@ import dk.collections.OrderedSet
 import dk.collections.pset
 import dk.collections.sdict
 import dk.collections.xmlrec
-import dk.findapps
 import dk.html.css
 import dk.html.html
 import dk.html.theme
@@ -36,7 +35,6 @@ def test_import_dk():
     assert dk.collections.pset
     assert dk.collections.sdict
     assert dk.collections.xmlrec
-    assert dk.findapps
     assert dk.html.css
     assert dk.html.html
     assert dk.html.theme
