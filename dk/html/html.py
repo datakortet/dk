@@ -4,6 +4,7 @@
 
 """
 from __future__ import absolute_import
+import sys
 import six
 from past.builtins import basestring
 from builtins import int
@@ -306,21 +307,22 @@ class tag(xtag):
 
     def close_tag(self):
         return '</' + self._name + '>' + self._nlafter
-        
-    def __str__(self):
+
+    def _unicode(self):
         res = []
         for item in self.flatten():
             try:
-                if isinstance(item, unicode):
-                    res.append(item.encode("u8"))
-                else:
-                    # res.append(u8(item))
-                    res.append(str(item))
+                res.append(unicode_repr(item))
             except TypeError:
                 # generator found for some reason
                 six.print_(type(item), dir(item))
                 raise
-        return ''.join(res)
+        return u''.join(res)
+        
+    def __str__(self):
+        if sys.version_info.major < 3:
+            return self._unicode().encode('u8')
+        return self._unicode()
 
 
 class opentag(tag):
