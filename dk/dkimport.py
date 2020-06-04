@@ -21,14 +21,14 @@ def dkimport(name):
     if name.startswith('/'):
         raise ValueError("Cannot import from implicit root.")
     # print("DKIMPORT:", name)
-    if sys.version_info < (3, 0):
+    if sys.version_info < (3, 0):  # pragma: nocover
         if '.' in name:
             package, item = name.rsplit('.', 1)
             tmp = __import__(package, {}, {}, [item], -1)
             return getattr(tmp, item)
         else:
             return __import__(name, {}, {}, [], -1)
-    else:
+    else:  # pragma: nocover
         if '.' in name:
             package, item = name.rsplit('.', 1)
             tmp = __import__(package, {}, {}, [item], 0)
