@@ -4,7 +4,7 @@
    (to hide the baroque nature of __import__).
 """
 
-import os, inspect
+import sys, os, inspect
 
 
 def dkimport(name):
@@ -12,7 +12,7 @@ def dkimport(name):
 
        Usage::
 
-           >>> item = dkimport('dk.core.dkimport.dkimport')
+           >>> item = dkimport('dk.dkimport.dkimport')
            >>> item.__name__
            'dkimport'
 
@@ -20,13 +20,23 @@ def dkimport(name):
     name = str(name)  # can't import unicode, or special chars..
     if name.startswith('/'):
         raise ValueError("Cannot import from implicit root.")
-
-    if '.' in name:
-        package, item = name.rsplit('.', 1)
-        tmp = __import__(package, {}, {}, [item], -1)
-        return getattr(tmp, item)
+    # print("DKIMPORT:", name)
+    if sys.version_info < (3, 0):
+        if '.' in name:
+            package, item = name.rsplit('.', 1)
+            tmp = __import__(package, {}, {}, [item], -1)
+            return getattr(tmp, item)
+        else:
+            return __import__(name, {}, {}, [], -1)
     else:
-        return __import__(name, {}, {}, [], -1)
+        if '.' in name:
+            package, item = name.rsplit('.', 1)
+            tmp = __import__(package, {}, {}, [item], 0)
+            return getattr(tmp, item)
+        else:
+            return __import__(name, {}, {}, [], 0)
+        # import importlib
+        # return importlib.import_module(name)
 
 
 def _true(_x):

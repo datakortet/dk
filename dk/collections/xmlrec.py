@@ -40,7 +40,7 @@ class xmlrec(pset):
         }
     
     def __init__(self, soup, **types):
-        super(xmlrec,self).__init__()
+        super(xmlrec, self).__init__()
         for tag in soup.findAll(True):
             name = str(tag.name).lower()
             val = tag.string
