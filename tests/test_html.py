@@ -95,3 +95,12 @@ def test_html():
 def test_uhtml():
     from dk.html import uhtml
     return tagtester(uhtml)
+
+
+def test_make_unicode():
+    from dk.html.html import make_unicode, EmptyString
+    
+    assert make_unicode(EmptyString) == EmptyString
+    assert make_unicode(u'') == u''
+    assert make_unicode('') == u''
+    assert(make_unicode(b'')) == u''
