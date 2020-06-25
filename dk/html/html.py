@@ -170,6 +170,29 @@ def norm_attr_name(attr):
     return attr.replace('_', '-')
     
 
+class EmptyString(object):
+    pass
+
+
+def make_unicode(obj):
+    """Return obj as a unicode string. If obj is a (non-)unicode string, then
+       first try to decode it as utf-8, then as iso-8859-1.
+    """
+    if isinstance(obj, unicode):
+        return obj
+
+    if isinstance(obj, str):
+        try:
+            return obj.decode('u8')
+        except:
+            return obj.decode('l1')
+    
+    if obj is EmptyString:
+        return obj
+
+    return unicode(obj)
+
+
 class xtag(object):
     """x(ml-style)tag: a tag without content or a closing tag.
        
@@ -214,6 +237,8 @@ class xtag(object):
             if isinstance(v, bool):
                 if v:
                     res.append(' %s' % k)
+            elif v is EmptyString:
+                res.append(' %s=""' % k)
             else:
                 v = normalize(v)
                 if v:
@@ -574,7 +599,7 @@ class select(tag):
             kw['id'] = 'id_' + kw['name']
         super(select, self).__init__('select', **kw)
         self._options = None
-        self.options = options
+        self.options = options  # assigns to property
         if selected is not None:
             selected = u8(selected)
         content = []
@@ -595,10 +620,10 @@ class select(tag):
                 first = options[0]
                 
                 if len(first) == 2 and not isinstance(first, basestring):
-                    self._options = [(unicode_repr(k), unicode_repr(v))
+                    self._options = [(make_unicode(k), make_unicode(v))
                                      for (k, v) in options]
                 else:
-                    self._options = [(unicode_repr(o), unicode_repr(o))
+                    self._options = [(make_unicode(o), make_unicode(o))
                                      for o in options]
 
         def fget(self):
