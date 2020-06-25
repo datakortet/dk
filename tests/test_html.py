@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 try:
     unicode
 except NameError:
@@ -85,6 +87,32 @@ def tagtester(htmlmod):
     for t in htmlmod.tags:
         nl = '\\n' if t in htmlmod._nlafter else ''
         #print """    assert str(unicode(htmlmod.%s('a', b='c'))) == '<%s b=\"c\">a</%s>%s'""" % (t,t,t, nl)
+
+
+def test_escape_char():
+    from dk.html.html import escape_char, escaped_array, escape
+
+    assert escape_char(u'&oslash;') == '&oslash;'
+    assert escape_char(u'ø') == '&oslash;'
+    assert escaped_array(u'hi') == ['h', 'i']
+    assert escape(u'bjørn') == 'bj&oslash;rn'
+    
+
+def test_attribute_functions():
+    from dk.html.html import plain_attribute, quote_xhtml, quote_smart, quote_if_needed, norm_attr_name
+
+    assert plain_attribute('foo')
+    assert not plain_attribute('&')
+    assert quote_xhtml('hello') == '"hello"'
+    assert quote_xhtml('"hi"') == '"&quot;hi&quot;"'
+    assert quote_smart('"hi"') == """'"hi"'"""
+    # s = ""
+    # s += '"'
+    # s += "'"
+    # assert quote_smart(s) == "&quot;'"
+
+    assert quote_if_needed('v') == "v"
+    assert quote_if_needed('&1') == '"&1"'
 
 
 def test_html():

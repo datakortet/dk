@@ -8,18 +8,18 @@ import sys
 import six
 from past.builtins import basestring
 from builtins import int
-try:
+try:  # pragma: nocover
     import htmlentitydefs as _h
-except ImportError:
+except ImportError:  # pragma: nocover
     import html.entities as _h
 import string as _s
 import types as _types
 from .css import css
 from ..text import u8, unicode_repr
 
-try:
+try:  # pragma: nocover
     unicode
-except NameError:
+except NameError:  # pragma: nocover
     unicode = str
 
 _map = map
