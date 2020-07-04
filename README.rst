@@ -16,19 +16,6 @@ Various basic packages pulled from our source tree.
    :target: https://coveralls.io/r/datakortet/dk?branch=master
    :alt: Test Coverage
 
-.. image:: https://gitlab.com/norsktest/dk/badges/master/pipeline.svg
-   :target: https://gitlab.com/norsktest/dk/commits/master
-   :alt: pipeline status
-
-.. image:: https://img.shields.io/badge/docs-darkgreen.svg
-   :target: https://norsktest.gitlab.io/dk
-   :alt: documentation
-
-.. image:: https://codecov.io/gl/norsktest/dk/branch/master/graph/badge.svg?token=HVSX43NZP3
-  :target: https://codecov.io/gl/norsktest/dk
-
-.. include:: badge-wheel.rst
-
 Documentation
 -------------
 
