@@ -8,9 +8,7 @@ Subpackages
 
     dk.collections
     dk.html
-    dk.identifiers
     dk.js
-    dk.ttcal
 
 Submodules
 ----------
@@ -51,14 +49,6 @@ dk.dklogger module
 ------------------
 
 .. automodule:: dk.dklogger
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-dk.findapps module
-------------------
-
-.. automodule:: dk.findapps
     :members:
     :undoc-members:
     :show-inheritance:
