@@ -4,7 +4,7 @@ from .pset import pset
 
 
 def Boolean(s):
-    if isinstance(s, basestring):
+    if isinstance(s, str):
         if s.lower() in ('true', 'yes', '1'):
             return True
         else:
