@@ -5,6 +5,9 @@
 
 """
 from __future__ import print_function
+
+from typing import List
+from builtins import str as texttype
 from past.builtins import basestring
 from builtins import int
 from dk.text import u8, unicode_repr
@@ -20,65 +23,100 @@ _map = map
 raw_string_encodings = ('utf-8', 'iso-8859-1')
 
 
-INLINE_ELEMENTS = '''
+class color(object):
+    black = '"#000000"'
+    silver = '"#COCOCO"'
+    gray = '"#808080"'
+    white = '"#FFFFFF"'
+    maroon = '"#800000"'
+    red = '"#FF0000"'
+    purple = '"#800080"'
+    fuchsia = '"#FF00FF"'
+    green = '"#008000"'
+    lime = '"#00FF00"'
+    olive = '"#808000"'
+    yellow = '"#FFFF00"'
+    navy = '"#000080"'
+    blue = '"#0000FF"'
+    teal = '"#008080"'
+    aqua = '"#00FFFF"'
+
+
+INLINE_ELEMENTS = u'''
    a abbr acronym b basefont bdo big br cite code dfn em font i img input
    kbd label q s samp select small span strike strong sub sup textarea tt
    u var applet button del iframe ins map object script'''.split()
 
-BLOCKLEVEL_ELEMENTS = '''
+BLOCKLEVEL_ELEMENTS = u'''
    address blockquote center dir div dl fieldset form h1 h2 h3 h4 h5 h6
    hr isindex menu noframes noscript ol p pre table ul dd dt frameset
    li tbody td tfoot th thead tr applet button del iframe ins map object
-   script
+   script main section article nav header footer
    '''.split()
 
 
-try:
-    unicode
-except NameError:
-    unicode = str
+# try:
+#     unicode
+# except NameError:
+#     unicode = str
 
 
-class EscapedString(unicode):
+class EscapedString(texttype):
     pass
 
 
-def escape_char(unichar):
-    if len(unichar) > 1 and (unichar[0] == '&' and unichar[-1] == ';'):
+def escape_char(unichar):  # type: (texttype) -> texttype
+    assert isinstance(unichar, texttype)
+    if len(unichar) > 1 and (unichar[0] == u'&' and unichar[-1] == u';'):
         return str(unichar)
     
-    o = ord(unichar)
-    t = _h.codepoint2name.get(o, o)
-    if t == o:
-        if 0 < t < 128:
-            return str(unichar)
+    ordch = ord(unichar)
+    name = _h.codepoint2name.get(ordch, ordch)
+    if name == ordch:
+        if 0 < name < 128:
+            return unichar
         else:
             return ''
     else:
-        return '&' + t + ';'
+        return u'&' + name + u';'
 
 
-def escaped_array(s):
+def escaped_array(s):  # type: (texttype) -> List[texttype]
     """Convert unicode string to list of ascii characters or
        entitydefs like &oslash; etc.
     """
     return [escape_char(ch) for ch in s]
 
 
-def escape(s, enc=None):
-    """Convert string s (potentially unicode) to a ascii string
+def escape(s, enc=None):  # type: (Union[texttype, bytes]) -> texttype
+    """Convert string s (potentially unicode) to a unicode string
+       with ascii representation, i.e.
        with entitydefs like &oslash; &aelig; etc.
     """
     if s is None:
-        return ''
-    if not isinstance(s, unicode):
+        return u''
+    if isinstance(s, bytes):
         if enc is not None:
             s = s.decode(enc)
-    return ''.join(escape_char(c) for c in s)
+    return u''.join(escape_char(c) for c in s)
+
+
+def unescape(txt):
+    """Convert text containing entitydefs into Unicode.
+    """
+    try:  # pragma: nocover
+        from html.parser import HTMLParser
+    except ImportError:  # pragma: nocover
+        from HTMLParser import HTMLParser
+    h = HTMLParser()
+    if isinstance(txt, bytes):
+        txt = txt.decode('u8')
+    # this one is undocumented...
+    return h.unescape(txt)
 
 
 def u8escape(s):
-    return escape(s,'u8')
+    return escape(s, 'u8')
 
 
 def rawstr2unicode(s):
@@ -183,10 +221,9 @@ class xtag(object):
         return u'<' + self._name + self.attributes() + u'>'
 
     def __str__(self):
-        return '<' + self._name + self.attributes() + u'>'
+        return '<' + self._name + self.attributes() + '>'
 
-    def __repr__(self):
-        return '<' + self._name + self.attributes() + u'>'
+    __repr__ = __str__
 
 
 class stag(xtag):
@@ -196,7 +233,7 @@ class stag(xtag):
         return u'<' + self._name + self.attributes() + u'>'
 
     def __str__(self):
-        return '<' + self._name + self.attributes() + u'>'
+        return '<' + self._name + self.attributes() + '>'
 
 
 class tag(xtag):

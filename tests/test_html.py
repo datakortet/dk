@@ -120,9 +120,9 @@ def test_html():
     return tagtester(html)
 
 
-def test_uhtml():
-    from dk.html import uhtml
-    return tagtester(uhtml)
+# def test_uhtml():
+#     from dk.html import uhtml
+#     return tagtester(uhtml)
 
 
 def test_make_unicode():

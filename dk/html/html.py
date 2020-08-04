@@ -47,6 +47,7 @@ class color(object):
     teal = '"#008080"'
     aqua = '"#00FFFF"'
 
+
 INLINE_ELEMENTS = '''
    a abbr acronym b basefont bdo big br cite code dfn em font i img input
    kbd label q s samp select small span strike strong sub sup textarea tt
