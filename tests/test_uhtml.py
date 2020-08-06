@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
-from dk.html import uhtml
-from dk.html.uhtml import escape_char, escaped_array, escape, u8escape, unescape
-
-
-# from dk.html.uhtml import plain_attribute, quote_xhtml, quote_smart, \
-#     quote_if_needed, norm_attr_name
-# from dk.html.uhtml import make_unicode, EmptyString
+from dk.html.uhtml import *
 
 
 def test_escape_char():
@@ -20,19 +14,27 @@ def test_escape_char():
     assert unescape(u'bj&oslash;rn') == u'bjørn'
     assert unescape(b'bj&oslash;rn') == u'bjørn'
 
-# def test_attribute_functions():
-#     assert plain_attribute('foo')
-#     assert not plain_attribute('&')
-#     assert quote_xhtml('hello') == '"hello"'
-#     assert quote_xhtml('"hi"') == '"&quot;hi&quot;"'
-#     assert quote_smart('"hi"') == """'"hi"'"""
-#     # s = ""
-#     # s += '"'
-#     # s += "'"
-#     # assert quote_smart(s) == "&quot;'"
-#
-#     assert quote_if_needed('v') == "v"
-#     assert quote_if_needed('&1') == '"&1"'
+
+def test_normalize():
+    assert normalize(u'Bjørn') == u'Bjørn'
+    assert normalize(u'Bjørn'.encode('u8')) == u'Bjørn'
+    assert normalize(u'Bjørn'.encode('iso-8859-1')) == u'Bjørn'
+    assert normalize(u'€'.encode('iso-8859-15')) != u'€'
+
+
+def test_attribute_functions():
+    assert plain_attribute('foo')
+    assert not plain_attribute('&')
+    assert quote_xhtml('hello') == '"hello"'
+    assert quote_xhtml('"hi"') == '"&quot;hi&quot;"'
+    assert quote_smart('"hi"') == """'"hi"'"""
+    # s = ""
+    # s += '"'
+    # s += "'"
+    # assert quote_smart(s) == "&quot;'"
+
+    assert quote_if_needed('v') == "v"
+    assert quote_if_needed('&1') == '"&1"'
 #
 #
 # def test_make_unicode():
@@ -142,3 +144,9 @@ def test_escape_char():
 #         nl = '\\n' if t in uhtml._nlafter else ''
 #         # print """    assert str(unicode(uhtml.%s('a', b='c'))) == '<%s b=\"c\">a</%s>%s'""" % (t,t,t, nl)
 #
+
+def test_make_unicode():
+    assert make_unicode(EmptyString) == EmptyString
+    assert make_unicode(u'') == u''
+    assert make_unicode('') == u''
+    assert (make_unicode(b'')) == u''

@@ -6,8 +6,8 @@
 """
 from __future__ import print_function
 
-from typing import List
-from builtins import str as texttype
+from typing import List, Any
+from builtins import str as text
 from past.builtins import basestring
 from builtins import int
 from dk.text import u8, unicode_repr
@@ -61,12 +61,12 @@ BLOCKLEVEL_ELEMENTS = u'''
 #     unicode = str
 
 
-class EscapedString(texttype):
+class EscapedString(text):
     pass
 
 
-def escape_char(unichar):  # type: (texttype) -> texttype
-    assert isinstance(unichar, texttype)
+def escape_char(unichar):  # type: (text) -> text
+    assert isinstance(unichar, text)
     if len(unichar) > 1 and (unichar[0] == u'&' and unichar[-1] == u';'):
         return str(unichar)
     
@@ -81,14 +81,14 @@ def escape_char(unichar):  # type: (texttype) -> texttype
         return u'&' + name + u';'
 
 
-def escaped_array(s):  # type: (texttype) -> List[texttype]
+def escaped_array(s):  # type: (text) -> List[text]
     """Convert unicode string to list of ascii characters or
        entitydefs like &oslash; etc.
     """
     return [escape_char(ch) for ch in s]
 
 
-def escape(s, enc=None):  # type: (Union[texttype, bytes]) -> texttype
+def escape(s, enc=None):  # type: (Union[text, bytes]) -> text
     """Convert string s (potentially unicode) to a unicode string
        with ascii representation, i.e.
        with entitydefs like &oslash; &aelig; etc.
@@ -119,41 +119,62 @@ def u8escape(s):
     return escape(s, 'u8')
 
 
-def rawstr2unicode(s):
+def rawstr2unicode(s):  # type: (bytes) -> text
+    # only used from normalize (below)
     for enc in raw_string_encodings:
         try:
-            return unicode(s, enc)
+            return s.decode(enc)
         except UnicodeDecodeError:
             pass
     raise UnicodeError("Could not decode raw string.")
 
 
-def normalize(v):
+def normalize(v):   # type: (Any) -> text
     """returns a stringified unicode version of v
     """
-    if not isinstance(v, basestring):
-        # all 'other' objects: call their __str__ method
-        v = unicode(str(v))
-    elif not isinstance(v, unicode):
-        # str objects: try to find encoding
-        v = rawstr2unicode(v)
-    return v
+    if isinstance(v, bytes):
+        return rawstr2unicode(v)
+    return text(v)
 
 
-def quote(v):
-    '''
-       >>> quote(u"Bjorn's")
-       u'"Bjorn\\'s"'
-       >>> quote(u'the "best"')
-       u'"the &quot;best&quot;"'
-    '''  # '
+def quote_xhtml(v):  # type: (text) -> text
     if u'"' in v:
         v = v.replace(u'"', u'&quot;')
     return u'"%s"' % v
 
 
+def quote_smart(strval):
+    dq = u'"' in strval
+    sq = u"'" in strval
+    if dq and sq:
+        return u"'%s'" % s.replace(u'"', u'&quot;')
+    elif dq:
+        return u"'%s'" % strval
+    else:
+        return u'"%s"' % strval
+
+
+def plain_attribute(strval, legal=_s.ascii_letters + _s.digits + '-._:'):  # type: (text, text) -> bool
+    # html 4: 3.2.2 p4 some attributes may be unquoted
+    for c in strval:
+        if c not in legal:
+            return False
+    return True
+
+
+def quote_if_needed(strval):  # type: (text) -> text
+    if plain_attribute(strval):
+        return strval
+    else:
+        return quote_smart(strval)
+
+
+quote = quote_smart
+
+
 def norm_attr_name(a):
-    """``_foo_bar => _foo_bar``,  ``class_ => class``, ``max_height => max-height``
+    """``_foo_bar => _foo_bar``,  ``class_ => class``,
+       ``max_height => max-height``
 
            >>> norm_attr_name(u'class_')
            u'class'
@@ -319,18 +340,18 @@ class closetag(tag):
         yield self.close_tag()
 
 
-class text(tag):
+class text_grouping(tag):
     """text tag: outputs its contents without any tags around it. Useful
        for grouping at the top level.
     """
     def __init__(self, *content):
-        super(text,self).__init__('text', *content)
+        super(text_grouping, self).__init__('text', *content)
         
     def flatten(self):
         return self._flatten(self._content)
 
 
-class lines(text):
+class lines(text_grouping):
     """like text, except each item in content is separated with a <br> tag.
     """
     def flatten(self):

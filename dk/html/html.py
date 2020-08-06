@@ -160,10 +160,19 @@ def quote_if_needed(strval):
     else:
         return quote_smart(strval)
 
+
 quote = quote_smart
 
 
 def norm_attr_name(attr):
+    """``_foo_bar => _foo_bar``,  ``class_ => class``,
+       ``max_height => max-height``
+
+           >>> norm_attr_name('class_')
+           'class'
+           >>> norm_attr_name('z_index')
+           'z-index'
+    """
     if attr[0] == '_':
         return attr
     if attr[-1] == '_':
