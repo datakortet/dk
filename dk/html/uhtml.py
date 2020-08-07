@@ -6,10 +6,10 @@
 """
 from __future__ import print_function
 
+import sys
 from typing import List, Any
-from builtins import str as text
+from builtins import int, str as text
 from past.builtins import basestring
-from builtins import int
 from dk.text import u8, unicode_repr
 import types as _types
 try:
@@ -43,7 +43,7 @@ class color(object):
 
 
 INLINE_ELEMENTS = u'''
-   a abbr acronym b basefont bdo big br cite code dfn em font i img input
+   a abbr acronym b basefont bdo big br cite code dfn em figure font i img input
    kbd label q s samp select small span strike strong sub sup textarea tt
    u var applet button del iframe ins map object script'''.split()
 
@@ -53,12 +53,6 @@ BLOCKLEVEL_ELEMENTS = u'''
    li tbody td tfoot th thead tr applet button del iframe ins map object
    script main section article nav header footer
    '''.split()
-
-
-# try:
-#     unicode
-# except NameError:
-#     unicode = str
 
 
 class EscapedString(text):
@@ -186,7 +180,30 @@ def norm_attr_name(a):
     if a[-1] == u'_':
         a = a[:-1]
     return a.replace(u'_', u'-')
-    
+
+
+class EmptyString(object):
+    pass
+
+
+def make_unicode(obj):
+    """Return obj as a unicode string. If obj is a (non-)unicode string, then
+       first try to decode it as utf-8, then as iso-8859-1.
+    """
+    if obj is EmptyString:
+        return obj
+
+    if isinstance(obj, text):
+        return obj
+
+    if isinstance(obj, bytes):
+        try:
+            return obj.decode('u8')
+        except UnicodeDecodeError:
+            return obj.decode('l1')
+
+    return text(obj)
+
 
 class xtag(object):
     """x(ml-style)tag: a tag without content or a closing tag.
@@ -223,14 +240,14 @@ class xtag(object):
     def attributes(self):
         """return a string like key="val". """
         res = []
-        for k, v in self._attr.items():
+        for k, v in sorted(list(self._attr.items())):
             if isinstance(v, css):
                 v = str(v)
 
             v = normalize(v)
             if v:
                 res.append(u' %s=%s' % (k, quote(escape(v))))
-        return ''.join(res)
+        return u''.join(res)
 
     def _flatten(self):
         yield self
@@ -238,11 +255,19 @@ class xtag(object):
     def flatten(self):
         yield self
 
-    def __unicode__(self):
+    def _as_unicode(self):
         return u'<' + self._name + self.attributes() + u'>'
 
+    def _as_bytes(self):
+        return self._as_unicode().encode('u8')
+
+    __unicode__ = _as_unicode
+
     def __str__(self):
-        return '<' + self._name + self.attributes() + '>'
+        if sys.version_info.major < 3:
+            return self._as_bytes()
+        else:
+            return self._as_unicode()
 
     __repr__ = __str__
 
@@ -250,11 +275,8 @@ class xtag(object):
 class stag(xtag):
     """s(ingle)tag
     """
-    def __unicode__(self):
+    def _as_unicode(self):
         return u'<' + self._name + self.attributes() + u'>'
-
-    def __str__(self):
-        return '<' + self._name + self.attributes() + '>'
 
 
 class tag(xtag):
@@ -278,14 +300,13 @@ class tag(xtag):
         else:
             self._content = content
 
-    def xcontent():
-        def fget(self):
-            return self._content
+    @property
+    def xcontent(self):
+        return self._content
 
-        def fset(self, v):
-            self._content = v
-        return locals()
-    xcontent = property(**xcontent())
+    @xcontent.setter
+    def xcontent(self, v):
+        self._content = v
 
     def _flatten(self, lst):
         for item in lst:
@@ -316,18 +337,16 @@ class tag(xtag):
     def close_tag(self):
         return u'</' + self._name + u'>' + self._nlafter
         
-    def __unicode__(self):
+    def _as_unicode(self):
         res = []
         for item in self.flatten():
             try:
                 res.append(unicode_repr(item))
-            except TypeError:
+            except TypeError:  # pragma: nocover
                 # generator found for some reason
                 print(type(item), dir(item))
                 raise
-        return ''.join(res)
-
-    __str__ = __unicode__
+        return u''.join(res)
 
 
 class opentag(tag):
@@ -358,7 +377,7 @@ class lines(text_grouping):
         content = []
         for c in self._content[:-1]:
             content.append(c)
-            content.append('<br>')
+            content.append(u'<br>')
         content.append(self._content[-1])
         return self._flatten(content)
 
@@ -368,11 +387,11 @@ class dtag(tag):
        this tag doesn't output anything at all. Useful for legends, table
        captions, etc.
     """
-    def __unicode__(self):
+    def _as_unicode(self):
         if self._content:
             if len(self._content) == 1 and self._content[0] == u'':
                 return u''
-            return super(dtag,self).__str__()
+            return super(dtag, self)._as_unicode()
         else:
             return u''
 
@@ -423,8 +442,17 @@ doctype = doctype401strict
 
 xtags = "br hr img input link col meta".split()
 
-for t in xtags:
-    globals()[t] = mkxtag(t)
+# for t in xtags:
+#     globals()[t] = mkxtag(t)
+
+# these are created by the forloop above.
+br = mkxtag("br")
+hr = mkxtag("hr")
+img = mkxtag("img")
+input = mkxtag("input")   # ouch!
+link = mkxtag("link")
+col = mkxtag("col")
+meta = mkxtag("meta")
 
 tags = '''
   a abbr acronym address applet area b base bsefont bdo big blockquote
@@ -441,13 +469,106 @@ _nlafter = '''
   col colgroup
   '''.split()
 
-for t in tags:
-    globals()[t] = mktag(t, tag, t in _nlafter)
+# for t in tags:
+#     globals()[t] = mktag(t, tag, t in _nlafter)
 
-dtags = "caption legend".split()
 
-for t in dtags:
-    globals()[t] = mkdtag(t)
+class a(tag):
+    def __init__(self, *content, **kw):
+        tag.__init__(self, 'a', *content, **kw)
+        self._nlafter = ''
+
+    def _as_unicode(self):
+        return super(a, self)._as_unicode()
+
+# these are created by the forloop above.
+# a = mktag("a", tag, False)
+abbr = mktag("abbr", tag, False)
+acronym = mktag("acronym", tag, False)
+address = mktag("address", tag, False)
+applet = mktag("applet", tag, False)
+area = mktag("area", tag, False)
+b = mktag("b", tag, False)
+base = mktag("base", tag, False)
+bsefont = mktag("bsefont", tag, False)
+bdo = mktag("bdo", tag, False)
+big = mktag("big", tag, False)
+blockquote = mktag("blockquote", tag, True)
+body = mktag("body", tag, True)
+button = mktag("button", tag, False)
+center = mktag("center", tag, True)
+cite = mktag("cite", tag, False)
+code = mktag("code", tag, False)
+colgroup = mktag("colgroup", tag, True)
+dd = mktag("dd", tag, False)
+dfn = mktag("dfn", tag, False)
+div = mktag("div", tag, True)
+dl = mktag("dl", tag, True)
+dt = mktag("dt", tag, True)
+em = mktag("em", tag, False)
+fieldset = mktag("fieldset", tag, True)
+figure = mktag("figure", tag, True)
+font = mktag("font", tag, False)
+form = mktag("form", tag, True)
+frame = mktag("frame", tag, True)
+frameset = mktag("frameset", tag, False)
+h1 = mktag("h1", tag, True)
+h2 = mktag("h2", tag, True)
+h3 = mktag("h3", tag, True)
+h4 = mktag("h4", tag, True)
+h5 = mktag("h5", tag, True)
+h6 = mktag("h6", tag, True)
+head = mktag("head", tag, True)
+html = mktag("html", tag, True)          # same name as module :-(
+i = mktag("i", tag, False)
+iframe = mktag("iframe", tag, True)
+ins = mktag("ins", tag, False)
+kbd = mktag("kbd", tag, False)
+label = mktag("label", tag, False)
+li = mktag("li", tag, True)
+map = mktag("map", tag, False)           # ouch!
+menu = mktag("menu", tag, False)
+nobr = mktag("nobr", tag, False)
+noframes = mktag("noframes", tag, False)
+noscript = mktag("noscript", tag, False)
+ol = mktag("ol", tag, True)
+optgroup = mktag("optgroup", tag, False)
+option = mktag("option", tag, True)
+p = mktag("p", tag, True)
+param = mktag("param", tag, False)
+pre = mktag("pre", tag, True)
+q = mktag("q", tag, False)
+s = mktag("s", tag, False)
+samp = mktag("samp", tag, False)
+small = mktag("small", tag, False)
+span = mktag("span", tag, False)
+strike = mktag("strike", tag, False)
+strong = mktag("strong", tag, False)
+sub = mktag("sub", tag, False)
+sup = mktag("sup", tag, False)
+table = mktag("table", tag, True)
+tbody = mktag("tbody", tag, True)
+td = mktag("td", tag, False)
+textarea = mktag("textarea", tag, False)
+tfoot = mktag("tfoot", tag, False)
+th = mktag("th", tag, False)
+thead = mktag("thead", tag, False)
+title = mktag("title", tag, True)
+tr = mktag("tr", tag, True)
+tt = mktag("tt", tag, False)
+u = mktag("u", tag, False)
+ul = mktag("ul", tag, True)
+var = mktag("var", tag, False)      # ouch
+
+dtags = "caption legend figcaption".split()
+
+# for t in dtags:
+#     globals()[t] = mkdtag(t)
+
+# created from above for loop
+caption = mkdtag("caption")
+figcaption = mkdtag("figcaption")
+legend = mkdtag("legend")
 
 # special case (del is a keyword)
 del_ = mktag('del')
@@ -483,72 +604,49 @@ class select(tag):
         self._options = None
         self.options = options
         if selected is not None:
-            selected = u8(selected)
+            selected = str(selected)
         content = []
         for k, v in self.options:
-            if u8(k) == selected:
+            if str(k) == selected:
                 opt = option(v, value=k, selected='selected')
             else:
                 opt = option(v, value=k)
             content.append(opt)
         self._content = tuple(content)
 
-    def options():
-        def fset(self, options):
-            if len(options) == 0:
-                self._options = []
+    @property
+    def options(self):
+        return self._options
+
+    @options.setter
+    def options(self, options):
+        if len(options) == 0:
+            self._options = []
+        else:
+            first = options[0]
+
+            if len(first) == 2 and not isinstance(first, basestring):
+                self._options = [(unicode_repr(k), unicode_repr(v))
+                                 for (k,v) in options]
             else:
-                first = options[0]
-                
-                if len(first) == 2 and not isinstance(first, basestring):
-                    self._options = [(unicode_repr(k), unicode_repr(v))
-                                     for (k,v) in options]
-                else:
-                    self._options = [(unicode_repr(o), unicode_repr(o))
-                                     for o in options]
+                self._options = [(unicode_repr(o), unicode_repr(o))
+                                 for o in options]
 
-        def fget(self):
-            return self._options
-        return locals()
-    options = property(**options())
+    @property
+    def selected(self):
+        return self._selected
 
-    def selected():
-        def fset(self, v):
-            if v not in self.values:
-                raise ValueError("Only valid options can be selected.")
-            self._selected = v
+    @selected.setter
+    def selected(self, v):
+        if v not in self.values:
+            raise ValueError("Only valid options can be selected.")
+        self._selected = v
 
-        def fget(self):
-            return self._selected
-        return locals()
-    selected = property(**selected())
-
-    def values():
-        def fget(self):
-            return [k for (k,v) in self.options]
-        return locals()
-    values = property(**values())
+    @property
+    def values(self):
+        return [k for (k,v) in self.options]
 
 
 class tabledesc(object):
     def __init__(self, *cols):
         self.cols = cols
-        
-
-def test_doctest():
-    """
-       ::
-
-           >>> br()
-           u'<br>'
-           >>> div('hello', b('world'))
-           u'<div>hello<b>world</b></div>\\n'
-           >>> print select(options=[u'a', u'b'], name='foo')
-           u'<select name="foo" id="id_foo"><option value="a">a</option>\\n<option value="b">b</option>\\n</select>'
-
-    """
-    import doctest
-    doctest.testmod()
-
-if __name__ == "__main__":
-    _test()

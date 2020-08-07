@@ -5,6 +5,7 @@ def test_css():
     # the str here is bytes on py2 and unicode on py3
 
     x = css(color='red', background='blue')
+    print("X: %r" % str(x))
     assert str(x) == 'background:blue;color:red'
 
     x.border = 'none'
@@ -14,6 +15,7 @@ def test_css():
 
     a = css()
     a['font-weight'] = 'bold'
+    print("FWB: %r" % str(a))
     assert str(a) == 'font-weight:bold'
 
     a.text_align = 'right'

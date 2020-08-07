@@ -7,7 +7,7 @@ from __future__ import absolute_import
 import sys
 import six
 from past.builtins import basestring
-from builtins import int
+from builtins import int, str as texttype
 try:  # pragma: nocover
     import htmlentitydefs as _h
 except ImportError:  # pragma: nocover
@@ -188,19 +188,19 @@ def make_unicode(obj):
     """Return obj as a unicode string. If obj is a (non-)unicode string, then
        first try to decode it as utf-8, then as iso-8859-1.
     """
-    if isinstance(obj, unicode):
+    if obj is EmptyString:
         return obj
 
-    if isinstance(obj, str):
+    if isinstance(obj, texttype):
+        return obj
+
+    if isinstance(obj, bytes):
         try:
             return obj.decode('u8')
         except:
             return obj.decode('l1')
-    
-    if obj is EmptyString:
-        return obj
 
-    return unicode(obj)
+    return texttype(obj)
 
 
 class xtag(object):

@@ -1,4 +1,4 @@
 ipaddr==2.2.0
 six==1.12.0
 future==0.18.1
-
+typing==3.6.4

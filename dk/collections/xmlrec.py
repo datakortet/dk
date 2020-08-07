@@ -1,4 +1,5 @@
 
+from past.builtins import basestring
 import datetime, decimal
 from .pset import pset
 

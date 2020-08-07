@@ -8,6 +8,10 @@ class css(pset):
     def __init__(self, **attrs):
         super(css, self).__init__()
         for key, val in attrs.items():
+            if isinstance(val, bytes):
+                val = val.decode('u8')
+            if isinstance(key, bytes):
+                key = key.decode('u8')
             self[key.replace(u'_', u'-')] = val
         
     def __setattr__(self, key, val):
@@ -21,7 +25,6 @@ class css(pset):
         return self._as_unicode().encode('u8')
 
     def _as_unicode(self):
-        assert all(isinstance(k, text) and isinstance(v, text) for k,v in self.attrs())
         return u';'.join(u'%s:%s' % (k, v) for (k, v) in self.attrs())
 
     def __str__(self):
