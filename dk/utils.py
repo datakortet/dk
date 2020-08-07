@@ -2,7 +2,7 @@
 
 """FIXME: many of these really should go in their own modules...
 """
-from typing import Any
+from typing import Any, Optional, Union
 
 from past.builtins import basestring
 from builtins import str as text
@@ -19,7 +19,7 @@ def identity(x):    # XXX: replace any usages of this function with lambda x:x!
     return x
 
 
-def srcpath(base, pth):
+def srcpath(base, pth):  # pragma: nocover
     """Return an absolute path based on the relative path `pth`.
        Useful in tests, where we don't know what the absolute path is,
        and we can't use relative paths since we don't know which folder
@@ -32,36 +32,16 @@ def srcpath(base, pth):
 
     """
     raise EnvironmentError("dk.utils.srcpath no longer does anything useful.")
-    # # FIXME: __file__ is not srcroot when this file has been moved!
-    # # XXX: this no longer works as intended!
-    #
-    # srcroot = __file__.replace('\\', '/').rsplit('/', 1)[0]
-    #
-    # if not base:
-    #     base = '/'
-    # base = base.replace('\\', '/')
-    # if base[0] != '/':
-    #     base = '/' + base
-    # if base[-1] != '/':
-    #     base += '/'
-    #
-    # return srcroot + base + pth.replace('\\', '/')
 
 
-# def root():     # FIXME: this is fubar (__file__ isn't near the root of the source tree when utils is here...)
-#     "Return the root of the source tree."
-#     return __file__.replace('\\', '/').rsplit('/', 1)[0]
-def root():
+def root():  # pragma: nocover
     """Return the root of the source tree.
     """
     raise EnvironmentError("dk.utils.root no longer does anything useful.")
-    # srcroot = __file__.replace('\\', '/').rsplit('/', 1)[0]
-    # srcroot = srcroot.replace("lib/dk/dk", "src/datakortet")
-    # return srcroot
 
 
 # FIXME: this doesn't work since srcpath doesn't work!
-def dkpath(pth=None):
+def dkpath(pth=None):  # pragma: nocover
     """Usage
        ::
 
@@ -72,11 +52,6 @@ def dkpath(pth=None):
 
     """
     raise EnvironmentError("dk.utils.dkpath no longer does anything useful.")
-    # if not pth:
-    #     pth = ''
-    # if pth.startswith('/'):
-    #     pth = pth[1:]
-    # return os.path.normcase(os.path.normpath(srcpath('', pth)))
 
 
 def hour_minute(v):     # XXX: move to ttcal?
@@ -114,7 +89,7 @@ def lower_case(s, encoding='u8'):
     return s.encode(encoding)
 
 
-def ulower_case(val):  # type: (Optional[text]) -> text
+def ulower_case(val):  # type: (Any) -> text
     """Call val.lower(). Return '' if val is None.
     """
     if val is None:
@@ -146,14 +121,14 @@ _mixedcase = re.compile(u'[A-ZÆØÅ][a-zæøå]+[A-ZÆØÅ]')
 _mcmac = re.compile(u'(Mc)|(Mac)|(Van)|(Von)')
 
 
-def title_case_lastname(s, encoding='u8'):
+def title_case_lastname(s, encoding='u8'):  # type: (Any, str) -> bytes
     """Return a title cased version of ``s`` encoded in ``encoding``.
        If it looks like ``s`` is already title cased, then leave it alone
        (in case of manual override and complex capitalization rules for
        last names).
     """
     if not s:
-        return ''
+        return b''
     us = unicode_repr(s)
     m = _mixedcase.match(us)
     if m:
@@ -259,7 +234,7 @@ def normalize(v):  # type: (Any) -> bytes
         return v.encode('u8')
     if v in (None, ''):
         return b''
-    return bytes(v)
+    return text(v).encode('u8')
 
 
 def nlat(v):
@@ -304,55 +279,55 @@ def kr_ore(n):
     return kronestring(kr) + ',' + orestring(ore)
 
 
-def mk_post(model):
-    """Encode ``model`` (a dict-like object) into a dict where:
-
-        - all values are strings
-        - None values are removed
-        - date values are expanded into year/month/day parts
-
-       Note:: this function is superceeded by maint.client._encode_date
-              which does this transparently for unit tests.
-
-    """
-    res = {}
-    for key, val in model.items():
-        if isinstance(val, datetime.date):
-            res[key + '_year'] = str(val.year)
-            res[key + '_month'] = str(val.month)
-            res[key + '_day'] = str(val.day)
-        elif val is None:
-            pass  # do nothing
-        else:
-            res[key] = str(val)
-    return res
-
-
-class Ordered(dict):        # FIXME: should be removed asap.
-    """
-    Mapping that maintains insertion order.
-    (Should be removed and the adt versions should be used).
-    """
-    def __init__(self):
-        super(Ordered, self).__init__()
-        self._ordered = []
-
-    def __setitem__(self, key, val):
-        super(Ordered, self).__setitem__(key, val)
-        self._ordered.append(key)
-
-    def __getitem__(self, key):
-        if key not in self._ordered:
-            return ''
-        return super(Ordered, self).__getitem__(key)
-
-    def keys(self):
-        return self._ordered
-
-    def values(self):
-        for key in self._ordered:
-            yield self[key]
-
-    def items(self):
-        for key in self._ordered:
-            yield key, self[key]
+# def mk_post(model):
+#     """Encode ``model`` (a dict-like object) into a dict where:
+#
+#         - all values are strings
+#         - None values are removed
+#         - date values are expanded into year/month/day parts
+#
+#        Note:: this function is superceeded by maint.client._encode_date
+#               which does this transparently for unit tests.
+#
+#     """
+#     res = {}
+#     for key, val in model.items():
+#         if isinstance(val, datetime.date):
+#             res[key + '_year'] = str(val.year)
+#             res[key + '_month'] = str(val.month)
+#             res[key + '_day'] = str(val.day)
+#         elif val is None:
+#             pass  # do nothing
+#         else:
+#             res[key] = str(val)
+#     return res
+#
+#
+# class Ordered(dict):        # FIXME: should be removed asap.
+#     """
+#     Mapping that maintains insertion order.
+#     (Should be removed and the adt versions should be used).
+#     """
+#     def __init__(self):
+#         super(Ordered, self).__init__()
+#         self._ordered = []
+#
+#     def __setitem__(self, key, val):
+#         super(Ordered, self).__setitem__(key, val)
+#         self._ordered.append(key)
+#
+#     def __getitem__(self, key):
+#         if key not in self._ordered:
+#             return ''
+#         return super(Ordered, self).__getitem__(key)
+#
+#     def keys(self):
+#         return self._ordered
+#
+#     def values(self):
+#         for key in self._ordered:
+#             yield self[key]
+#
+#     def items(self):
+#         for key in self._ordered:
+#             yield key, self[key]

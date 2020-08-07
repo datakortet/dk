@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
+import pytest
+
 from dk.utils import *
 
+
+def test_identity():
+    assert  identity(identity(42)) == 42
 
 # def test_srcpath():
 #     assert srcpath(base=None, pth='foo/bar/things.py')[-28:] == '/lib/dk/dk/foo/bar/things.py'
@@ -46,14 +51,14 @@ def test_single_line():
 
 
 def test_lower_case():
-    lower_case('This is JUST a test!!') == b'this is just a test!!'
-    lower_case('Gåsa flyr over Høybukta') == u'gåsa flyr over høybukta'.encode('u8')
-    lower_case('Gåsa flyr over Høybukta', 'l1') == u'gåsa flyr over høybukta'.encode('l1')
+    assert lower_case('This is JUST a test!!') == b'this is just a test!!'
+    assert lower_case('Gåsa flyr over Høybukta') == u'gåsa flyr over høybukta'.encode('u8')
+    assert lower_case('Gåsa flyr over Høybukta', 'l1') == u'gåsa flyr over høybukta'.encode('l1')
 
 
 def test_ulower_case():
     assert ulower_case(None) == u''
-    assert lower_case('Tømmer og biller') == u'tømmer og biller'.encode('u8')
+    assert ulower_case(u'Tømmer og biller') == u'tømmer og biller'
 
 
 def test_title_case():
@@ -61,16 +66,23 @@ def test_title_case():
 
 
 def test_utitle_case():
+    assert utitle_case(None) == u''
+    with pytest.raises(ValueError):
+        utitle_case(42)
     assert utitle_case(u'hanen stend på stabburshella') == u'Hanen Stend På Stabburshella'
 
 
 def test_title_case_lastname():
+    assert title_case_lastname(None) == b''
+    assert title_case_lastname(u'OlSen') == b'OlSen'
     assert title_case_lastname('ole olsen') == b'Ole Olsen'
     assert title_case_lastname(u'jan jönson') == b'Jan J\xc3\xb6nson'
     assert title_case_lastname(u'jan jönson', 'l1') == b'Jan J\xf6nson'
 
 
 def test_utitle_case_lastname():
+    assert utitle_case_lastname(None) == ''
+    assert utitle_case_lastname(u"McDonald") == 'McDonald'
     assert utitle_case_lastname('ole olsen') == 'Ole Olsen'
     assert utitle_case_lastname(u'jan jönson') == u'Jan Jönson'
 
@@ -78,12 +90,35 @@ def test_utitle_case_lastname():
 def test_unicode_repr():
     assert unicode_repr('Laksen springer i håven') == u'Laksen springer i håven'
     assert unicode_repr(object())[:17] == '<object object at'
+    assert unicode_repr(u'Bjørn'.encode('iso-8859-1')) == u'Bjørn'
+
+
+def test_normalize():
+    assert normalize(42) == b'42'
+    assert normalize(None) == b''
+    assert normalize(u'bjørn') == u'bjørn'.encode('u8')
+
+
+def test_nlat():
+    assert nlat(42) == b'42'
+    assert nlat(None) == b''
+    assert nlat(u'bjørn') == u'bjørn'.encode('l1')
+
+
+def test_utf8():
+    assert utf8(42) == b'42'
+
+
+def test_latin1():
+    assert latin1(42) == b'42'
 
 
 def test_unhtml():
+    assert unhtml(42) == 42
     string = u'&nbsp;&Aring;&AElig;&Oslash;&aring;&aelig;&oslash;&eacute;'
     result = u' ÅÆØåæøé'
     assert unhtml(string) == result
+    assert unhtml(string.encode('u8')) == result
 
 
 def test_html2u8():
@@ -93,5 +128,16 @@ def test_html2u8():
 
 
 def test_kronestring():
+    assert kronestring(0) == '0'
     assert kronestring(1054) == '1 054'
+    assert kronestring(-1054) == '-1 054'
 
+
+def test_orestring():
+    assert orestring(0) == '-'
+    assert orestring(2) == '02'
+    assert orestring(42) == '42'
+
+
+def test_kr_ore():
+    assert kr_ore(1054) == '10,54'
