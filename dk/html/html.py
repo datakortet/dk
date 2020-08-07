@@ -7,7 +7,7 @@ from __future__ import absolute_import
 import sys
 import six
 from past.builtins import basestring
-from builtins import int
+from builtins import int, str as texttype
 try:  # pragma: nocover
     import htmlentitydefs as _h
 except ImportError:  # pragma: nocover
@@ -46,6 +46,7 @@ class color(object):
     blue = '"#0000FF"'
     teal = '"#008080"'
     aqua = '"#00FFFF"'
+
 
 INLINE_ELEMENTS = '''
    a abbr acronym b basefont bdo big br cite code dfn em font i img input
@@ -159,10 +160,19 @@ def quote_if_needed(strval):
     else:
         return quote_smart(strval)
 
+
 quote = quote_smart
 
 
 def norm_attr_name(attr):
+    """``_foo_bar => _foo_bar``,  ``class_ => class``,
+       ``max_height => max-height``
+
+           >>> norm_attr_name('class_')
+           'class'
+           >>> norm_attr_name('z_index')
+           'z-index'
+    """
     if attr[0] == '_':
         return attr
     if attr[-1] == '_':
@@ -178,22 +188,19 @@ def make_unicode(obj):
     """Return obj as a unicode string. If obj is a (non-)unicode string, then
        first try to decode it as utf-8, then as iso-8859-1.
     """
-    if isinstance(obj, unicode):
+    if obj is EmptyString:
+        return obj
+
+    if isinstance(obj, texttype):
         return obj
 
     if isinstance(obj, bytes):
-        return obj.decode('utf-8')
-
-    if isinstance(obj, str):
         try:
             return obj.decode('u8')
         except:
             return obj.decode('l1')
-    
-    if obj is EmptyString:
-        return obj
 
-    return unicode(obj)
+    return texttype(obj)
 
 
 class xtag(object):

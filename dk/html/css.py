@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+import sys
+from builtins import str as text
 from dk.collections import pset
 
 
@@ -5,37 +8,31 @@ class css(pset):
     def __init__(self, **attrs):
         super(css, self).__init__()
         for key, val in sorted(attrs.items()):
-            self[key.replace('_', '-')] = val
-        
+            if isinstance(val, bytes):
+                val = val.decode('u8')
+            if isinstance(key, bytes):
+                key = key.decode('u8')
+            self[key.replace(u'_', u'-')] = val
+
     def __setattr__(self, key, val):
         super(css, self).__setattr__(key.replace('_', '-'), val)
-    
+
+    def attrs(self):
+        for k, v in sorted(list(self.items())):
+            yield k, v
+
+    def _as_bytes(self):
+        return self._as_unicode().encode('u8')
+
+    def _as_unicode(self):
+        return u';'.join(u'%s:%s' % (k, v) for (k, v) in self.attrs())
+
     def __str__(self):
-        return ';'.join('%s:%s' % (k,v) for (k,v) in self.items())
+        if sys.version_info.major < 3:
+            return self._as_bytes()
+        else:
+            return self._as_unicode()
 
     __repr__ = __str__
 
 
-def _test():
-    """
-       >>> x = css(color='red', background='blue')
-       >>> x
-       color:red;background:blue
-       >>> x.border = 'none'
-       >>> y = css(background='blue', color='red')
-       >>> y.border = 'none'
-       >>> x == y
-       True
-       >>> a = css()
-        >>> a['font-weight'] = 'bold'
-        >>> a
-        font-weight:bold
-        >>> a.text_align = 'right'
-        >>> a
-        font-weight:bold;text-align:right
-    """
-    import doctest
-    doctest.testmod()
-
-if __name__ == "__main__":
-    _test()
