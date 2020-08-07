@@ -2,13 +2,12 @@
 
 """FIXME: many of these really should go in their own modules...
 """
+from typing import Any
 
 from past.builtins import basestring
-import re, os, datetime
-try:
-    unicode
-except NameError:
-    unicode = str
+from builtins import str as text
+import re
+import datetime
 
 
 def identity(x):    # XXX: replace any usages of this function with lambda x:x!
@@ -49,15 +48,17 @@ def srcpath(base, pth):
     # return srcroot + base + pth.replace('\\', '/')
 
 
-#def root():     # FIXME: this is fubar (__file__ isn't near the root of the source tree when utils is here...)
-#    "Return the root of the source tree."
-#    return __file__.replace('\\', '/').rsplit('/', 1)[0]
+# def root():     # FIXME: this is fubar (__file__ isn't near the root of the source tree when utils is here...)
+#     "Return the root of the source tree."
+#     return __file__.replace('\\', '/').rsplit('/', 1)[0]
 def root():
-    "Return the root of the source tree."
+    """Return the root of the source tree.
+    """
     raise EnvironmentError("dk.utils.root no longer does anything useful.")
     # srcroot = __file__.replace('\\', '/').rsplit('/', 1)[0]
     # srcroot = srcroot.replace("lib/dk/dk", "src/datakortet")
     # return srcroot
+
 
 # FIXME: this doesn't work since srcpath doesn't work!
 def dkpath(pth=None):
@@ -79,24 +80,28 @@ def dkpath(pth=None):
 
 
 def hour_minute(v):     # XXX: move to ttcal?
-    "Convert 7.5 (hours) to (7, 30) i.e. 7 hours and 30 minutes."
+    """Convert 7.5 (hours) to (7, 30) i.e. 7 hours and 30 minutes.
+    """
     h = int(v)
     m = int((v - h) * 60)
     return h, m
 
 
 def HourMinute(v):      # XXX: move to ttcal?
-    "Format 7.10 as 7t 06m."
+    """Format 7.10 as 7t 06m.
+    """
     return '%dt %02dm' % hour_minute(v)
 
 
 def hm_to_float(h, m):  # XXX: move to ttcal?
-    "Convert 7, 30 to 7.5 hours."
+    """Convert 7, 30 to 7.5 hours.
+    """
     return float(h) + (float(m) / 60.0)
 
 
 def single_line(txt):
-    "Remove multiple spaces and newlines."
+    """Remove multiple spaces and newlines.
+    """
     return u' '.join(txt.split())
 
 
@@ -109,11 +114,12 @@ def lower_case(s, encoding='u8'):
     return s.encode(encoding)
 
 
-def ulower_case(val):
-    "Call val.lower(). Return '' if val is None."
+def ulower_case(val):  # type: (Optional[text]) -> text
+    """Call val.lower(). Return '' if val is None.
+    """
     if val is None:
         return u''
-    assert isinstance(val, unicode)
+    assert isinstance(val, text)
     return val.lower()
 
 
@@ -127,10 +133,11 @@ def title_case(s, encoding='u8'):
 
 
 def utitle_case(val):
-    "(safer) val.title() implementation."
+    """(safer) val.title() implementation.
+    """
     if val is None:
         return u''
-    if not isinstance(val, unicode):
+    if not isinstance(val, text):
         raise ValueError(repr(val) + ' of type ' + str(type(val)))
     return val.title()
 
@@ -173,39 +180,44 @@ def unicode_repr(obj):
     """Return obj as a unicode string. If obj is a (non-)unicode string, then
        first try to decode it as utf-8, then as iso-8859-1.
     """
-    if isinstance(obj, unicode):
+    if isinstance(obj, text):
         return obj
 
-    if isinstance(obj, str):
+    if isinstance(obj, bytes):
         try:
             return obj.decode('u8')
-        except:
+        except UnicodeDecodeError:
             return obj.decode('l1')
 
-    return unicode(obj)
+    return text(obj)
+
 
 u = unicode_repr
 
 
 def utf8(obj):
-    "Return a utf-8 representation of ``obj``."
+    """Return a utf-8 representation of ``obj``.
+    """
     return unicode_repr(obj).encode('u8')
 
 
 def latin1(obj):
-    "Return a latin-1 representation of ``obj``."
+    """Return a latin-1 representation of ``obj``.
+    """
     return unicode_repr(obj).encode('l1')
+
 
 u8 = utf8
 
 
 def unhtml(s, toencoding=None):
-    "Convert charrefs for Norwegian vowels to their unicode counterparts."
+    """Convert charrefs for Norwegian vowels to their unicode counterparts.
+    """
 
     if not isinstance(s, basestring):
         return s
-    if type(s) is str:
-        s = unicode(s)
+    if isinstance(s, bytes):
+        s = s.decode('u8')
 
     tr = {
         u'&nbsp;': u' ',
@@ -228,11 +240,12 @@ def unhtml(s, toencoding=None):
 
 
 def html2u8(s):
-    "Convert charrefs for Norwegian vowels to their utf-8 counterparts."
+    """Convert charrefs for Norwegian vowels to their utf-8 counterparts.
+    """
     return unhtml(s, 'u8')
 
 
-def normalize(v):
+def normalize(v):  # type: (Any) -> bytes
     """Return a string version of v such that
 
          normalize(u) == normalize(v) iff **not** (u != v)
@@ -242,15 +255,16 @@ def normalize(v):
          normalize(None) == normalize('') == normalize(u'')
 
     """
-    if type(v) == unicode:
+    if isinstance(v, text):
         return v.encode('u8')
     if v in (None, ''):
-        return ''
-    return str(v)
+        return b''
+    return bytes(v)
 
 
 def nlat(v):
-    "Normalize and recover from utf-8 stored in varchar columns."
+    """Normalize and recover from utf-8 stored in varchar columns.
+    """
     return normalize(v).decode('u8').encode('l1')
 
 
@@ -284,7 +298,8 @@ def orestring(n):
 
 
 def kr_ore(n):
-    u"Convert the øre-value ``n`` to a proper NOK string value."
+    u"""Convert the øre-value ``n`` to a proper NOK string value.
+    """
     kr, ore = divmod(n, 100)
     return kronestring(kr) + ',' + orestring(ore)
 
@@ -321,6 +336,7 @@ class Ordered(dict):        # FIXME: should be removed asap.
     def __init__(self):
         super(Ordered, self).__init__()
         self._ordered = []
+
     def __setitem__(self, key, val):
         super(Ordered, self).__setitem__(key, val)
         self._ordered.append(key)
@@ -339,5 +355,4 @@ class Ordered(dict):        # FIXME: should be removed asap.
 
     def items(self):
         for key in self._ordered:
-            yield (key, self[key])
-
+            yield key, self[key]

@@ -242,7 +242,7 @@ class xtag(object):
         res = []
         for k, v in sorted(list(self._attr.items())):
             if isinstance(v, css):
-                v = str(v)
+                v = str(v)  # str is correct here for both py2 and 3
 
             v = normalize(v)
             if v:
@@ -294,7 +294,7 @@ class tag(xtag):
        appended, e.g.:  ``mytag.class_ = ...``
     """
     def __init__(self, tag_name, *content, **kw):
-        xtag.__init__(self, tag_name, **kw)
+        super(tag, self).__init__(tag_name, **kw)
         if len(content) == 1 and type(content[0]) == _types.GeneratorType:
             self._content = list(content[0])
         else:
@@ -406,7 +406,7 @@ def _add(a, b):
 def mktag(name, _parent=tag, _nlafter=False, **attrs):
     class _tmp(_parent):
         def __init__(self, *content, **kw):
-            _parent.__init__(self, name, *content, **_add(attrs, kw))
+            super(_tmp, self).__init__(name, *content, **_add(attrs, kw))
             self._nlafter = _nlafter and '\n' or ''
     _tmp.__name__ = name
     return _tmp
@@ -415,7 +415,7 @@ def mktag(name, _parent=tag, _nlafter=False, **attrs):
 def mkxtag(name, **attrs):
     class _tmp(xtag):
         def __init__(self, **kw):
-            xtag.__init__(self, name, **_add(attrs, kw))
+            super(_tmp, self).__init__(name, **_add(attrs, kw))
     _tmp.__name__ = name
     return _tmp
 
@@ -426,6 +426,7 @@ def mkdtag(name, **attrs):
 
 def mkstag(name):
     return mktag(name, _parent=stag)
+
 
 doctype401strict = mkstag(
     '!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"\n'
@@ -475,11 +476,12 @@ _nlafter = '''
 
 class a(tag):
     def __init__(self, *content, **kw):
-        tag.__init__(self, 'a', *content, **kw)
+        super(a, self).__init__('a', *content, **kw)
         self._nlafter = ''
 
     def _as_unicode(self):
         return super(a, self)._as_unicode()
+
 
 # these are created by the forloop above.
 # a = mktag("a", tag, False)
