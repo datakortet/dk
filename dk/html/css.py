@@ -1,11 +1,10 @@
-
 from dk.collections import pset
 
 
 class css(pset):
     def __init__(self, **attrs):
         super(css, self).__init__()
-        for key, val in attrs.items():
+        for key, val in sorted(attrs.items()):
             self[key.replace('_', '-')] = val
         
     def __setattr__(self, key, val):
