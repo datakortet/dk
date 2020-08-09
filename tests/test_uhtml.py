@@ -7,6 +7,11 @@ from dk.html.uhtml import *
 from dk.html import uhtml
 
 
+def test_to_html():
+    assert to_html(42) == u'42'
+    assert to_html(b'hi') == u'hi'
+
+
 def test_escape_char():
     assert escape_char(u'&oslash;') == u'&oslash;'
     assert escape_char(u'ø') == u'&oslash;'
@@ -26,6 +31,7 @@ def test_normalize():
     assert normalize(u'Bjørn'.encode('u8')) == u'Bjørn'
     assert normalize(u'Bjørn'.encode('iso-8859-1')) == u'Bjørn'
     assert normalize(u'€'.encode('iso-8859-15')) != u'€'
+    assert normalize(b'\0') == u'\x00'
 
 
 def test_attribute_functions():
@@ -34,40 +40,78 @@ def test_attribute_functions():
     assert quote_xhtml('hello') == '"hello"'
     assert quote_xhtml('"hi"') == '"&quot;hi&quot;"'
     assert quote_smart('"hi"') == """'"hi"'"""
-    # s = ""
-    # s += '"'
-    # s += "'"
-    # assert quote_smart(s) == "&quot;'"
-
+    assert quote_smart('''
+    "it's"
+    '''.strip()) == "'&quot;it's&quot;'"
+    assert norm_attr_name('foo') == 'foo'
+    assert norm_attr_name('foo_') == 'foo'
+    assert norm_attr_name('foo_bar') == 'foo-bar'
     assert quote_if_needed('v') == "v"
     assert quote_if_needed('&1') == '"&1"'
 
 
 def test_make_unicode():
-    assert 1
     assert make_unicode(EmptyString) == EmptyString
     assert make_unicode(u'') == u''
     assert make_unicode('') == u''
-    assert (make_unicode(b'')) == u''
+    assert make_unicode(b'') == u''
+    assert make_unicode(42) == u'42'
+
+
+def test_eq():
+    assert tag('T') == '<T></T>'
+    assert tag('T') != 42
+
+
+def test_tag_methods():
+    t = tag('T')
+    t.foo = 'bar'
+    assert t.foo == 'bar'
+    assert t == '<T foo="bar"></T>'
+    assert stag('B') == '<B>'
 
 
 def test_caption():
-    assert str(uhtml.figure(
+    assert uhtml.figure(
         uhtml.img(),
         uhtml.figcaption('hello')
-    )) == "<figure><img><figcaption>hello</figcaption></figure>\n"
+    ) == "<figure><img><figcaption>hello</figcaption></figure>\n"
 
 
-@pytest.mark.xfail
 def test_empty_caption():
-    assert str(uhtml.figure(
+    assert uhtml.figure(
         uhtml.img(),
         uhtml.figcaption()
-    )) == "<figure><img></figure>\n"
+    ) == "<figure><img></figure>\n"
+
+
+def test_flatten():
+    a = tag('A')
+    b = tag('B', a)
+    t = tag('T', a, b, ['e', 'f'], c="d")
+    # print("str?:", t)
+    # print("_unicode:", t._as_unicode())
+    # print("__html__:", t.__html__())
+    assert t == to_html(t)
+
+
+def test_flatten_d():
+    a = dtag('A')
+    b = tag('B', a)
+    assert b == "<B></B>"
+    assert a == ""
+
+
+def test_dtag():
+    a = dtag("A", 'a')
+    assert a == "<A>a</A>"
+    b = dtag("B")
+    assert b == ""
 
 
 def test_simple_tag():
     htmlval = uhtml.a(u'bjørn', href=u'url')
+    assert htmlval == '<a href="url">bjørn</a>'
     assert str(htmlval) == '<a href="url">bjørn</a>'
 
 
@@ -160,3 +204,10 @@ def test_old_doctest():
         '</select>'
     )
 
+
+def test_lines():
+    assert lines('a', 'b') == 'a<br>b'
+
+
+def test_text_grouping():
+    assert text_grouping('a', 'b') == 'ab'

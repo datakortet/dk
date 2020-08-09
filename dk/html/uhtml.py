@@ -23,6 +23,18 @@ _map = map
 raw_string_encodings = ('utf-8', 'iso-8859-1')
 
 
+def to_html(obj):
+    if hasattr(obj, '__html__'):
+        return obj.__html__()
+    if hasattr(obj, '_as_unicode'):
+        return obj._as_unicode()
+    if isinstance(obj, bytes):
+        return obj.decode('u8')
+    if isinstance(obj, text):
+        return obj
+    return text(obj)
+
+
 class color(object):
     black = '"#000000"'
     silver = '"#COCOCO"'
@@ -120,7 +132,7 @@ def rawstr2unicode(s):  # type: (bytes) -> text
             return s.decode(enc)
         except UnicodeDecodeError:
             pass
-    raise UnicodeError("Could not decode raw string.")
+    raise UnicodeError("Could not decode raw string.")  # pragma: nocover
 
 
 def normalize(v):   # type: (Any) -> text
@@ -141,7 +153,7 @@ def quote_smart(strval):
     dq = u'"' in strval
     sq = u"'" in strval
     if dq and sq:
-        return u"'%s'" % s.replace(u'"', u'&quot;')
+        return u"'%s'" % strval.replace(u'"', u'&quot;')
     elif dq:
         return u"'%s'" % strval
     else:
@@ -199,7 +211,8 @@ def make_unicode(obj):
     if isinstance(obj, bytes):
         try:
             return obj.decode('u8')
-        except UnicodeDecodeError:
+        except UnicodeDecodeError:  # pragma: nocover
+            raise
             return obj.decode('l1')
 
     return text(obj)
@@ -263,10 +276,18 @@ class xtag(object):
 
     __unicode__ = _as_unicode
 
+    def __html__(self):
+        return self._as_unicode()
+
+    def __eq__(self, other):
+        if isinstance(other, text):
+            return self.__html__() == other
+        return False
+
     def __str__(self):
-        if sys.version_info.major < 3:
+        if sys.version_info.major < 3:    # pragma: nocover
             return self._as_bytes()
-        else:
+        else:                             # pragma: nocover
             return self._as_unicode()
 
     __repr__ = __str__
@@ -308,7 +329,9 @@ class tag(xtag):
     def xcontent(self, v):
         self._content = v
 
-    def _flatten(self, lst):
+    def _flatten(self, lst=None):
+        if not lst:
+            return
         for item in lst:
             if isinstance(item, (basestring, int, float)):
                 yield item
@@ -341,7 +364,7 @@ class tag(xtag):
         res = []
         for item in self.flatten():
             try:
-                res.append(unicode_repr(item))
+                res.append(to_html(item))
             except TypeError:  # pragma: nocover
                 # generator found for some reason
                 print(type(item), dir(item))
@@ -349,12 +372,14 @@ class tag(xtag):
         return u''.join(res)
 
 
-class opentag(tag):
+# unused?
+class opentag(tag):  # pragma: nocover
     def flatten(self, lst=None):
         yield self.open_tag()
 
 
-class closetag(tag):
+# unused?
+class closetag(tag):  # pragma: nocover
     def flatten(self, lst=None):
         yield self.close_tag()
 
@@ -394,6 +419,12 @@ class dtag(tag):
             return super(dtag, self)._as_unicode()
         else:
             return u''
+
+    def flatten(self, lst=None):
+        if not self._content:
+            return
+        for item in super(dtag, self).flatten(lst):
+            yield item
 
 
 def _add(a, b):
@@ -478,9 +509,6 @@ class a(tag):
     def __init__(self, *content, **kw):
         super(a, self).__init__('a', *content, **kw)
         self._nlafter = ''
-
-    def _as_unicode(self):
-        return super(a, self)._as_unicode()
 
 
 # these are created by the forloop above.
