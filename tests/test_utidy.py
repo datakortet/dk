@@ -36,6 +36,16 @@ def test_attributes():
     </p>""")
 
 
+def test_utidy_spacing_ordering():
+    assert utidy.utidy('<tag z="3" a="1" b="2"></tag>') == utidy.utidy('''
+        <tag a='1' z='3' b='2'>
+        </tag>
+    ''')
+    assert utidy.utidy('<div style="height :50px;width :30px"></div>') == utidy.utidy('''
+        <div style="width: 30px; height: 50px;"></div>
+    ''')
+
+
 def test_simplify():
     ua = utidy.utidy("<h1>a</h1>", simplify=True)
     assert ua == "<h1>a</h1>"

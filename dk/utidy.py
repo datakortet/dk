@@ -20,6 +20,8 @@ from __future__ import print_function
 
 import re
 
+from dk.html.uhtml import to_html
+
 self_closing_tags = """
     area
     base
@@ -77,7 +79,9 @@ class HtmlTag(object):
         return ' '.join(sorted(val.split()))
 
     def normalize_style(self, val):
-        return ';'.join(sorted([v for v in val.split(';') if v.strip()])) + ';'
+        styles = [s.split(':', 1) for s in val.split(';') if s.strip()]
+        return ';'.join('{}:{}'.format(k.strip(), v.strip())
+                        for k, v in sorted(styles)) + ';'
 
     def normalize_attrs(self, attrs):
         res = []
@@ -163,7 +167,7 @@ def utidy(html, level=0, indent='    ', simplify=False):
 
        Normalizes the html.
     """
-    tokens = tokenize_html(html.strip())
+    tokens = tokenize_html(to_html(html).strip())
     res = []
     def _indent(n):
         return indent * max(0, n)
