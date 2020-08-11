@@ -55,7 +55,7 @@ class color(object):
 
 
 INLINE_ELEMENTS = u'''
-   a abbr acronym b basefont bdo big br cite code dfn em figure font i img input
+   a abbr acronym b basefont bdo big br cite code dfn em figure figcaption font i img input
    kbd label q s samp select small span strike strong sub sup textarea tt
    u var applet button del iframe ins map object script'''.split()
 
@@ -288,13 +288,14 @@ class xtag(object):
     def _as_bytes(self):
         return self._as_unicode().encode('u8')
 
-    __unicode__ = _as_unicode
-
-    def __html__(self):
+    def __unicode__(self):
         return self._as_unicode()
 
+    def __html__(self):
+        return self._as_bytes()
+
     def __eq__(self, other):
-        if isinstance(other, text):
+        if isinstance(other, (bytes, text)):
             return self.__html__() == other
         return False
 

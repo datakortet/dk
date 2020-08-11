@@ -1,5 +1,109 @@
 # -*- coding: utf-8 -*-
 
+from dk.html.html import *
+from dk.html import html
+
+
+def test_escape_char():
+    assert escape_char(u'&oslash;') == u'&oslash;'
+    assert escape_char(u'ø') == u'&oslash;'
+    if sys.version_info.major >= 3:
+        assert escape_char(u'👍') == u''
+    assert escaped_array(u'hi') == [u'h', u'i']
+    assert escape(u'bjørn') == u'bj&oslash;rn'
+    assert escape(u'bjørn'.encode('u8'), 'u8') == u'bj&oslash;rn'
+    assert escape(None) == u''
+    assert u8escape(u'bjørn'.encode('u8')) == u'bj&oslash;rn'
+    assert unescape(u'bj&oslash;rn') == u'bjørn'
+    assert unescape(b'bj&oslash;rn') == u'bjørn'
+
+
+def test_normalize():
+    assert normalize(u'Bjørn') == u'Bjørn'
+    assert normalize(u'Bjørn'.encode('u8')) == u'Bjørn'
+    assert normalize(u'Bjørn'.encode('iso-8859-1')) == u'Bjørn'
+    assert normalize(u'€'.encode('iso-8859-15')) != u'€'
+    assert normalize(b'\0') == u'\x00'
+
+
+def test_attribute_functions():
+    assert plain_attribute('foo')
+    assert not plain_attribute('&')
+    assert quote_xhtml('hello') == '"hello"'
+    assert quote_xhtml('"hi"') == '"&quot;hi&quot;"'
+    assert quote_smart('"hi"') == """'"hi"'"""
+    assert quote_smart('''
+    "it's"
+    '''.strip()) == "'&quot;it's&quot;'"
+    assert norm_attr_name('foo') == 'foo'
+    assert norm_attr_name('foo_') == 'foo'
+    assert norm_attr_name('foo_bar') == 'foo-bar'
+    assert quote_if_needed('v') == "v"
+    assert quote_if_needed('&1') == '"&1"'
+
+
+def test_eq():
+    assert tag('T') == '<T></T>'
+    assert tag('T') != 42
+
+
+def test_tag_methods():
+    t = tag('T')
+    t.foo = 'bar'
+    assert t.foo == 'bar'
+    assert t == '<T foo="bar"></T>'
+    assert stag('B') == '<B>'
+
+
+def test_tag_attributes():
+    assert tag('A', checked=True) == '<A checked></A>'
+    assert tag('A', checked=False) == '<A></A>'
+    # assert tag('A', xchecked=False) == '<A xchecked="False"></A>'
+    assert tag('A', style=css(height=50)) == '<A style="height:50"></A>'
+    assert tag('A', foo=EmptyString) == '<A foo=""></A>'
+
+
+def test_caption():
+    assert html.figure(
+        html.img(),
+        html.figcaption('hello')
+    ) == "<figure><img><figcaption>hello</figcaption></figure>\n"
+
+
+def test_empty_caption():
+    assert html.figure(
+        html.img(),
+        html.figcaption()
+    ) == "<figure><img></figure>\n"
+
+
+def test_flatten():
+    a = tag('A')
+    b = tag('B', a)
+    t = tag('T', a, b, ['e', 'f'], c="d")
+    assert t == str(t)
+
+
+def test_flatten_d():
+    a = dtag('A')
+    b = tag('B', a)
+    assert b == "<B></B>"
+    assert a == ""
+
+
+def test_dtag():
+    a = dtag("A", 'a')
+    assert a == "<A>a</A>"
+    b = dtag("B")
+    assert b == ""
+
+
+def test_simple_tag():
+    htmlval = html.a(u'bjørn', href=u'url')
+    assert htmlval == '<a href="url">bjørn</a>'
+    assert str(htmlval) == '<a href="url">bjørn</a>'
+
+
 try:
     unicode
 except NameError:
@@ -115,20 +219,9 @@ def test_attribute_functions():
     assert quote_if_needed('&1') == '"&1"'
 
 
-def test_html():
-    from dk.html import html
-    return tagtester(html)
-
-
-# def test_uhtml():
-#     from dk.html import uhtml
-#     return tagtester(uhtml)
-
-
 def test_make_unicode():
-    from dk.html.html import make_unicode, EmptyString
-    
     assert make_unicode(EmptyString) == EmptyString
     assert make_unicode(u'') == u''
     assert make_unicode('') == u''
-    assert(make_unicode(b'')) == u''
+    assert make_unicode(b'') == u''
+    assert make_unicode(42) == u'42'

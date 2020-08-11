@@ -49,7 +49,7 @@ class color(object):
 
 
 INLINE_ELEMENTS = '''
-   a abbr acronym b basefont bdo big br cite code dfn em font i img input
+   a abbr acronym b basefont bdo big br cite code dfn em figure figcaption font i img input
    kbd label q s samp select small span strike strong sub sup textarea tt
    u var applet button del iframe ins map object script'''.split()
 
@@ -139,7 +139,7 @@ def quote_smart(strval):
     dq = '"' in strval
     sq = "'" in strval
     if dq and sq:
-        return "'%s'" % s.replace('"', '&quot;')
+        return "'%s'" % strval.replace('"', '&quot;')
     elif dq:
         return "'%s'" % strval
     else:
@@ -240,7 +240,7 @@ class xtag(object):
     def attributes(self):
         """return a string like key="val". """
         res = []
-        for k, v in self._attr.items():
+        for k, v in sorted(list(self._attr.items())):
             if isinstance(v, css):
                 v = str(v)
 
@@ -261,14 +261,38 @@ class xtag(object):
     def flatten(self):
         yield self
 
-    def __str__(self):
-        return '<' + self._name + self.attributes() + '>'
+    def _as_unicode(self):
+        return u'<' + self._name + self.attributes() + u'>'
 
-    def __unicode__(self):
-        return unicode(str(self), 'u8')
+    def _as_bytes(self):
+        return self._as_unicode().encode('u8')
 
-    def __repr__(self):
+    __unicode__ = _as_unicode
+
+    def __html__(self):
         return str(self)
+
+    def __eq__(self, other):
+        if isinstance(other, (bytes, text)):
+            return self.__html__() == other
+        return False
+
+    def __str__(self):
+        if sys.version_info.major < 3:    # pragma: nocover
+            return self._as_bytes()
+        else:                             # pragma: nocover
+            return self._as_unicode()
+
+    __repr__ = __str__
+
+    # def __str__(self):
+    #     return '<' + self._name + self.attributes() + '>'
+    #
+    # def __unicode__(self):
+    #     return unicode(str(self), 'u8')
+    #
+    # def __repr__(self):
+    #     return str(self)
 
 
 class stag(xtag):
@@ -353,6 +377,9 @@ class tag(xtag):
                 six.print_(type(item), dir(item))
                 raise
         return u''.join(res)
+
+    # def __html__(self):
+    #     return self._unicode()
         
     def __str__(self):
         if sys.version_info.major < 3:
@@ -406,6 +433,11 @@ class dtag(tag):
         else:
             return ''
 
+    def flatten(self, lst=None):
+        if not self._content:
+            return
+        for item in super(dtag, self).flatten(lst):
+            yield item
 
 def _add(left, right):
     t = {}
@@ -513,6 +545,7 @@ dl = mktag("dl", tag, True)
 dt = mktag("dt", tag, True)
 em = mktag("em", tag, False)
 fieldset = mktag("fieldset", tag, True)
+figure = mktag("figure", tag, True)
 font = mktag("font", tag, False)
 form = mktag("form", tag, True)
 frame = mktag("frame", tag, True)
@@ -563,10 +596,9 @@ tr = mktag("tr", tag, True)
 tt = mktag("tt", tag, False)
 u = mktag("u", tag, False)
 ul = mktag("ul", tag, True)
-var = mktag("var", tag, False)
+var = mktag("var", tag, False)      # ouch
 
-
-dtags = "caption legend".split()
+dtags = "caption legend figcaption".split()
 
 #for t in dtags:
 #    print '%s = mkdtag("%s")' % (t,t)
@@ -574,8 +606,8 @@ dtags = "caption legend".split()
 
 # created from above for loop
 caption = mkdtag("caption")
+figcaption = mkdtag("figcaption")
 legend = mkdtag("legend")
-
 
 # special case (del is a keyword)
 del_ = mktag('del')
