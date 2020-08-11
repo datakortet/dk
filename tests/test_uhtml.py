@@ -71,6 +71,14 @@ def test_tag_methods():
     assert stag('B') == '<B>'
 
 
+def test_tag_attributes():
+    assert tag('A', checked=True) == '<A checked></A>'
+    assert tag('A', checked=False) == '<A></A>'
+    assert tag('A', xchecked=False) == '<A xchecked="False"></A>'
+    assert tag('A', style=css(height=50)) == '<A style="height:50"></A>'
+    assert tag('A', foo=EmptyString) == '<A foo=""></A>'
+
+
 def test_caption():
     assert uhtml.figure(
         uhtml.img(),
@@ -89,9 +97,6 @@ def test_flatten():
     a = tag('A')
     b = tag('B', a)
     t = tag('T', a, b, ['e', 'f'], c="d")
-    # print("str?:", t)
-    # print("_unicode:", t._as_unicode())
-    # print("__html__:", t.__html__())
     assert t == to_html(t)
 
 
