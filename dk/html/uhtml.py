@@ -67,6 +67,14 @@ BLOCKLEVEL_ELEMENTS = u'''
    '''.split()
 
 
+BOOLEAN_ATTRIBUTES = set(u'''
+    allowfullscreen allowpaymentrequest async autofocus autoplay checked 
+    controls default disabled formnovalidate hidden ismap itemscope loop 
+    multiple muted nomodule novalidate open playsinline readonly required 
+    reversed selected truespeed 
+'''.split())
+
+
 class EscapedString(text):
     pass
 
@@ -257,9 +265,15 @@ class xtag(object):
             if isinstance(v, css):
                 v = str(v)  # str is correct here for both py2 and 3
 
-            v = normalize(v)
-            if v:
-                res.append(u' %s=%s' % (k, quote(escape(v))))
+            if isinstance(v, bool) and k in BOOLEAN_ATTRIBUTES:
+                if v:
+                    res.append(u' %s' % k)
+            elif v is EmptyString:
+                res.append(' %s=""' % k)
+            else:
+                v = normalize(v)
+                if v:
+                    res.append(u' %s=%s' % (k, quote(escape(v))))
         return u''.join(res)
 
     def _flatten(self):
