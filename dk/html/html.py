@@ -98,8 +98,13 @@ def escape(strval, enc=None):
 def unescape(txt):
     """Convert text containing entitydefs into Unicode.
     """
-    import HTMLParser
-    h = HTMLParser.HTMLParser()
+    try:  # pragma: nocover
+        from html.parser import HTMLParser
+    except ImportError:  # pragma: nocover
+        from HTMLParser import HTMLParser
+    h = HTMLParser()
+    if isinstance(txt, bytes):
+        txt = txt.decode('u8')
     # this one is undocumented...
     return h.unescape(txt)
 
