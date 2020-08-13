@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """Micro tidy.
 
    Usage::
@@ -12,15 +11,16 @@
        ...
        <form action="." autocomplete="off" class="fForm" id="FirmaForm" method="POST" name="FirmaForm">
            <input name="__cmd" type="hidden" value="FirmaForm">
-       </form>>
+       </form>
        hello
 
 """
-from __future__ import print_function
-
+from __future__ import print_function, unicode_literals
+from builtins import str as text
+import sys
 import re
 
-from dk.html.uhtml import to_html
+from .html.uhtml import to_html
 
 self_closing_tags = """
     area
@@ -157,7 +157,6 @@ def simplify_simple_tags(html):
         html,
         flags=re.MULTILINE|re.DOTALL
     )
-    import sys
     sys.stderr.write('done: %.3f\n' % (time.time() - start))
     return res
 
@@ -189,12 +188,45 @@ def utidy(html, level=0, indent='    ', simplify=False):
     return html
 
 
-# print utidy('''
-#     <div style="font-family:verdana;color:red" class="c b a">
-#     <input type=checkbox data-toggle="#foo" checked>
-#     </div>
-#     ''')
+class Utidy(object):
+    def __init__(self, item, **kw):
+        self.debug = kw.pop('debug', False)
+        self.item = item
+        self.kw = kw
+        if not isinstance(item, text):
+            item = to_html(item)
+        self.html = utidy(item, **kw)
+
+    def _as_unicode(self):
+        return self.html
+
+    def _as_bytes(self):
+        return self._as_unicode().encode('u8')
+
+    __unicode__ = _as_unicode
+    __bytes__ = _as_bytes
+
+    def __str__(self):
+        if sys.version_info.major < 3:
+            return self._as_bytes()
+        else:
+            return self._as_unicode()
+
+    __repr__ = __str__
+
+    def __html__(self):
+        return self.html
+
+    def __eq__(self, other):
+        if not isinstance(other, text):
+            other = to_html(other)
+        other_html = utidy(other, **self.kw)
+        res = self.html == other_html
+        if not res and self.debug:
+            print("LHS:\n", self.html)
+            print("RHS:\n", other_html)
+        return res
+
 
 if __name__ == "__main__":  # pragma: nocover
-    import sys
     print(utidy(open(sys.argv[1]).read(), simplify=True))
