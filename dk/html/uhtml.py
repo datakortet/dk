@@ -10,7 +10,7 @@ import sys
 from typing import List, Any
 from builtins import int, str as text
 from past.builtins import basestring
-from dk.text import u8, unicode_repr
+from dk.text import unicode_repr
 import types as _types
 import warnings
 try:
@@ -31,6 +31,7 @@ def to_html(obj):
             warnings.warn("obj.__html__() returned bytes!: {}".format(
                 obj.__class__.__name__
             ))
+        return res
     if hasattr(obj, '_as_unicode'):
         return obj._as_unicode()
     if isinstance(obj, bytes):
@@ -86,6 +87,11 @@ class EscapedString(text):
 
 
 def escape_char(unichar):  # type: (text) -> text
+    # if not isinstance(unichar, text):
+    #     print("NOT UNICODE:", type(unichar), repr(unichar), unichar)
+    #     1/0
+    if isinstance(unichar, bytes):
+        unichar = unichar.decode('u8')
     assert isinstance(unichar, text)
     if len(unichar) > 1 and (unichar[0] == u'&' and unichar[-1] == u';'):
         return str(unichar)
@@ -297,7 +303,7 @@ class xtag(object):
     def __unicode__(self):
         return self._as_unicode()
 
-    def __html__(self):
+    def __html__(self):  # type: () -> text
         return self._as_unicode()
 
     def __eq__(self, other):
@@ -649,7 +655,7 @@ submit_button = mkxtag('input', type='submit')
 
 class select(tag):
     def __init__(self, options, selected=None, **kw):
-        if 'id' not in kw:
+        if 'id' not in kw and 'name' in kw and kw['name']:
             kw['id'] = 'id_' + kw['name']
         super(select, self).__init__('select', **kw)
         self._options = None
