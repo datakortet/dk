@@ -118,6 +118,7 @@ def test_simple_tag():
     htmlval = uhtml.a(u'bjørn', href=u'url')
     assert htmlval == '<a href="url">bjørn</a>'
     assert str(htmlval) == '<a href="url">bjørn</a>'
+    assert to_html(htmlval) == '<a href="url">bjørn</a>'
 
 
 def test_tags():

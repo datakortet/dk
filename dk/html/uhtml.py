@@ -12,6 +12,7 @@ from builtins import int, str as text
 from past.builtins import basestring
 from dk.text import u8, unicode_repr
 import types as _types
+import warnings
 try:
     import html.entities as _h
 except ImportError:
@@ -25,13 +26,18 @@ raw_string_encodings = ('utf-8', 'iso-8859-1')
 
 def to_html(obj):
     if hasattr(obj, '__html__'):
-        return obj.__html__()
+        res = obj.__html__()
+        if isinstance(res, bytes):
+            warnings.warn("obj.__html__() returned bytes!: {}".format(
+                obj.__class__.__name__
+            ))
     if hasattr(obj, '_as_unicode'):
         return obj._as_unicode()
     if isinstance(obj, bytes):
         return obj.decode('u8')
     if isinstance(obj, text):
         return obj
+
     return text(obj)
 
 
@@ -292,7 +298,7 @@ class xtag(object):
         return self._as_unicode()
 
     def __html__(self):
-        return self._as_bytes()
+        return self._as_unicode()
 
     def __eq__(self, other):
         if isinstance(other, (bytes, text)):
