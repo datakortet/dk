@@ -8,6 +8,9 @@ import sys
 import six
 from past.builtins import basestring
 from builtins import int, str as texttype
+
+from .uhtml import to_html
+
 try:  # pragma: nocover
     import htmlentitydefs as _h
 except ImportError:  # pragma: nocover
@@ -64,7 +67,7 @@ BLOCKLEVEL_ELEMENTS = '''
 def escape_char(unichar):
     if len(unichar) > 1 and (unichar[0] == '&' and unichar[-1] == ';'):
         return str(unichar)
-    
+
     o = ord(unichar)
     t = _h.codepoint2name.get(o, o)
     if t == o:
@@ -158,7 +161,7 @@ def plain_attribute(strval, legal=_s.ascii_letters + _s.digits + '-._:'):
             return False
     return True
 
-    
+
 def quote_if_needed(strval):
     if plain_attribute(strval):
         return strval
@@ -183,7 +186,7 @@ def norm_attr_name(attr):
     if attr[-1] == '_':
         attr = attr[:-1]
     return attr.replace('_', '-')
-    
+
 
 class EmptyString(object):
     pass
@@ -210,9 +213,9 @@ def make_unicode(obj):
 
 class xtag(object):
     """x(ml-style)tag: a tag without content or a closing tag.
-       
+
        E.g. <br/> would be xtag('br')
-       
+
        [2009-03-11]
            w3 validator complains that 4.01 loose should not use
            <foo />  but <foo>.
@@ -272,10 +275,11 @@ class xtag(object):
     def _as_bytes(self):
         return self._as_unicode().encode('u8')
 
-    __unicode__ = _as_unicode
+    def __unicode__(self):
+        return self._as_unicode()
 
     def __html__(self):
-        return str(self)
+        return self._as_unicode()
 
     def __eq__(self, other):
         if isinstance(other, (bytes, text)):
@@ -343,7 +347,9 @@ class tag(xtag):
         return locals()
     xcontent = property(**xcontent())
 
-    def _flatten(self, lst):
+    def _flatten(self, lst=None):
+        if not lst:
+            return
         for item in lst:
             if isinstance(item, (basestring, int, float)):
                 yield item
@@ -365,7 +371,7 @@ class tag(xtag):
             yield item
         yield self.close_tag()
         return
-        
+
     def open_tag(self):
         return '<' + self._name + self.attributes() + '>'
 
@@ -376,7 +382,7 @@ class tag(xtag):
         res = []
         for item in self.flatten():
             try:
-                res.append(unicode_repr(item))
+                res.append(to_html(item))
             except TypeError:
                 # generator found for some reason
                 six.print_(type(item), dir(item))
@@ -385,7 +391,7 @@ class tag(xtag):
 
     # def __html__(self):
     #     return self._unicode()
-        
+
     def __str__(self):
         if sys.version_info.major < 3:
             return self._unicode().encode('u8')
@@ -408,7 +414,7 @@ class text(tag):
     """
     def __init__(self, *content):
         super(text, self).__init__('text', *content)
-        
+
     def flatten(self):
         return self._flatten(self._content)
 
@@ -665,7 +671,7 @@ class select(tag):
                 self._options = []
             else:
                 first = options[0]
-                
+
                 if len(first) == 2 and not isinstance(first, basestring):
                     self._options = [(make_unicode(k), make_unicode(v))
                                      for (k, v) in options]
@@ -733,7 +739,7 @@ class sqlresult(tag):
             result.append(row)
         tbl = table(result, style=css(font='10pt Verdana', margin_left='10%'))
         self.content = (tbl,)
-        
+
 
 def page(xtitle, abody):
     """Shortcut to get a page up quickly."""
