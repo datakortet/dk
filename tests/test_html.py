@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-import pytest
-
-from dk.html.html import *
 from dk.html import html
+from dk.html.html import *
 
 
-@pytest.mark.skip
 def test_escape_char():
     assert escape_char(u'&oslash;') == u'&oslash;'
     assert escape_char(u'ø') == u'&oslash;'
@@ -20,7 +17,6 @@ def test_escape_char():
     assert unescape(b'bj&oslash;rn') == u'bjørn'
 
 
-@pytest.mark.skip
 def test_normalize():
     assert normalize(u'Bjørn') == u'Bjørn'
     assert normalize(u'Bjørn'.encode('u8')) == u'Bjørn'
@@ -29,7 +25,6 @@ def test_normalize():
     assert normalize(b'\0') == u'\x00'
 
 
-@pytest.mark.skip
 def test_attribute_functions():
     assert plain_attribute('foo')
     assert not plain_attribute('&')
@@ -46,13 +41,11 @@ def test_attribute_functions():
     assert quote_if_needed('&1') == '"&1"'
 
 
-@pytest.mark.skip
 def test_eq():
     assert tag('T') == '<T></T>'
     assert tag('T') != 42
 
 
-@pytest.mark.skip
 def test_tag_methods():
     t = tag('T')
     t.foo = 'bar'
@@ -61,7 +54,6 @@ def test_tag_methods():
     assert stag('B') == '<B>'
 
 
-@pytest.mark.skip
 def test_tag_attributes():
     assert tag('A', checked=True) == '<A checked></A>'
     assert tag('A', checked=False) == '<A></A>'
@@ -70,7 +62,6 @@ def test_tag_attributes():
     assert tag('A', foo=EmptyString) == '<A foo=""></A>'
 
 
-@pytest.mark.skip
 def test_caption():
     assert html.figure(
         html.img(),
@@ -78,7 +69,6 @@ def test_caption():
     ) == "<figure><img><figcaption>hello</figcaption></figure>\n"
 
 
-@pytest.mark.skip
 def test_empty_caption():
     assert html.figure(
         html.img(),
@@ -86,7 +76,6 @@ def test_empty_caption():
     ) == "<figure><img></figure>\n"
 
 
-@pytest.mark.skip
 def test_flatten():
     a = tag('A')
     b = tag('B', a)
@@ -94,7 +83,6 @@ def test_flatten():
     assert t == str(t)
 
 
-@pytest.mark.skip
 def test_flatten_d():
     a = dtag('A')
     b = tag('B', a)
@@ -102,14 +90,12 @@ def test_flatten_d():
     assert a == ""
 
 
-@pytest.mark.skip
 def test_dtag():
     a = dtag("A", 'a')
     assert a == "<A>a</A>"
     b = dtag("B")
     assert b == ""
 
-@pytest.mark.skip
 def test_simple_tag():
     htmlval = html.a(u'bjørn', href=u'url')
     assert htmlval == '<a href="url">bjørn</a>'
@@ -121,7 +107,6 @@ try:
 except NameError:
     unicode = str
 
-@pytest.mark.skip
 def test_tags():
     assert html.a('a', b='c') == '<a b="c">a</a>'
     assert html.abbr('a', b='c') == '<abbr b="c">a</abbr>'
@@ -201,7 +186,6 @@ def test_tags():
     assert html.var('a', b='c') == '<var b="c">a</var>'
 
 
-@pytest.mark.skip
 def test_escape_char():
     from dk.html.html import escape_char, escaped_array, escape
 
@@ -211,9 +195,8 @@ def test_escape_char():
     assert escape(u'bjørn') == 'bj&oslash;rn'
 
 
-@pytest.mark.skip
 def test_attribute_functions():
-    from dk.html.html import plain_attribute, quote_xhtml, quote_smart, quote_if_needed, norm_attr_name
+    from dk.html.html import plain_attribute, quote_xhtml, quote_smart, quote_if_needed
 
     assert plain_attribute('foo')
     assert not plain_attribute('&')
@@ -229,7 +212,6 @@ def test_attribute_functions():
     assert quote_if_needed('&1') == '"&1"'
 
 
-@pytest.mark.skip
 def test_make_unicode():
     assert make_unicode(EmptyString) == EmptyString
     assert make_unicode(u'') == u''
@@ -238,7 +220,6 @@ def test_make_unicode():
     assert make_unicode(42) == u'42'
 
 
-@pytest.mark.skip
 def test_old_doctest():
     assert str(html.br()) == '<br>'
     assert str(html.div('hello', html.b('world'))) == '<div>hello<b>world</b></div>\n'
@@ -251,7 +232,6 @@ def test_old_doctest():
     )
 
 
-@pytest.mark.skip
 def test_lines():
     assert lines('a', 'b') == 'a<br>b'
 
