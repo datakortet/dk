@@ -391,7 +391,7 @@ class tag(xtag):
         res = []
         for item in self.flatten():
             try:
-                res.append(to_html(item))
+                res.append(to_html(item))       # XXX: 12: unicode_repr
             except TypeError:  # pragma: nocover
                 # generator found for some reason
                 print(type(item), dir(item))

@@ -34,5 +34,3 @@ class css(pset):
             return self._as_unicode()
 
     __repr__ = __str__
-
-
