@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from dk.html import html
 from dk.html.html import *
+from dk.html import html
 
 
 def test_escape_char():
@@ -96,16 +96,17 @@ def test_dtag():
     b = dtag("B")
     assert b == ""
 
+
 def test_simple_tag():
     htmlval = html.a(u'bjørn', href=u'url')
-    assert htmlval == '<a href="url">bjørn</a>'
     assert str(htmlval) == '<a href="url">bjørn</a>'
+    assert htmlval == '<a href="url">bjørn</a>'
 
 
-try:
-    unicode
-except NameError:
-    unicode = str
+# try:
+#     unicode
+# except NameError:
+#     unicode = str
 
 def test_tags():
     assert html.a('a', b='c') == '<a b="c">a</a>'

@@ -282,7 +282,9 @@ class xtag(object):
         return self._as_unicode()
 
     def __eq__(self, other):
-        if isinstance(other, (bytes, text)):
+        if isinstance(other, bytes):
+            return self.__html__() == other.decode('u8')
+        if isinstance(other, text):
             return self.__html__() == other
         return False
 
@@ -378,7 +380,7 @@ class tag(xtag):
     def close_tag(self):
         return '</' + self._name + '>' + self._nlafter
 
-    def _unicode(self):
+    def _as_unicode(self):
         res = []
         for item in self.flatten():
             try:
@@ -388,14 +390,6 @@ class tag(xtag):
                 six.print_(type(item), dir(item))
                 raise
         return u''.join(res)
-
-    # def __html__(self):
-    #     return self._unicode()
-
-    def __str__(self):
-        if sys.version_info.major < 3:
-            return self._unicode().encode('u8')
-        return self._unicode()
 
 
 class opentag(tag):
@@ -449,6 +443,7 @@ class dtag(tag):
             return
         for item in super(dtag, self).flatten(lst):
             yield item
+
 
 def _add(left, right):
     t = {}
