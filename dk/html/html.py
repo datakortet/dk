@@ -7,7 +7,7 @@ from __future__ import absolute_import
 import sys
 import six
 from past.builtins import basestring
-from builtins import int, str as texttype
+from builtins import int, str as text
 
 from .uhtml import to_html
 
@@ -199,7 +199,7 @@ def make_unicode(obj):
     if obj is EmptyString:
         return obj
 
-    if isinstance(obj, texttype):
+    if isinstance(obj, text):
         return obj
 
     if isinstance(obj, bytes):
@@ -208,7 +208,7 @@ def make_unicode(obj):
         except:
             return obj.decode('l1')
 
-    return texttype(obj)
+    return text(obj)
 
 
 class xtag(object):
@@ -286,6 +286,8 @@ class xtag(object):
             return self.__html__() == other.decode('u8')
         if isinstance(other, text):
             return self.__html__() == other
+        # if sys.version_info.major >= 3 and isinstance(other, str):
+        #     pass
         return False
 
     def __str__(self):
@@ -402,18 +404,18 @@ class closetag(tag):
         yield self.close_tag()
 
 
-class text(tag):
+class text_grouping(tag):
     """text tag: outputs its contents without any tags around it. Useful
        for grouping at the top level.
     """
     def __init__(self, *content):
-        super(text, self).__init__('text', *content)
+        super(text_grouping, self).__init__('text', *content)
 
     def flatten(self):
         return self._flatten(self._content)
 
 
-class lines(text):
+class lines(text_grouping):
     """like text, except each item in content is separated with a <br> tag.
     """
     def flatten(self):
