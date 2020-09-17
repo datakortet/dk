@@ -210,13 +210,34 @@ def test_old_doctest():
 
 
 def test_select():
-    assert str(select(options=[u'a', u'ø'], selected=u'ø', name='foo')) == (
+    s = select(options=[u'a', u'ø'], selected=u'ø', name='foo')
+    assert str(s) == (
         '<select id="id_foo" name="foo">'
         '<option value="a">a</option>\n'
         '<option selected="selected" value="&oslash;">ø</option>\n'
         '</select>'
     )
 
+
+def test_select_tuple_nonstring():
+    assert str(select(options=[(1, 1)], name='foo')) == (
+        '<select id="id_foo" name="foo"><option value="1">1</option>\n</select>'
+    )
+
+
+def test_select_no_options():
+    assert str(select(options=[], name='foo')) == (
+        '<select id="id_foo" name="foo"></select>'
+    )
+
+
+def xtest_select_selected():
+    s = select(options=[(1, 1)], selected=1, name='foo')
+    s.selected = 1
+    assert s.selected == 1
+    assert str(s) == (
+        '<select id="id_foo" name="foo"><option selected="selected" value="1">1</option>\n</select>'
+    )
 
 def test_lines():
     assert lines('a', 'b') == 'a<br>b'
