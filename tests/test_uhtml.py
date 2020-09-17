@@ -207,10 +207,13 @@ def test_old_doctest():
     assert str(uhtml.br()) == '<br>'
     assert str(uhtml.div('hello', uhtml.b('world'))) == '<div>hello<b>world</b></div>\n'
     print(select(options=[u'a', u'b'], name='foo'))
-    assert str(select(options=[u'a', u'b'], name='foo')) == (
+
+
+def test_select():
+    assert str(select(options=[u'a', u'ø'], selected=u'ø', name='foo')) == (
         '<select id="id_foo" name="foo">'
         '<option value="a">a</option>\n'
-        '<option value="b">b</option>\n'
+        '<option selected="selected" value="&oslash;">ø</option>\n'
         '</select>'
     )
 

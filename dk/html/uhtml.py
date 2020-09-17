@@ -661,10 +661,10 @@ class select(tag):
         self._options = None
         self.options = options
         if selected is not None:
-            selected = str(selected)
+            selected = text(selected)
         content = []
         for k, v in self.options:
-            if str(k) == selected:
+            if text(k) == selected:
                 opt = option(v, value=k, selected='selected')
             else:
                 opt = option(v, value=k)
