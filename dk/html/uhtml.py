@@ -34,6 +34,8 @@ def to_html(obj):
         return res
     if hasattr(obj, '_as_unicode'):
         return obj._as_unicode()
+    if isinstance(obj, list):
+        return u''.join([to_html(item) for item in obj])
     if isinstance(obj, bytes):
         return obj.decode('u8')
     if isinstance(obj, text):
