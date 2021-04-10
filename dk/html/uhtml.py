@@ -279,7 +279,9 @@ class xtag(object):
             if isinstance(v, css):
                 v = str(v)  # str is correct here for both py2 and 3
 
-            if isinstance(v, bool) and k in BOOLEAN_ATTRIBUTES:
+            if k in BOOLEAN_ATTRIBUTES and v == '4242424242':
+                res.append(u' %s ' % k)
+            elif isinstance(v, bool) and k in BOOLEAN_ATTRIBUTES:
                 if v:
                     res.append(u' %s' % k)
             elif v is EmptyString:
