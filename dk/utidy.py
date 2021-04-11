@@ -85,8 +85,13 @@ class HtmlTag(object):
 
     def normalize_attrs(self, attrs):
         res = []
+        # attributes who should preserve empty string
+        empty_is_empty = {'action'}
         for attrname, _quote, qval, noqval in sorted(attrs):
-            val = qval or noqval or attrname
+            if attrname in empty_is_empty:
+                val = qval or noqval
+            else:
+                val = qval or noqval or attrname
             if attrname == 'class':
                 res.append((attrname, self.normalize_class(val)))
             elif attrname == 'style':
