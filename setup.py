@@ -17,7 +17,7 @@ Topic :: Software Development :: Libraries
 
 import setuptools
 
-version = '1.1.9'
+version = '1.1.10'
 
 
 setuptools.setup(
