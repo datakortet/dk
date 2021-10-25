@@ -8,15 +8,11 @@ from __future__ import print_function
 
 import sys
 from typing import List, Any
-from builtins import int, str as text
-from past.builtins import basestring
 from dk.text import unicode_repr
 import types as _types
 import warnings
-try:
-    import html.entities as _h
-except ImportError:
-    import htmlentitydefs as _h
+import html.entities as _h
+from html import unescape as _unescape
 import string as _s
 from .css import css
 _map = map
@@ -38,10 +34,10 @@ def to_html(obj):
         return u''.join([to_html(item) for item in obj])
     if isinstance(obj, bytes):
         return obj.decode('u8')
-    if isinstance(obj, text):
+    if isinstance(obj, str):
         return obj
 
-    return text(obj)
+    return str(obj)
 
 
 class color(object):
@@ -84,17 +80,17 @@ BOOLEAN_ATTRIBUTES = set(u'''
 '''.split())
 
 
-class EscapedString(text):
+class EscapedString(str):
     pass
 
 
-def escape_char(unichar):  # type: (text) -> text
-    # if not isinstance(unichar, text):
+def escape_char(unichar):  # type: (str) -> str
+    # if not isinstance(unichar, str):
     #     print("NOT UNICODE:", type(unichar), repr(unichar), unichar)
     #     1/0
     if isinstance(unichar, bytes):
         unichar = unichar.decode('u8')
-    assert isinstance(unichar, text)
+    assert isinstance(unichar, str)
     if len(unichar) > 1 and (unichar[0] == u'&' and unichar[-1] == u';'):
         return str(unichar)
     
@@ -109,14 +105,14 @@ def escape_char(unichar):  # type: (text) -> text
         return u'&' + name + u';'
 
 
-def escaped_array(s):  # type: (text) -> List[text]
+def escaped_array(s):  # type: (str) -> List[str]
     """Convert unicode string to list of ascii characters or
        entitydefs like &oslash; etc.
     """
     return [escape_char(ch) for ch in s]
 
 
-def escape(s, enc=None):  # type: (Union[text, bytes]) -> text
+def escape(s, enc=None):  # type: (Union[str, bytes]) -> str
     """Convert string s (potentially unicode) to a unicode string
        with ascii representation, i.e.
        with entitydefs like &oslash; &aelig; etc.
@@ -132,22 +128,19 @@ def escape(s, enc=None):  # type: (Union[text, bytes]) -> text
 def unescape(txt):
     """Convert text containing entitydefs into Unicode.
     """
-    try:  # pragma: nocover
-        from html.parser import HTMLParser
-    except ImportError:  # pragma: nocover
-        from HTMLParser import HTMLParser
+    from html.parser import HTMLParser
     h = HTMLParser()
     if isinstance(txt, bytes):
         txt = txt.decode('u8')
     # this one is undocumented...
-    return h.unescape(txt)
+    return _unescape(txt)
 
 
 def u8escape(s):
     return escape(s, 'u8')
 
 
-def rawstr2unicode(s):  # type: (bytes) -> text
+def rawstr2unicode(s):  # type: (bytes) -> str
     # only used from normalize (below)
     for enc in raw_string_encodings:
         try:
@@ -157,15 +150,15 @@ def rawstr2unicode(s):  # type: (bytes) -> text
     raise UnicodeError("Could not decode raw string.")  # pragma: nocover
 
 
-def normalize(v):   # type: (Any) -> text
+def normalize(v):   # type: (Any) -> str
     """returns a stringified unicode version of v
     """
     if isinstance(v, bytes):
         return rawstr2unicode(v)
-    return text(v)
+    return str(v)
 
 
-def quote_xhtml(v):  # type: (text) -> text
+def quote_xhtml(v):  # type: (str) -> str
     if u'"' in v:
         v = v.replace(u'"', u'&quot;')
     return u'"%s"' % v
@@ -182,7 +175,7 @@ def quote_smart(strval):
         return u'"%s"' % strval
 
 
-def plain_attribute(strval, legal=_s.ascii_letters + _s.digits + '-._:'):  # type: (text, text) -> bool
+def plain_attribute(strval, legal=_s.ascii_letters + _s.digits + '-._:'):  # type: (str, str) -> bool
     # html 4: 3.2.2 p4 some attributes may be unquoted
     for c in strval:
         if c not in legal:
@@ -190,7 +183,7 @@ def plain_attribute(strval, legal=_s.ascii_letters + _s.digits + '-._:'):  # typ
     return True
 
 
-def quote_if_needed(strval):  # type: (text) -> text
+def quote_if_needed(strval):  # type: (str) -> str
     if plain_attribute(strval):
         return strval
     else:
@@ -227,7 +220,7 @@ def make_unicode(obj):
     if obj is EmptyString:
         return obj
 
-    if isinstance(obj, text):
+    if isinstance(obj, str):
         return obj
 
     if isinstance(obj, bytes):
@@ -237,7 +230,7 @@ def make_unicode(obj):
             raise
             return obj.decode('l1')
 
-    return text(obj)
+    return str(obj)
 
 
 class xtag(object):
@@ -298,28 +291,16 @@ class xtag(object):
     def flatten(self):
         yield self
 
-    def _as_unicode(self):
+    def __str__(self):
         return u'<' + self._name + self.attributes() + u'>'
 
-    def _as_bytes(self):
-        return self._as_unicode().encode('u8')
-
-    def __unicode__(self):
-        return self._as_unicode()
-
-    def __html__(self):  # type: () -> text
-        return self._as_unicode()
+    def __html__(self):  # type: () -> str
+        return str(self)
 
     def __eq__(self, other):
-        if isinstance(other, (bytes, text)):
+        if isinstance(other, (bytes, str)):
             return self.__html__() == other
         return False
-
-    def __str__(self):
-        if sys.version_info.major < 3:    # pragma: nocover
-            return self._as_bytes()
-        else:                             # pragma: nocover
-            return self._as_unicode()
 
     __repr__ = __str__
 
@@ -327,7 +308,7 @@ class xtag(object):
 class stag(xtag):
     """s(ingle)tag
     """
-    def _as_unicode(self):
+    def __str__(self):
         return u'<' + self._name + self.attributes() + u'>'
 
 
@@ -364,7 +345,7 @@ class tag(xtag):
         if not lst:
             return
         for item in lst:
-            if isinstance(item, (basestring, int, float)):
+            if isinstance(item, (str, int, float)):
                 yield item
             elif isinstance(item, xtag):
                 for subitem in item.flatten():
@@ -391,7 +372,7 @@ class tag(xtag):
     def close_tag(self):
         return u'</' + self._name + u'>' + self._nlafter
         
-    def _as_unicode(self):
+    def __str__(self):
         res = []
         for item in self.flatten():
             try:
@@ -665,10 +646,10 @@ class select(tag):
         self._options = None
         self.options = options
         if selected is not None:
-            selected = text(selected)
+            selected = str(selected)
         content = []
         for k, v in self.options:
-            if text(k) == selected:
+            if str(k) == selected:
                 opt = option(v, value=k, selected='selected')
             else:
                 opt = option(v, value=k)
@@ -686,7 +667,7 @@ class select(tag):
         else:
             first = options[0]
 
-            if len(first) == 2 and not isinstance(first, basestring):
+            if len(first) == 2 and not isinstance(first, str):
                 self._options = [(unicode_repr(k), unicode_repr(v))
                                  for (k,v) in options]
             else:

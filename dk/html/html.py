@@ -3,27 +3,14 @@
     HTML helper file.
 
 """
-from __future__ import absolute_import
 import sys
-import six
-from past.builtins import basestring
-from builtins import int, str as text
-
 from .uhtml import to_html
-
-try:  # pragma: nocover
-    import htmlentitydefs as _h
-except ImportError:  # pragma: nocover
-    import html.entities as _h
+import html.entities as _h
 import string as _s
 import types as _types
 from .css import css
 from ..text import u8, unicode_repr
 
-try:  # pragma: nocover
-    unicode
-except NameError:  # pragma: nocover
-    unicode = str
 
 _map = map
 
@@ -92,7 +79,7 @@ def escape(strval, enc=None):
     """
     if strval is None:
         return ''
-    if not isinstance(strval, unicode):
+    if not isinstance(strval, str):
         if enc is not None:
             strval = strval.decode(enc)
     return ''.join(escape_char(c) for c in strval)
@@ -119,7 +106,7 @@ def u8escape(strval):
 def rawstr2unicode(strval):
     for enc in raw_string_encodings:
         try:
-            return unicode(strval, enc)
+            return strval.decode(enc)
         except UnicodeDecodeError:
             pass
     raise UnicodeError("Could not decode raw string.")
@@ -128,10 +115,10 @@ def rawstr2unicode(strval):
 def normalize(v):
     """returns a stringified unicode version of v
     """
-    if not isinstance(v, basestring):
+    if not isinstance(v, str) and not isinstance(v, bytes):
         # all 'other' objects: call their __str__ method
-        v = unicode(str(v))
-    elif not isinstance(v, unicode):
+        v = str(v)
+    elif isinstance(v, bytes):
         # str objects: try to find encoding
         v = rawstr2unicode(v)
     return v
@@ -199,7 +186,7 @@ def make_unicode(obj):
     if obj is EmptyString:
         return obj
 
-    if isinstance(obj, text):
+    if isinstance(obj, str):
         return obj
 
     if isinstance(obj, bytes):
@@ -208,7 +195,7 @@ def make_unicode(obj):
         except:
             return obj.decode('l1')
 
-    return text(obj)
+    return str(obj)
 
 
 class xtag(object):
@@ -269,43 +256,22 @@ class xtag(object):
     def flatten(self):
         yield self
 
-    def _as_unicode(self):
+    def __str__(self):
         return u'<' + self._name + self.attributes() + u'>'
 
-    def _as_bytes(self):
-        return self._as_unicode().encode('u8')
-
-    def __unicode__(self):
-        return self._as_unicode()
-
     def __html__(self):
-        return self._as_unicode()
+        return str(self)
 
     def __eq__(self, other):
         if isinstance(other, bytes):
             return self.__html__() == other.decode('u8')
-        if isinstance(other, text):
+        if isinstance(other, str):
             return self.__html__() == other
         # if sys.version_info.major >= 3 and isinstance(other, str):
         #     pass
         return False
 
-    def __str__(self):
-        if sys.version_info.major < 3:    # pragma: nocover
-            return self._as_bytes()
-        else:                             # pragma: nocover
-            return self._as_unicode()
-
     __repr__ = __str__
-
-    # def __str__(self):
-    #     return '<' + self._name + self.attributes() + '>'
-    #
-    # def __unicode__(self):
-    #     return unicode(str(self), 'u8')
-    #
-    # def __repr__(self):
-    #     return str(self)
 
 
 class stag(xtag):
@@ -355,7 +321,8 @@ class tag(xtag):
         if not lst:
             return
         for item in lst:
-            if isinstance(item, (basestring, int, float)):
+            print("FLATTEN:", item)
+            if isinstance(item, (str, int, float)):
                 yield item
             elif isinstance(item, xtag):
                 for subitem in item.flatten():
@@ -382,14 +349,14 @@ class tag(xtag):
     def close_tag(self):
         return '</' + self._name + '>' + self._nlafter
 
-    def _as_unicode(self):
+    def __str__(self):
         res = []
         for item in self.flatten():
             try:
                 res.append(to_html(item))
             except TypeError:
                 # generator found for some reason
-                six.print_(type(item), dir(item))
+                print(type(item), dir(item))
                 raise
         return u''.join(res)
 
@@ -669,7 +636,7 @@ class select(tag):
             else:
                 first = options[0]
 
-                if len(first) == 2 and not isinstance(first, basestring):
+                if len(first) == 2 and not isinstance(first, str):
                     self._options = [(make_unicode(k), make_unicode(v))
                                      for (k, v) in options]
                 else:

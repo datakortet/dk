@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """A 2D grid with slicing.
 
    Usage::
@@ -32,16 +31,10 @@
 # W0141: Used builtin map
 # E1102: grid.copy_area t is not callable (t is derived from __sub__)
 # W0201: attribute defined outside __init__ (descriptors).
-from __future__ import print_function
 import sys
 from builtins import str
-from past.builtins import long, basestring
-try:
-    from new import instancemethod
-    newmethod = instancemethod
-except ImportError:  # py3
-    from types import MethodType
-    newmethod = lambda m, o, c: MethodType(m, o)
+from types import MethodType
+newmethod = lambda m, o, c: MethodType(m, o)
 from . import proxy
 
 
@@ -94,7 +87,7 @@ def indexiter(length, ndx):
         if isinstance(ndx, slice):
             for x in range(*ndx.indices(length)):
                 yield x
-        elif isinstance(ndx, (int, long)):
+        elif isinstance(ndx, int):
             if ndx < 0:
                 yield length + ndx
             else:
@@ -308,7 +301,7 @@ class table_iterator(object):
             y, x = ndx[0]
             return self.instance.set_cell(y, x, val)
         else:
-            if not isinstance(val, basestring):
+            if not isinstance(val, str) and not isinstance(val, bytes):
                 try:
                     it = iter(val)
                 except TypeError:
@@ -548,14 +541,8 @@ class grid(object):
 
         return u'\n'.join(res)
 
-    def __unicode__(self):
-        return self.stringrep()
-
     def __str__(self):
-        if sys.version_info.major < 3:
-            return self.stringrep().encode('u8')
-        else:
-            return self.stringrep()
+        return self.stringrep()
 
     def print_row(self, y):
         rows = [self._rows[y]]
@@ -757,7 +744,7 @@ class grid(object):
                 else:
                     raise ValueError('Different sizes in assignment.')
                 return
-            elif not isinstance(val, basestring):
+            elif not isinstance(val, str) and not isinstance(val, bytes):
                 try:
                     it = iter(val)
                 except TypeError:

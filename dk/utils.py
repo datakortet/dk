@@ -4,8 +4,6 @@
 """
 from typing import Any, Optional, Union
 
-from past.builtins import basestring
-from builtins import str as text
 import re
 import datetime
 
@@ -89,12 +87,12 @@ def lower_case(s, encoding='u8'):
     return s.encode(encoding)
 
 
-def ulower_case(val):  # type: (Any) -> text
+def ulower_case(val):  # type: (Any) -> str
     """Call val.lower(). Return '' if val is None.
     """
     if val is None:
         return u''
-    assert isinstance(val, text)
+    assert isinstance(val, str)
     return val.lower()
 
 
@@ -112,7 +110,7 @@ def utitle_case(val):
     """
     if val is None:
         return u''
-    if not isinstance(val, text):
+    if not isinstance(val, str):
         raise ValueError(repr(val) + ' of type ' + str(type(val)))
     return val.title()
 
@@ -155,7 +153,7 @@ def unicode_repr(obj):
     """Return obj as a unicode string. If obj is a (non-)unicode string, then
        first try to decode it as utf-8, then as iso-8859-1.
     """
-    if isinstance(obj, text):
+    if isinstance(obj, str):
         return obj
 
     if isinstance(obj, bytes):
@@ -164,7 +162,7 @@ def unicode_repr(obj):
         except UnicodeDecodeError:
             return obj.decode('l1')
 
-    return text(obj)
+    return str(obj)
 
 
 u = unicode_repr
@@ -189,7 +187,7 @@ def unhtml(s, toencoding=None):
     """Convert charrefs for Norwegian vowels to their unicode counterparts.
     """
 
-    if not isinstance(s, basestring):
+    if not isinstance(s, str) and not isinstance(s, bytes):
         return s
     if isinstance(s, bytes):
         s = s.decode('u8')
@@ -230,11 +228,11 @@ def normalize(v):  # type: (Any) -> bytes
          normalize(None) == normalize('') == normalize(u'')
 
     """
-    if isinstance(v, text):
+    if isinstance(v, str):
         return v.encode('u8')
     if v in (None, ''):
         return b''
-    return text(v).encode('u8')
+    return str(v).encode('u8')
 
 
 def nlat(v):
