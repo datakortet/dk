@@ -321,7 +321,6 @@ class tag(xtag):
         if not lst:
             return
         for item in lst:
-            print("FLATTEN:", item)
             if isinstance(item, (str, int, float)):
                 yield item
             elif isinstance(item, xtag):
