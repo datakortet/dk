@@ -1,0 +1,5 @@
+build:
+  ipaddr: 2.2.0
+  typing: 3.6.4
+  six: 1.16.0
+  
