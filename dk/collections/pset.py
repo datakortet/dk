@@ -141,11 +141,20 @@ class pset(dict):
         res.append('</%s>' % self._name())
         return ''.join(res)
 
-    def __repr__(self):
-        val = self.__unicode()
-        if sys.version_info < (3, 0):
-            return val.encode('utf-8')
-        return val
+    def __str__(self):
+        vals = []
+        for k, v in self:
+            if k != 'name':
+                try:
+                    vals.append('%s=%s' % (k, repr(v)))
+                except:
+                    vals.append('%s=UNPRINTABLE' % k)
+
+        vals = ', '.join(vals)
+
+        return '%s(%s)' % (self._name(), vals)        
+
+    __repr__ = __str__
 
     def pprint(self, indent=0, tab='   ', seen=None):
         "Pretty print the pset, indented."
@@ -202,8 +211,6 @@ class pset(dict):
     def __delitem__(self, key):
         if key in self:
             self.remove(key)
-
-    __str__ = __repr__
 
     def __iter__(self):
         return ((k, dict.get(self, k)) for k in self._order)
