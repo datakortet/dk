@@ -2,7 +2,6 @@
 Mapping classes.
 """
 from __future__ import absolute_import
-import sys
 from collections import namedtuple
 import six
 
@@ -147,12 +146,12 @@ class pset(dict):
             if k != 'name':
                 try:
                     vals.append('%s=%s' % (k, repr(v)))
-                except:
+                except:  # noqa
                     vals.append('%s=UNPRINTABLE' % k)
 
         vals = ', '.join(vals)
 
-        return '%s(%s)' % (self._name(), vals)        
+        return '%s(%s)' % (self._name(), vals)
 
     __repr__ = __str__
 
