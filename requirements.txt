@@ -1,2 +1,2 @@
 ipaddr==2.2.0
-typing==3.6.4
+typing==3.6.4       ; python_version < '3.6'
