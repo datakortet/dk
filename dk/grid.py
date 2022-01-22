@@ -33,8 +33,8 @@
 # W0201: attribute defined outside __init__ (descriptors).
 from builtins import str
 from types import MethodType
-newmethod = lambda m, o, c: MethodType(m, o)  # noqa
 from . import proxy
+newmethod = lambda m, o, c: MethodType(m, o)  # noqa
 
 
 def _direction(start, end):
