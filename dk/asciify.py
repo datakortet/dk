@@ -38,7 +38,7 @@ def asciify(s, spaces=None, legal=None, replacement=''):
        If `legal` is specified (as a string), only characters from
        `legal` will be in the result, otherwise all characters from
        ascii 32 to ascii 127 are allowed.
-       
+
        If `replacement` is passed, then any characters that are elided
        will be replaced by `replacement`.
     """

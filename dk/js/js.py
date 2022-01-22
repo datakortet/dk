@@ -2,7 +2,7 @@
 
 """This module is dedicated to creating javascript snippets that can be
    consumed elsewhere.
-   (uses MochiKit and seems to be imported in way too many places...) 
+   (uses MochiKit and seems to be imported in way too many places...)
 """
 
 # this is way old code, from before Python had ''.format()...

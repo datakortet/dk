@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 import sys
-from builtins import str as text
 from dk.collections import pset
 
 

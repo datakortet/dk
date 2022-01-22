@@ -1,15 +1,11 @@
-# -*- coding: utf-8 -*-
-
-"""Mapping classes.
+"""
+Mapping classes.
 """
 from __future__ import absolute_import
 import sys
 from collections import namedtuple
 import six
-try:
-    unicode
-except NameError:
-    unicode = str
+
 
 keyval = namedtuple('keyval', 'key val')
 
@@ -31,8 +27,6 @@ def xmlrepr(v, toplevel=False):
         return '<list>%s</list>' % (''.join(res))
     return str(v)
 
-########################################################################
-
 
 class pset(dict):
     """This code is placed in the Public Domain, or released under the
@@ -50,7 +44,7 @@ class pset(dict):
          >>> x.a = 314
          >>> x
          pset(a=314, b='foo')
-         
+
     """
     def __init__(self, items=(), **attrs):
         object.__setattr__(self, '_order', [])
@@ -147,28 +141,6 @@ class pset(dict):
         res.append('</%s>' % self._name())
         return ''.join(res)
 
-    def __unicode(self):
-        vals = []
-        for k, v in self:
-            if k != 'name':
-                try:
-                    vals.append(u'%s=%s' % (k, repr(v)))
-                except:
-                    vals.append(u'%s=UNPRINTABLE' % k)
-
-        vals = u', '.join(vals)
-
-        return u'%s(%s)' % (self._name(), vals)
-
-    def __unicode__(self):
-        return self.__unicode()
-
-    def __str__(self):
-        val =  self.__unicode()
-        if sys.version_info < (3,0):
-            return val.encode('utf-8')
-        return val
-
     def __repr__(self):
         val = self.__unicode()
         if sys.version_info < (3, 0):
@@ -184,7 +156,7 @@ class pset(dict):
             six.print_('{|')
 
         indent += 1
-            
+
         for key in self.keys():
             six.print_(tab * indent, key, '=',)
             val = self[key]
@@ -230,7 +202,7 @@ class pset(dict):
     def __delitem__(self, key):
         if key in self:
             self.remove(key)
-    
+
     __str__ = __repr__
 
     def __iter__(self):
@@ -246,7 +218,7 @@ class pset(dict):
         return self._order
 
     def __setattr__(self, key, val):
-        #assert key not in self._reserved, key
+        # assert key not in self._reserved, key
         if key.startswith('_'):
             object.__setattr__(self, key, val)
         else:
@@ -288,15 +260,15 @@ class record(pset):  # pylint:disable=R0904
 
     def strvals(self, empty='', none='NULL', encoding='u8'):
         "Return a list of all values, formatted for human consumption."
-        
+
         def cnvt(v):
             "Convert ``v`` to a human readable format."
             if v is None:
                 res = none  # from outer scope parameters
             elif isinstance(v, str):
                 res = v
-            elif isinstance(v, unicode):
-                res = v.encode(encoding)
+            elif isinstance(v, bytes):
+                res = v.decode(encoding)
             elif hasattr(v, 'strfmt'):
                 if hasattr(v, 'minute'):
                     res = v.strfmt('%d.%m.%Y %H:%M')
@@ -327,7 +299,7 @@ class record(pset):  # pylint:disable=R0904
         del self._order[:]
         for k, v in self._history:
             self[k] = v
-            
+
         return self
 
     def changed(self):
@@ -351,7 +323,7 @@ class record(pset):  # pylint:disable=R0904
                 return v.decode(encoding)
             else:
                 return v
-        
+
         neworder = []
         for k in self._order:
             newval = decodeval(self.get(k))
@@ -366,11 +338,11 @@ class record(pset):  # pylint:disable=R0904
         "Encode using ``encoding``."
         def encodeval(v):
             "Helper function to encode value ``v``."
-            if type(v) is unicode:
+            if isinstance(v, str):
                 return v.encode(encoding)
             else:
                 return v
-        
+
         neworder = []
         for k in self._order:
             newval = encodeval(self.get(k))
@@ -385,7 +357,7 @@ class record(pset):  # pylint:disable=R0904
 def test_pset():
     """
        Unit tests...
-    
+
        >>> request = pset(REQUEST={}, META={}, path='/', user=None, session={}, method='GET',
        ...                COOKIES={}, LANGUAGE_CODE='no')
        >>> p = page(request)

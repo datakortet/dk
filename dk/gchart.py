@@ -35,7 +35,7 @@ class Chart(object):
         if int(v) == v:
             return str(v)
         return '%.1f' % round(v, 1)
-    
+
     def __setitem__(self, k, v):
         self.params[k] = v
 
@@ -65,7 +65,7 @@ class DataSeries(object):
     @property
     def linestyle(self):
         return data_list(',', self.thickness, self.length, self.gap)
-    
+
     @property
     def _xseries(self):
         return [x for x, _y in self.data]
@@ -77,7 +77,7 @@ class DataSeries(object):
     @property
     def _yseries(self):
         return [y for _x, y in self.data]
-    
+
     @property
     def yseries(self):
         return map(self.dataval, self._yseries)
@@ -126,11 +126,11 @@ class XYLineChart(Chart):
         self.params['chls'] = '|'.join(d.linestyle for d in self.data)
         self.params['chds'] = ','.join(d.scale for d in self.data)
 
-        #self.params['chdl'] = '|'.join(d.legend for d in self.data if d.legend)
+        # self.params['chdl'] = '|'.join(d.legend for d in self.data if d.legend)
         self.params['chxt'] = 'x,y'
         self.params['chxl'] = '0:|%s|1:|%s|' % (
-            '|'.join(map(str,range(53)[::2])),
-            '|'.join(map(str,range(70)[::10])),
+            '|'.join(map(str, range(53)[::2])),
+            '|'.join(map(str, range(70)[::10])),
             )
         self.params['chg'] = '7.7,14.3'
         self.params['chm'] = 'o,cfffdf,0,-1,7,0'
@@ -148,13 +148,13 @@ class XYLineChart(Chart):
 #         def minmax(s):
 #             s = list(s)
 #             return self.dataval(min(s)), self.dataval(max(s))
-        
+
 #         def series_data(s):
 #             x = '%s,%s' % minmax(x for x,y in s)
 #             y = '%s,%s' % minmax(y for x,y in s)
 #             return x + ',' + y
 #         self.params['chds'] = ','.join(series_data(s) for s in self.data)
-            
+
 
 class GChart(object):
     def __init__(self, data):
@@ -197,8 +197,8 @@ class GChart(object):
             'radar-spline': 'rs',
             'map': 't',
             'google-o-meter': 'gom',
-            }.get(t,t)
-            
+        }.get(t, t)
+
     def format_data(self):
         return ','.join('%.2f' % float(d) for d in self.yvals)
 
@@ -216,7 +216,7 @@ class GChart(object):
         end = int(math.ceil(max(self.yvals)))
         step = int(round((end - start) / 7.0))
         return '|' + '|'.join(str(n) for n in range(start, end, step)) + '|'
-    
+
     def axis_labels(self):
         return '0:' + self._xaxis_vals() + '1:' + self._yaxis_vals()
 
@@ -232,14 +232,13 @@ class GChart(object):
     def html(self):
         params = {
             'chd': 't:' + self.format_data(),
-            #'chds': self.data_range(),                  # data scale
+            # 'chds': self.data_range(),                 # data scale
             'chds': '0,100',
-            'chxt': 'x,y',                              # axis definition
-            #'chxr': self.axes_range(),                 # axis range
-            'chxl': self.axis_labels(),                # axis labels
-            #'chg': '%d,10' % (100.0/len(self.xvals)),  # grid lines
-
-            }
+            'chxt': 'x,y',                               # axis definition
+            # 'chxr': self.axes_range(),                 # axis range
+            'chxl': self.axis_labels(),                  # axis labels
+            # 'chg': '%d,10' % (100.0/len(self.xvals)),  # grid lines
+        }
         params.update(self.params)
         src = 'http://chart.apis.google.com/chart?' + '&'.join('%s=%s' % x for x in params.items())
         return html.img(src=src)

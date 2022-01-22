@@ -1,13 +1,10 @@
-# -*- coding: utf-8 -*-
-
 """
-   New version of html.py module that works on/with Unicode.
+New version of html.py module that works on/with Unicode.
 
 """
 from __future__ import print_function
 
-import sys
-from typing import List, Any
+from typing import List, Any, Union
 from dk.text import unicode_repr
 import types as _types
 import warnings
@@ -73,10 +70,10 @@ BLOCKLEVEL_ELEMENTS = u'''
 
 
 BOOLEAN_ATTRIBUTES = set(u'''
-    allowfullscreen allowpaymentrequest async autofocus autoplay checked 
-    controls default disabled formnovalidate hidden ismap itemscope loop 
-    multiple muted nomodule novalidate open playsinline readonly required 
-    reversed selected truespeed 
+    allowfullscreen allowpaymentrequest async autofocus autoplay checked
+    controls default disabled formnovalidate hidden ismap itemscope loop
+    multiple muted nomodule novalidate open playsinline readonly required
+    reversed selected truespeed
 '''.split())
 
 
@@ -93,7 +90,7 @@ def escape_char(unichar):  # type: (str) -> str
     assert isinstance(unichar, str)
     if len(unichar) > 1 and (unichar[0] == u'&' and unichar[-1] == u';'):
         return str(unichar)
-    
+
     ordch = ord(unichar)
     name = _h.codepoint2name.get(ordch, ordch)
     if name == ordch:
@@ -105,14 +102,14 @@ def escape_char(unichar):  # type: (str) -> str
         return u'&' + name + u';'
 
 
-def escaped_array(s):  # type: (str) -> List[str]
+def escaped_array(s: str) -> List[str]:
     """Convert unicode string to list of ascii characters or
        entitydefs like &oslash; etc.
     """
     return [escape_char(ch) for ch in s]
 
 
-def escape(s, enc=None):  # type: (Union[str, bytes]) -> str
+def escape(s: Union[str, bytes], enc=None) -> str:
     """Convert string s (potentially unicode) to a unicode string
        with ascii representation, i.e.
        with entitydefs like &oslash; &aelig; etc.
@@ -128,8 +125,8 @@ def escape(s, enc=None):  # type: (Union[str, bytes]) -> str
 def unescape(txt):
     """Convert text containing entitydefs into Unicode.
     """
-    from html.parser import HTMLParser
-    h = HTMLParser()
+    # from html.parser import HTMLParser
+    # h = HTMLParser()
     if isinstance(txt, bytes):
         txt = txt.decode('u8')
     # this one is undocumented...
@@ -365,13 +362,13 @@ class tag(xtag):
             yield item
         yield self.close_tag()
         return
-        
+
     def open_tag(self):
         return u'<' + self._name + self.attributes() + u'>'
 
     def close_tag(self):
         return u'</' + self._name + u'>' + self._nlafter
-        
+
     def __str__(self):
         res = []
         for item in self.flatten():
@@ -402,7 +399,7 @@ class text_grouping(tag):
     """
     def __init__(self, *content):
         super(text_grouping, self).__init__('text', *content)
-        
+
     def flatten(self):
         return self._flatten(self._content)
 
@@ -669,7 +666,7 @@ class select(tag):
 
             if len(first) == 2 and not isinstance(first, str):
                 self._options = [(unicode_repr(k), unicode_repr(v))
-                                 for (k,v) in options]
+                                 for (k, v) in options]
             else:
                 self._options = [(unicode_repr(o), unicode_repr(o))
                                  for o in options]
@@ -686,7 +683,7 @@ class select(tag):
 
     @property
     def values(self):
-        return [k for (k,v) in self.options]
+        return [k for (k, v) in self.options]
 
 
 class tabledesc(object):

@@ -24,7 +24,7 @@ class mmap(list):
     def append(self, kv):
         key, val = kv
         self.add(key, val)
-        
+
     def __setitem__(self, key, val):
         self.add(key, val)
 

@@ -177,9 +177,6 @@ class proxy(object):
     def __rshift__(self, other):
         return self._value >> other
 
-    def __truediv__(self, other):
-        return self._value // other
-
     def __xor__(self, other):
         return self._value ^ other
 

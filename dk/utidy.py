@@ -115,7 +115,7 @@ class HtmlTag(object):
 
 
 def tokenize_html(html):
-    tagre = re.compile(r'(<.*?>)', re.MULTILINE|re.DOTALL|re.UNICODE)
+    tagre = re.compile(r'(<.*?>)', re.MULTILINE | re.DOTALL | re.UNICODE)
     tokens = []
     pos = 0
     while 1:
@@ -146,7 +146,7 @@ def simplify_simple_tags(html):
        into::
 
            <h1>foo</h1>
-           
+
     """
     def replacement(m):
         grps = m.groups()
@@ -160,7 +160,7 @@ def simplify_simple_tags(html):
         r'<(\w+)>([^<]*)</\1>',
         replacement,
         html,
-        flags=re.MULTILINE|re.DOTALL
+        flags=re.MULTILINE | re.DOTALL
     )
     sys.stderr.write('done: %.3f\n' % (time.time() - start))
     return res
@@ -173,6 +173,7 @@ def utidy(html, level=0, indent='    ', simplify=False):
     """
     tokens = tokenize_html(to_html(html).strip())
     res = []
+
     def _indent(n):
         return indent * max(0, n)
     i = level

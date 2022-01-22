@@ -1,12 +1,11 @@
-# -*- coding: utf-8 -*-
-
-"""Convenience function for installing a module level logger::
+"""
+Convenience function for installing a module level logger::
 
      from dk import dklogger
      logger = dklogger.dklogger(__name__, debug=1, info=1)
      logger.setLevel(dklogger.DEBUG)
 
-    to prevent logging to stdout, pass `stream=None`
+to prevent logging to stdout, pass `stream=None`
 """
 
 # pylint:disable=W0401,W0621
@@ -14,7 +13,10 @@
 # W0621: shadowing logging.debug inside dklogger
 
 import sys
-from logging import *
+from logging import *   # noqa
+from logging import (
+    getLogger, StreamHandler, FileHandler, INFO, DEBUG, Formatter
+)
 
 
 def dklogger(name, debug=False, info=False,
@@ -36,8 +38,8 @@ def dklogger(name, debug=False, info=False,
         if sh:
             sh.setFormatter(fmt)
         if fh:
-            fh.setFormatter(fmt)        
-    
+            fh.setFormatter(fmt)
+
     if info:
         logger.setLevel(INFO)
     if debug:

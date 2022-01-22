@@ -1,15 +1,12 @@
-
 """
-    HTML helper file.
-
+HTML helper file.
 """
-import sys
 from .uhtml import to_html
 import html.entities as _h
 import string as _s
 import types as _types
 from .css import css
-from ..text import u8, unicode_repr
+from ..text import u8
 
 
 _map = map
@@ -192,7 +189,7 @@ def make_unicode(obj):
     if isinstance(obj, bytes):
         try:
             return obj.decode('u8')
-        except:
+        except:  # noqa
             return obj.decode('l1')
 
     return str(obj)
@@ -297,7 +294,7 @@ class tag(xtag):
          <BLANKLINE>
 
        NB: Attributes that conflict with Python keywords have an underline
-       appended, e.g.:  mytag.class\_ = ...
+       appended, e.g.:  ``mytag.class_ = ...``
     """
     def __init__(self, tag_name, *content, **kw):
         xtag.__init__(self, tag_name, **kw)
@@ -444,6 +441,7 @@ def mkdtag(name, **attrs):
 def mkstag(name):
     return mktag(name, _parent=stag)
 
+
 doctype401strict = mkstag(
     '!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"\n'
     '    "http://www.w3.org/TR/html4/strict.dtd"')
@@ -459,7 +457,7 @@ doctype = doctype401strict
 
 xtags = "br hr img input link col meta".split()
 
-#for t in xtags:
+# for t in xtags:
 #    print '%s = mkxtag("%s")' % (t,t)
 #    globals()[t] = mkxtag(t)
 
@@ -489,7 +487,7 @@ _nlafter = '''
   '''.split()
 
 
-#for t in tags:
+# for t in tags:
 #    print '%s = mktag("%s", tag, %r)' % (t,t, t in _nlafter)
 #    globals()[t] = mktag(t, tag, t in _nlafter)
 
@@ -574,7 +572,7 @@ var = mktag("var", tag, False)      # ouch
 
 dtags = "caption legend figcaption".split()
 
-#for t in dtags:
+# for t in dtags:
 #    print '%s = mkdtag("%s")' % (t,t)
 #    globals()[t] = mkdtag(t)
 
@@ -679,7 +677,7 @@ class sqlresult(tag):
 
         evenstyle = css(background='lightyellow')
         oddstyle = css(background='aqua')
-        _tablestyle = css(font='9pt/16pt Verdana')
+        # _tablestyle = css(font='9pt/16pt Verdana')
 
         result = []
         if desc:

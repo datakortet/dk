@@ -1,5 +1,6 @@
 
-import datetime, decimal
+import datetime
+import decimal
 from .pset import pset
 
 
@@ -13,22 +14,22 @@ def Boolean(s):
 
 
 def NOK(s):
-    return decimal.Decimal(s.replace(',','.'))
+    return decimal.Decimal(s.replace(',', '.'))
 
 
 def Datetime(s):
     try:
         return datetime.datetime.strptime(s, '%Y-%m-%d %H:%M')
-    except:
+    except:  # noqa
         return None
 
 
 def Date(s):
     try:
         return datetime.datetime.strptime(s, '%Y-%m-%d')
-    except:
+    except:    # noqa
         return None
-    
+
 
 class xmlrec(pset):
     convert = {
@@ -37,8 +38,8 @@ class xmlrec(pset):
         'int': int,
         'bool': Boolean,
         'NOK': NOK,
-        }
-    
+    }
+
     def __init__(self, soup, **types):
         super(xmlrec, self).__init__()
         for tag in soup.findAll(True):

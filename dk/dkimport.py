@@ -1,10 +1,11 @@
-# -*- coding: utf-8 -*-
-
-"""Convenience function for importing a fqdn from a package.
-   (to hide the baroque nature of __import__).
+"""
+Convenience function for importing a fqdn from a package.
+(to hide the baroque nature of __import__).
 """
 
-import sys, os, inspect
+import sys
+import os
+import inspect
 
 
 def dkimport(name):
@@ -64,7 +65,7 @@ def defined_symbols(module, attrfilter=None, itemfilter=None):
             continue
         if not attrfilter(attr):
             continue
-        
+
         item = getattr(module, attr)
         if inspect.getmodule(item) == module and itemfilter(item):
             yield item
@@ -97,7 +98,7 @@ def dkimport_star(modname, **kw):
                for _item in _dki('..path.cmds'):
                    if hasattr(_item, '__name__'):
                        globals()[_item.__name__] = _item
-             
+
     """
     module_path, module_name = modname.rsplit('.', 1)
     parent_module = dkimport(module_path)

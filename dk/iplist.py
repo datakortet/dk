@@ -51,7 +51,7 @@ class IPList(object):
         "Reverse steps in pack()."
         pzip = base64.urlsafe_b64decode(b64val.encode('ascii'))
         pstr = codecs.decode(pzip, 'zip')
-        
+
         while pstr:
             val, pstr = pstr[:4], pstr[4:]
             self.add(ipaddr.IPv4Address(struct.unpack("!I", val)[0]))

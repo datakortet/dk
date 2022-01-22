@@ -31,10 +31,9 @@
 # W0141: Used builtin map
 # E1102: grid.copy_area t is not callable (t is derived from __sub__)
 # W0201: attribute defined outside __init__ (descriptors).
-import sys
 from builtins import str
 from types import MethodType
-newmethod = lambda m, o, c: MethodType(m, o)
+newmethod = lambda m, o, c: MethodType(m, o)  # noqa
 from . import proxy
 
 
@@ -52,7 +51,7 @@ try:
 except NameError:
     def cmp(a, b):
         return a - b
-        
+
 
 def point_xiter(start, end):
     y, x = _direction(start, end)

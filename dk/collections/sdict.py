@@ -15,7 +15,7 @@ class sdict(dict):
         if key in self._order:
             self._order.remove(key)
         self._order.append(key)
-        super(sdict, self).__setitem__(key, val)    
+        super(sdict, self).__setitem__(key, val)
 
     def __iter__(self):
         return ((key, self[key]) for key in self._order)

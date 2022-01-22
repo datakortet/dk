@@ -15,7 +15,7 @@ class age(object):
             self.months = 0
             self.days = 0
             return
-        
+
         y = today.year - dob.year
         m = today.month - dob.month
         d = today.day - dob.day
@@ -49,9 +49,9 @@ def next_birthday(birthday, today=None):
     "Return the date of the next birthday for someone born on date `birthday`."
     if today is None:
         today = _date.today()
-        
+
     y, m, d = birthday.year, birthday.month, birthday.day
-    
+
     y = today.year  # find the birthday this year.
 
     if (today.month, today.day) > (m, d):
@@ -79,7 +79,7 @@ def previous_birthday(birthday, today=None):
     if today is None:
         today = _date.today()
     return next_birthday(birthday, years_ago(1, today))
-    
+
 
 def years_ago(n, today=None):
     "The date that is `n` years before `today`."

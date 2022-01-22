@@ -3,7 +3,8 @@ try:
 except NameError:
     unicode = str
 
-    
+
+# XXX: this is fubar
 def unicode_repr(obj):
     """Return obj as a unicode string. If obj is a (non-)unicode string, then
        first try to decode it as utf-8, then as iso-8859-1.
@@ -14,7 +15,7 @@ def unicode_repr(obj):
     if isinstance(obj, str):
         try:
             return obj.decode('u8')
-        except:
+        except:  # noqa
             return obj.decode('l1')
 
     return unicode(obj)

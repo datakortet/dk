@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
-
 """FIXME: many of these really should go in their own modules...
 """
-from typing import Any, Optional, Union
+from typing import Any
 
 import re
-import datetime
 
 
 def identity(x):    # XXX: replace any usages of this function with lambda x:x!

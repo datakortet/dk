@@ -2,7 +2,7 @@
 
 
 class fstr(str):
-    """String sub-class with a split() method that splits a given indexes 
+    """String sub-class with a split() method that splits a given indexes
        ('fields').
 
        Usage::
@@ -13,7 +13,7 @@ class fstr(str):
           >>> _, year, _ = r.split(1,5)
           >>> year
           '2008'
-          
+
     """
     def split(self, *ndxs):
         if len(ndxs) == 0:
@@ -33,7 +33,7 @@ class fstr(str):
 
 
 def _index(s, v, start=None):
-    #print 'start:', start, v
+    # print 'start:', start, v
     try:
         if start is None:
             return s.lower().index(v)
