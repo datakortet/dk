@@ -1,5 +1,6 @@
 ipaddr==2.2.0
-typing==3.6.4       ; python_version < '3.6'
-six==1.15.0
+typing==3.6.4                  ; python_version < '3.6'
+six==1.16.0
 coverage==5.5
 pytest-cov>=2.12.1
+
