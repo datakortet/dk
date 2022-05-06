@@ -65,6 +65,7 @@ class HtmlTag(object):
         self.selfclosing = self.name in self_closing_tags
         if not self.closing and self.attrtxt.strip():
             self.attrs = self.normalize_attrs(
+                self.name,
                 HtmlTag.attre.findall(self.attrtxt)
             )
         else:
@@ -83,10 +84,23 @@ class HtmlTag(object):
         return ';'.join('{}:{}'.format(k.strip(), v.strip())
                         for k, v in sorted(styles)) + ';'
 
-    def normalize_attrs(self, attrs):
+    def value_should_be_empty(self, tagname, attrs):
+        """Returns True if the value attribute should be the empty string.
+           Useful when comparing generated semi-random data, e.g. csrf-tokens.
+        """
+        if tagname == 'input':
+            for attrname, _quote, qval, noqval in sorted(attrs):
+                if attrname == 'name' and qval == 'csrfmiddlewaretoken':
+                    return True
+        return False
+
+    def normalize_attrs(self, tagname, attrs):
         res = []
         # attributes who should preserve empty string
         empty_is_empty = {'action'}
+        # print("NORMALIZE:ATRRS:", tagname, attrs)
+        is_csrf = self.value_should_be_empty(tagname, attrs)
+        
         for attrname, _quote, qval, noqval in sorted(attrs):
             if attrname in empty_is_empty:
                 val = qval or noqval
@@ -96,6 +110,8 @@ class HtmlTag(object):
                 res.append((attrname, self.normalize_class(val)))
             elif attrname == 'style':
                 res.append((attrname, self.normalize_style(val)))
+            elif is_csrf and attrname == 'value':
+                res.append((attrname, ""))
             else:
                 res.append((attrname, val))
         return res
@@ -203,20 +219,8 @@ class Utidy(object):
             item = to_html(item)
         self.html = utidy(item, **kw)
 
-    def _as_unicode(self):
-        return self.html
-
-    def _as_bytes(self):
-        return self._as_unicode().encode('u8')
-
-    __unicode__ = _as_unicode
-    __bytes__ = _as_bytes
-
     def __str__(self):
-        if sys.version_info.major < 3:
-            return self._as_bytes()
-        else:
-            return self._as_unicode()
+        return self.html
 
     __repr__ = __str__
 
