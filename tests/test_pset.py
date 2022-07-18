@@ -21,6 +21,13 @@ def test_remove():
     assert str(p1) == 'pset(knights=9)'
 
 
+def test_update():
+    p = pset(hello='world')
+    p.update({'foo': 42})
+    assert p.foo == 42
+    assert p.hello == 'world'
+
+
 def test_eq_():
     "Test the __eq__ method."
     p1 = pset(foo='bar', knights=9)

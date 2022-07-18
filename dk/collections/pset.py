@@ -233,6 +233,12 @@ class pset(dict):
     def __setitem__(self, key, val):
         self._add(key, val)
 
+    def update(self, dct):
+        """Update self from dct.
+        """
+        for k, v in dct.items():
+            self._add(k, v)
+        return self
 
 class defset(pset):
     "pset with default value."
