@@ -17,9 +17,9 @@ _map = map
 raw_string_encodings = ('utf-8', 'iso-8859-1')
 
 
-def to_html(obj):
+def to_html(obj, ctx=None):
     if hasattr(obj, '__html__'):
-        res = obj.__html__()
+        res = obj.__html__(ctx)
         if isinstance(res, bytes):
             warnings.warn("obj.__html__() returned bytes!: {}".format(
                 obj.__class__.__name__
@@ -261,7 +261,7 @@ class xtag(object):
             object.__setattr__(self, name, value)
         else:
             self._attr[name] = value
-
+            
     def attributes(self):
         """return a string like key="val". """
         res = []
@@ -291,7 +291,7 @@ class xtag(object):
     def __str__(self):
         return u'<' + self._name + self.attributes() + u'>'
 
-    def __html__(self):  # type: () -> str
+    def __html__(self, ctx=None):  # type: () -> str
         return str(self)
 
     def __eq__(self, other):
