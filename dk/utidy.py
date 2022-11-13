@@ -100,7 +100,7 @@ class HtmlTag(object):
         empty_is_empty = {'action'}
         # print("NORMALIZE:ATRRS:", tagname, attrs)
         is_csrf = self.value_should_be_empty(tagname, attrs)
-        
+
         for attrname, _quote, qval, noqval in sorted(attrs):
             if attrname in empty_is_empty:
                 val = qval or noqval

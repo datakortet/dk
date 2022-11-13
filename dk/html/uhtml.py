@@ -266,7 +266,7 @@ class xtag(object):
             object.__setattr__(self, name, value)
         else:
             self._attr[name] = value
-            
+
     def attributes(self):
         """return a string like key="val". """
         res = []

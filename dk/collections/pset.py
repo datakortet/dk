@@ -240,6 +240,7 @@ class pset(dict):
             self._add(k, v)
         return self
 
+
 class defset(pset):
     "pset with default value."
     def __init__(self, defval):
