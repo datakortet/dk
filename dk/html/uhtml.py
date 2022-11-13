@@ -1,9 +1,7 @@
 """
 New version of html.py module that works on/with Unicode.
-
 """
-from __future__ import print_function
-
+import inspect
 from typing import List, Any, Union
 from dk.text import unicode_repr
 import types as _types
@@ -19,16 +17,23 @@ raw_string_encodings = ('utf-8', 'iso-8859-1')
 
 def to_html(obj, ctx=None):
     if hasattr(obj, '__html__'):
-        res = obj.__html__(ctx)
+        takes_context = inspect.signature(obj.__html__).parameters.get('ctx')
+        if takes_context:
+            res = obj.__html__(ctx)
+        else:
+            res = obj.__html__()  # e.g. SafeString/SafeData
         if isinstance(res, bytes):
             warnings.warn("obj.__html__() returned bytes!: {}".format(
                 obj.__class__.__name__
             ))
         return res
     if hasattr(obj, '_as_unicode'):
+        warnings.warn("obj has _as_unicode(): {}".format(
+            obj.__class__.__name__
+        ))
         return obj._as_unicode()
     if isinstance(obj, list):
-        return u''.join([to_html(item) for item in obj])
+        return u''.join([to_html(item, ctx) for item in obj])
     if isinstance(obj, bytes):
         return obj.decode('u8')
     if isinstance(obj, str):
