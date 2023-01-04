@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 class fstr(str):
     """String sub-class with a split() method that splits a given indexes
        ('fields').
@@ -91,7 +88,7 @@ class sindex(str):
             else:
                 stop = _index(self, key.stop, start)
 
-            return super(sindex, self).__getitem__(slice(start, stop)).strip()
+            return super().__getitem__(slice(start, stop)).strip()
 
         else:
-            return super(sindex, self).__getitem__(key)
+            return super().__getitem__(key)

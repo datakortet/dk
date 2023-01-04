@@ -1,20 +1,18 @@
-# -*- coding: utf-8 -*-
-
 """Convert unicode strings to visually similar ascii representations.
 """
 import re
 
 
 REPLACEMENTS = {
-    u'æ': 'ae',
-    u'øôöòóõ': 'o',
-    u'àáâãäå': 'a',
-    u'èéêë': 'e',
-    u'ìíîï': 'i',
-    u'üúùû': 'u',
-    u'ÿý': 'y',
+    'æ': 'ae',
+    'øôöòóõ': 'o',
+    'àáâãäå': 'a',
+    'èéêë': 'e',
+    'ìíîï': 'i',
+    'üúùû': 'u',
+    'ÿý': 'y',
 }
-REPL_CHARS = u''.join(REPLACEMENTS.keys())
+REPL_CHARS = ''.join(REPLACEMENTS.keys())
 REPL_CHARS += REPL_CHARS.upper()
 
 
@@ -69,11 +67,11 @@ def ascii_name(name):
        filename without (ever!) causing problems.
     """
     return asciify(name.lower(), spaces='-',
-                   legal=u'abcdefghijklmnopqrstuvwxyz-')
+                   legal='abcdefghijklmnopqrstuvwxyz-')
 
 
 def slug(txt):
     """Same as above, but intended for URIs.
     """
     return asciify(txt.lower(), spaces='-',
-                   legal=u'abcdefghijklmnopqrstuvwxyz-0123456789')
+                   legal='abcdefghijklmnopqrstuvwxyz-0123456789')

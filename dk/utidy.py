@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Micro tidy.
 
    Usage::
@@ -15,7 +14,6 @@
        hello
 
 """
-from __future__ import print_function, unicode_literals
 from builtins import str as text
 import sys
 import re
@@ -42,7 +40,7 @@ self_closing_tags = """
 """.split()
 
 
-class HtmlTag(object):
+class HtmlTag:
     attre = re.compile(r"""
         (?P<attr>[-\w]+)                            # attribute
         (?:                                         # either = followed by..
@@ -210,7 +208,7 @@ def utidy(html, level=0, indent='    ', simplify=False):
     return html
 
 
-class Utidy(object):
+class Utidy:
     def __init__(self, item, **kw):
         self.debug = kw.pop('debug', False)
         self.item = item

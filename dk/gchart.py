@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import math
 from dk.html import html
 
@@ -19,7 +17,7 @@ def data_list(ch, *lst):
 ########################################################################
 #  Chart
 
-class Chart(object):
+class Chart:
     def __init__(self, size, **kw):
         self.params = kw
         x, y = size
@@ -44,7 +42,7 @@ class Chart(object):
 #  DataSeries
 
 
-class DataSeries(object):
+class DataSeries:
     def __init__(self, data, **kw):
         self.data = data
         self.thickness = kw.get('thickness', 1)
@@ -112,7 +110,7 @@ class DataSeries(object):
 
 class XYLineChart(Chart):
     def __init__(self, size):
-        super(XYLineChart, self).__init__(size, cht='lxy', chxt='x,y')
+        super().__init__(size, cht='lxy', chxt='x,y')
         self.data = []
         self.params['chf'] = 'c,lg,45,ffffff,0,76a4fb,0.75|bg,s,EFEFEF'
 
@@ -128,7 +126,7 @@ class XYLineChart(Chart):
 
         # self.params['chdl'] = '|'.join(d.legend for d in self.data if d.legend)
         self.params['chxt'] = 'x,y'
-        self.params['chxl'] = '0:|%s|1:|%s|' % (
+        self.params['chxl'] = '0:|{}|1:|{}|'.format(
             '|'.join(map(str, range(53)[::2])),
             '|'.join(map(str, range(70)[::10])),
             )
@@ -156,7 +154,7 @@ class XYLineChart(Chart):
 #         self.params['chds'] = ','.join(series_data(s) for s in self.data)
 
 
-class GChart(object):
+class GChart:
     def __init__(self, data):
         self._data = []
         self.add_data(data)

@@ -16,7 +16,7 @@ _map = map
 raw_string_encodings = ('utf-8', 'iso-8859-1')
 
 
-class color(object):
+class color:
     black = '"#000000"'
     silver = '"#COCOCO"'
     gray = '"#808080"'
@@ -55,12 +55,9 @@ def escape_char(unichar):
     o = ord(unichar)
     t = _h.codepoint2name.get(o, o)
     if t == o:
-        if 0 < t < 128:
-            return str(unichar)
-        else:
-            return ''
+        return str(unichar) if 0 < t < 128 else ''
     else:
-        return '&' + t + ';'
+        return f'&{t};'
 
 
 def escaped_array(strval):
@@ -76,19 +73,15 @@ def escape(strval, enc=None):
     """
     if strval is None:
         return ''
-    if not isinstance(strval, str):
-        if enc is not None:
-            strval = strval.decode(enc)
+    if not isinstance(strval, str) and enc is not None:
+        strval = strval.decode(enc)
     return ''.join(escape_char(c) for c in strval)
 
 
 def unescape(txt):
     """Convert text containing entitydefs into Unicode.
     """
-    try:  # pragma: nocover
-        from html.parser import HTMLParser
-    except ImportError:  # pragma: nocover
-        from HTMLParser import HTMLParser
+    from html.parser import HTMLParser
     h = HTMLParser()
     if isinstance(txt, bytes):
         txt = txt.decode('u8')
@@ -172,7 +165,7 @@ def norm_attr_name(attr):
     return attr.replace('_', '-')
 
 
-class EmptyString(object):
+class EmptyString:
     pass
 
 
@@ -195,7 +188,7 @@ def make_unicode(obj):
     return str(obj)
 
 
-class xtag(object):
+class xtag:
     """x(ml-style)tag: a tag without content or a closing tag.
 
        E.g. <br/> would be xtag('br')
@@ -254,7 +247,7 @@ class xtag(object):
         yield self
 
     def __str__(self):
-        return u'<' + self._name + self.attributes() + u'>'
+        return '<' + self._name + self.attributes() + '>'
 
     def __html__(self):
         return str(self)
@@ -321,12 +314,10 @@ class tag(xtag):
             if isinstance(item, (str, int, float)):
                 yield item
             elif isinstance(item, xtag):
-                for subitem in item.flatten():
-                    yield subitem
+                yield from item.flatten()
             else:
                 try:
-                    for subitem in self._flatten(iter(item)):
-                        yield subitem
+                    yield from self._flatten(iter(item))
                 except TypeError:
                     yield item
 
@@ -334,8 +325,7 @@ class tag(xtag):
         if lst is None:
             lst = self._content
         yield self.open_tag()
-        for item in self._flatten(lst):
-            yield item
+        yield from self._flatten(lst)
         yield self.close_tag()
         return
 
@@ -354,7 +344,7 @@ class tag(xtag):
                 # generator found for some reason
                 print(type(item), dir(item))
                 raise
-        return u''.join(res)
+        return ''.join(res)
 
 
 class opentag(tag):
@@ -372,7 +362,7 @@ class text_grouping(tag):
        for grouping at the top level.
     """
     def __init__(self, *content):
-        super(text_grouping, self).__init__('text', *content)
+        super().__init__('text', *content)
 
     def flatten(self):
         return self._flatten(self._content)
@@ -399,15 +389,14 @@ class dtag(tag):
         if self._content:
             if len(self._content) == 1 and self._content[0] == '':
                 return ''
-            return super(dtag, self).__str__()
+            return super().__str__()
         else:
             return ''
 
     def flatten(self, lst=None):
         if not self._content:
             return
-        for item in super(dtag, self).flatten(lst):
-            yield item
+        yield from super().flatten(lst)
 
 
 def _add(left, right):
@@ -611,7 +600,7 @@ class select(tag):
     def __init__(self, options, selected=None, **kw):
         if 'id' not in kw:
             kw['id'] = 'id_' + kw['name']
-        super(select, self).__init__('select', **kw)
+        super().__init__('select', **kw)
         self._options = None
         self.options = options  # assigns to property
         if selected is not None:
@@ -666,14 +655,14 @@ class select(tag):
     values = property(**values())
 
 
-class tabledesc(object):
+class tabledesc:
     def __init__(self, *cols):
         self.cols = cols
 
 
 class sqlresult(tag):
     def __init__(self, res, desc=None, **kw):
-        super(sqlresult, self).__init__('div', **kw)
+        super().__init__('div', **kw)
 
         evenstyle = css(background='lightyellow')
         oddstyle = css(background='aqua')

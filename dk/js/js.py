@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """This module is dedicated to creating javascript snippets that can be
    consumed elsewhere.
    (uses MochiKit and seems to be imported in way too many places...)

@@ -1,7 +1,6 @@
 """
 Mapping classes.
 """
-from __future__ import absolute_import
 from collections import namedtuple
 import six
 
@@ -47,7 +46,7 @@ class pset(dict):
     """
     def __init__(self, items=(), **attrs):
         object.__setattr__(self, '_order', [])
-        super(pset, self).__init__()
+        super().__init__()
         for k, v in self._get_iterator(items):
             self._add(k, v)
         for k, v in attrs.items():
@@ -58,7 +57,7 @@ class pset(dict):
 
     def _add(self, key, value):
         "Add key->value to client vars."
-        if type(key) in six.integer_types:
+        if type(key) in (int,):
             key = self._order[key]
         elif key not in self._order:
             self._order.append(key)
@@ -72,7 +71,7 @@ class pset(dict):
 
     def remove(self, key):
         "Remove key from client vars."
-        if type(key) in six.integer_types:
+        if type(key) in (int,):
             key = self._order[key]
             del self._order[key]
         elif key in self._order:
@@ -161,45 +160,45 @@ class pset(dict):
             seen = [self]
 
         if indent == 0:
-            six.print_('{|')
+            print('{|')
 
         indent += 1
 
         for key in self.keys():
-            six.print_(tab * indent, key, '=',)
+            print(tab * indent, key, '=',)
             val = self[key]
             if isinstance(val, pset):
-                six.print_('{|')
+                print('{|')
                 if val in seen:
-                    six.print_(tab * (1 + indent), '...')
-                    six.print_(tab * indent, '|}')
+                    print(tab * (1 + indent), '...')
+                    print(tab * indent, '|}')
                 else:
                     val.pprint(indent, tab, seen)
             elif isinstance(val, list):
-                six.print_('[')
+                print('[')
                 for item in val:
                     if isinstance(item, pset):
-                        six.print_(tab * (indent + 1), '{|')
+                        print(tab * (indent + 1), '{|')
                         if item in seen:
-                            six.print_('...')
+                            print('...')
                         else:
                             item.pprint(indent + 1, tab)
                     else:
-                        six.print_(tab * (indent + 1), item)
-                six.print_(tab * indent, ']')
+                        print(tab * (indent + 1), item)
+                print(tab * indent, ']')
             else:
-                six.print_(val)
+                print(val)
 
         indent -= 1
-        six.print_(tab * indent, '|}')
+        print(tab * indent, '|}')
 
     def __getattr__(self, key):
-        if not super(pset, self).__contains__(key):
+        if not super().__contains__(key):
             raise AttributeError(key)
         return dict.get(self, key)
 
     def __getitem__(self, key):
-        if type(key) in six.integer_types:
+        if type(key) in (int,):
             key = self._order[key]
         return dict.get(self, key)
 
@@ -245,7 +244,7 @@ class defset(pset):
     "pset with default value."
     def __init__(self, defval):
         object.__setattr__(self, '_defval', defval)
-        super(defset, self).__init__()
+        super().__init__()
 
     def __getattr__(self, key):
         if key not in self:

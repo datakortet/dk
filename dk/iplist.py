@@ -1,4 +1,3 @@
-
 """Collections of distinct ip-addresses.
 """
 
@@ -8,7 +7,7 @@ import ipaddr
 import codecs
 
 
-class IPList(object):
+class IPList:
     """List (well, actually more of a set) of ip-addresses (well, actually
        using subnets...).
     """
@@ -30,8 +29,7 @@ class IPList(object):
 
     def __iter__(self):
         "Iterate over all network addresses in self."
-        for ipaddy in sorted(self._addys):
-            yield ipaddy
+        yield from sorted(self._addys)
 
     def __eq__(self, other):
         # pylint:disable=W0212

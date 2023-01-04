@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 """Proxy class that forwards __special__ methods too.
 """
 # pylint:disable=R0903
 
 
-class proxy(object):
+class proxy:
     "Proxy class that forwards __special__ methods too."
     __slots__ = ['_value']
 

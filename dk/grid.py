@@ -31,7 +31,6 @@
 # W0141: Used builtin map
 # E1102: grid.copy_area t is not callable (t is derived from __sub__)
 # W0201: attribute defined outside __init__ (descriptors).
-from builtins import str
 from types import MethodType
 from . import proxy
 newmethod = lambda m, o, c: MethodType(m, o)  # noqa
@@ -84,8 +83,7 @@ def point_yiter(start, end):
 def indexiter(length, ndx):
     def _indxiter(length, ndx):
         if isinstance(ndx, slice):
-            for x in range(*ndx.indices(length)):
-                yield x
+            yield from range(*ndx.indices(length))
         elif isinstance(ndx, int):
             if ndx < 0:
                 yield length + ndx
@@ -103,7 +101,7 @@ def indexiter(length, ndx):
 
 class point(tuple):
     def __new__(cls, y=0, x=0):
-        return super(point, cls).__new__(cls, (y, x))
+        return super().__new__(cls, (y, x))
 
     @property
     def y(self):
@@ -117,7 +115,7 @@ class point(tuple):
         return f'point({repr(self.y)},{repr(self.x)})'
 
 
-class rect(object):
+class rect:
     def __init__(self, x, y, w, h):
         self.orig = point(y=y, x=x)
         self.w = w
@@ -147,7 +145,7 @@ class rect(object):
         return transpose
 
     def __repr__(self):
-        return 'rect(x=%s, y=%s, w=%s, h=%s)' % (
+        return 'rect(x={}, y={}, w={}, h={})'.format(
             repr(self.x),
             repr(self.y),
             repr(self.w),
@@ -198,7 +196,7 @@ class rect(object):
         }[corner]
 
 
-class Deleted(object):
+class Deleted:
     def __repr__(self):
         return '<->'
 
@@ -208,7 +206,7 @@ Deleted = Deleted()
 
 class Empty(proxy.proxy):
     def __init__(self, emptyval=None):
-        super(Empty, self).__init__(emptyval)
+        super().__init__(emptyval)
 
     def setval(self, v):
         self._value = v
@@ -217,7 +215,7 @@ class Empty(proxy.proxy):
         return repr(self._value)
 
 
-class value_iterator(object):
+class value_iterator:
     def __init__(self, gridobj, ykey, xkey):
         self.g = gridobj
         self.yy, self.ymin, self.ymax = indexiter(self.g.y, ykey)
@@ -267,7 +265,7 @@ class value_iterator(object):
         return self.iter(self.direction)
 
 
-class table_iterator(object):
+class table_iterator:
     def __init__(self, iterfn):
         self.iterfn = iterfn
         self.iterator = None
@@ -314,7 +312,7 @@ class table_iterator(object):
                 self.instance.set_cell(y, x, val)
 
 
-class grid(object):
+class grid:
     """
        This is a tabular object of two dimensions that supports slice
        notation.
@@ -538,7 +536,7 @@ class grid(object):
                 row += str(r[x]).rjust(widths[x])
             res.append(row)
 
-        return u'\n'.join(res)
+        return '\n'.join(res)
 
     def __str__(self):
         return self.stringrep()

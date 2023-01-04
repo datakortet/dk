@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Attempt at defining themes from Python (probably better to do
    this elsewhere).
 """

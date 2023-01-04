@@ -29,7 +29,7 @@ def to_html(obj, ctx=None):
         warnings.warn(f"obj has _as_unicode(): {obj.__class__.__name__}")
         return obj._as_unicode()
     if isinstance(obj, list):
-        return u''.join([to_html(item, ctx) for item in obj])
+        return ''.join([to_html(item, ctx) for item in obj])
     if isinstance(obj, bytes):
         return obj.decode('u8')
     if isinstance(obj, str):
@@ -38,7 +38,7 @@ def to_html(obj, ctx=None):
     return str(obj)
 
 
-class color(object):
+class color:
     black = '"#000000"'
     silver = '"#COCOCO"'
     gray = '"#808080"'
@@ -57,12 +57,12 @@ class color(object):
     aqua = '"#00FFFF"'
 
 
-INLINE_ELEMENTS = u'''
+INLINE_ELEMENTS = '''
    a abbr acronym b basefont bdo big br cite code dfn em figure figcaption font i img input
    kbd label q s samp select small span strike strong sub sup textarea tt
    u var applet button del iframe ins map object script'''.split()
 
-BLOCKLEVEL_ELEMENTS = u'''
+BLOCKLEVEL_ELEMENTS = '''
    address blockquote center dir div dl fieldset form h1 h2 h3 h4 h5 h6
    hr isindex menu noframes noscript ol p pre table ul dd dt frameset
    li tbody td tfoot th thead tr applet button del iframe ins map object
@@ -70,7 +70,7 @@ BLOCKLEVEL_ELEMENTS = u'''
    '''.split()
 
 
-BOOLEAN_ATTRIBUTES = set(u'''
+BOOLEAN_ATTRIBUTES = set('''
     allowfullscreen allowpaymentrequest async autofocus autoplay checked
     controls default disabled formnovalidate hidden ismap itemscope loop
     multiple muted nomodule novalidate open playsinline readonly required
@@ -89,7 +89,7 @@ def escape_char(unichar):  # type: (str) -> str
     if isinstance(unichar, bytes):
         unichar = unichar.decode('u8')
     assert isinstance(unichar, str)
-    if len(unichar) > 1 and (unichar[0] == u'&' and unichar[-1] == u';'):
+    if len(unichar) > 1 and (unichar[0] == '&' and unichar[-1] == ';'):
         return str(unichar)
 
     ordch = ord(unichar)
@@ -100,7 +100,7 @@ def escape_char(unichar):  # type: (str) -> str
         else:
             return ''
     else:
-        return u'&' + name + u';'
+        return '&' + name + ';'
 
 
 def escaped_array(s: str) -> List[str]:
@@ -116,11 +116,11 @@ def escape(s: Union[str, bytes], enc=None) -> str:
        with entitydefs like &oslash; &aelig; etc.
     """
     if s is None:
-        return u''
+        return ''
     if isinstance(s, bytes):
         if enc is not None:
             s = s.decode(enc)
-    return u''.join(escape_char(c) for c in s)
+    return ''.join(escape_char(c) for c in s)
 
 
 def unescape(txt):
@@ -157,16 +157,16 @@ def normalize(v):   # type: (Any) -> str
 
 
 def quote_xhtml(v):  # type: (str) -> str
-    if u'"' in v:
-        v = v.replace(u'"', u'&quot;')
+    if '"' in v:
+        v = v.replace('"', '&quot;')
     return f'"{v}"'
 
 
 def quote_smart(strval):
-    dq = u'"' in strval
-    sq = u"'" in strval
+    dq = '"' in strval
+    sq = "'" in strval
     if dq and sq:
-        return u"'%s'" % strval.replace(u'"', u'&quot;')
+        return "'%s'" % strval.replace('"', '&quot;')
     elif dq:
         return f"'{strval}'"
     else:
@@ -200,14 +200,14 @@ def norm_attr_name(a):
            >>> norm_attr_name(u'z_index')
            u'z-index'
     """
-    if a[0] == u'_':
+    if a[0] == '_':
         return a
-    if a[-1] == u'_':
+    if a[-1] == '_':
         a = a[:-1]
-    return a.replace(u'_', u'-')
+    return a.replace('_', '-')
 
 
-class EmptyString(object):
+class EmptyString:
     pass
 
 
@@ -231,7 +231,7 @@ def make_unicode(obj):
     return str(obj)
 
 
-class xtag(object):
+class xtag:
     """x(ml-style)tag: a tag without content or a closing tag.
        E.g. <br/> would be xtag('br')
 
@@ -281,7 +281,7 @@ class xtag(object):
                 v = normalize(v)
                 if v:
                     res.append(f' {k}={quote(escape(v))}')
-        return u''.join(res)
+        return ''.join(res)
 
     def _flatten(self):
         yield self
@@ -290,7 +290,7 @@ class xtag(object):
         yield self
 
     def __str__(self):
-        return u'<' + self._name + self.attributes() + u'>'
+        return '<' + self._name + self.attributes() + '>'
 
     def __html__(self, ctx=None):  # type: () -> str
         return str(self)
@@ -307,7 +307,7 @@ class stag(xtag):
     """s(ingle)tag
     """
     def __str__(self):
-        return u'<' + self._name + self.attributes() + u'>'
+        return '<' + self._name + self.attributes() + '>'
 
 
 class tag(xtag):
@@ -325,7 +325,7 @@ class tag(xtag):
        appended, e.g.:  ``mytag.class_ = ...``
     """
     def __init__(self, tag_name, *content, **kw):
-        super(tag, self).__init__(tag_name, **kw)
+        super().__init__(tag_name, **kw)
         if len(content) == 1 and type(content[0]) == _types.GeneratorType:
             self._content = list(content[0])
         else:
@@ -346,12 +346,10 @@ class tag(xtag):
             if isinstance(item, (str, int, float)):
                 yield item
             elif isinstance(item, xtag):
-                for subitem in item.flatten():
-                    yield subitem
+                yield from item.flatten()
             else:
                 try:
-                    for subitem in self._flatten(iter(item)):
-                        yield subitem
+                    yield from self._flatten(iter(item))
                 except TypeError:
                     yield item
 
@@ -359,16 +357,15 @@ class tag(xtag):
         if lst is None:
             lst = self._content
         yield self.open_tag()
-        for item in self._flatten(lst):
-            yield item
+        yield from self._flatten(lst)
         yield self.close_tag()
         return
 
     def open_tag(self):
-        return u'<' + self._name + self.attributes() + u'>'
+        return '<' + self._name + self.attributes() + '>'
 
     def close_tag(self):
-        return u'</' + self._name + u'>' + self._nlafter
+        return '</' + self._name + '>' + self._nlafter
 
     def __str__(self):
         res = []
@@ -379,7 +376,7 @@ class tag(xtag):
                 # generator found for some reason
                 print(type(item), dir(item))
                 raise
-        return u''.join(res)
+        return ''.join(res)
 
 
 # unused?
@@ -399,7 +396,7 @@ class text_grouping(tag):
        for grouping at the top level.
     """
     def __init__(self, *content):
-        super(text_grouping, self).__init__('text', *content)
+        super().__init__('text', *content)
 
     def flatten(self):
         return self._flatten(self._content)
@@ -412,7 +409,7 @@ class lines(text_grouping):
         content = []
         for c in self._content[:-1]:
             content.append(c)
-            content.append(u'<br>')
+            content.append('<br>')
         content.append(self._content[-1])
         return self._flatten(content)
 
@@ -424,17 +421,16 @@ class dtag(tag):
     """
     def _as_unicode(self):
         if self._content:
-            if len(self._content) == 1 and self._content[0] == u'':
-                return u''
-            return super(dtag, self)._as_unicode()
+            if len(self._content) == 1 and self._content[0] == '':
+                return ''
+            return super()._as_unicode()
         else:
-            return u''
+            return ''
 
     def flatten(self, lst=None):
         if not self._content:
             return
-        for item in super(dtag, self).flatten(lst):
-            yield item
+        yield from super().flatten(lst)
 
 
 def _add(a, b):
@@ -447,7 +443,7 @@ def _add(a, b):
 def mktag(name, _parent=tag, _nlafter=False, **attrs):
     class _tmp(_parent):
         def __init__(self, *content, **kw):
-            super(_tmp, self).__init__(name, *content, **_add(attrs, kw))
+            super().__init__(name, *content, **_add(attrs, kw))
             self._nlafter = _nlafter and '\n' or ''
     _tmp.__name__ = name
     return _tmp
@@ -456,7 +452,7 @@ def mktag(name, _parent=tag, _nlafter=False, **attrs):
 def mkxtag(name, **attrs):
     class _tmp(xtag):
         def __init__(self, **kw):
-            super(_tmp, self).__init__(name, **_add(attrs, kw))
+            super().__init__(name, **_add(attrs, kw))
     _tmp.__name__ = name
     return _tmp
 
@@ -517,7 +513,7 @@ _nlafter = '''
 
 class a(tag):
     def __init__(self, *content, **kw):
-        super(a, self).__init__('a', *content, **kw)
+        super().__init__('a', *content, **kw)
         self._nlafter = ''
 
 
@@ -640,7 +636,7 @@ class select(tag):
     def __init__(self, options, selected=None, **kw):
         if 'id' not in kw and 'name' in kw and kw['name']:
             kw['id'] = 'id_' + kw['name']
-        super(select, self).__init__('select', **kw)
+        super().__init__('select', **kw)
         self._options = None
         self.options = options
         if selected is not None:
@@ -687,6 +683,6 @@ class select(tag):
         return [k for (k, v) in self.options]
 
 
-class tabledesc(object):
+class tabledesc:
     def __init__(self, *cols):
         self.cols = cols

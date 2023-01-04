@@ -1,12 +1,10 @@
-
-
 class sdict(dict):
     """Sorted Dictionary class.
        Iterating over the sdict will give back the key/value pairs in
        order of insertion. A key can only be in a sdict once.
     """
     def __init__(self, **attrs):
-        super(sdict, self).__init__()
+        super().__init__()
         self._order = []
         for k, v in attrs.items():
             self[k] = v
@@ -15,7 +13,7 @@ class sdict(dict):
         if key in self._order:
             self._order.remove(key)
         self._order.append(key)
-        super(sdict, self).__setitem__(key, val)
+        super().__setitem__(key, val)
 
     def __iter__(self):
         return ((key, self[key]) for key in self._order)

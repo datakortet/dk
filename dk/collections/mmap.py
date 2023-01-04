@@ -1,5 +1,3 @@
-
-
 class mmap(list):
     """Multi Map class, ie. a key/value collection where each key can
        occur multiple times. Implemented as a list of key/value tuples.
@@ -15,7 +13,7 @@ class mmap(list):
     __str__ = __repr__
 
     def add(self, key, val):
-        super(mmap, self).append((key, val))
+        super().append((key, val))
 
     def __iadd__(self, kv):
         key, val = kv

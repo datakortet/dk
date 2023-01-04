@@ -26,13 +26,13 @@ def srcpath(base, pth):  # pragma: nocover
           fp = open(srcpath(path, 'data/testdata.txt'))
 
     """
-    raise EnvironmentError("dk.utils.srcpath no longer does anything useful.")
+    raise OSError("dk.utils.srcpath no longer does anything useful.")
 
 
 def root():  # pragma: nocover
     """Return the root of the source tree.
     """
-    raise EnvironmentError("dk.utils.root no longer does anything useful.")
+    raise OSError("dk.utils.root no longer does anything useful.")
 
 
 # FIXME: this doesn't work since srcpath doesn't work!
@@ -46,7 +46,7 @@ def dkpath(pth=None):  # pragma: nocover
            dkpath('app/') => ../xxxxxxxx/app/
 
     """
-    raise EnvironmentError("dk.utils.dkpath no longer does anything useful.")
+    raise OSError("dk.utils.dkpath no longer does anything useful.")
 
 
 def hour_minute(v):     # XXX: move to ttcal?
@@ -72,7 +72,7 @@ def hm_to_float(h, m):  # XXX: move to ttcal?
 def single_line(txt):
     """Remove multiple spaces and newlines.
     """
-    return u' '.join(txt.split())
+    return ' '.join(txt.split())
 
 
 def lower_case(s, encoding='u8'):
@@ -88,7 +88,7 @@ def ulower_case(val):  # type: (Any) -> str
     """Call val.lower(). Return '' if val is None.
     """
     if val is None:
-        return u''
+        return ''
     assert isinstance(val, str)
     return val.lower()
 
@@ -106,14 +106,14 @@ def utitle_case(val):
     """(safer) val.title() implementation.
     """
     if val is None:
-        return u''
+        return ''
     if not isinstance(val, str):
         raise ValueError(repr(val) + ' of type ' + str(type(val)))
     return val.title()
 
 
-_mixedcase = re.compile(u'[A-ZÆØÅ][a-zæøå]+[A-ZÆØÅ]')
-_mcmac = re.compile(u'(Mc)|(Mac)|(Van)|(Von)')
+_mixedcase = re.compile('[A-ZÆØÅ][a-zæøå]+[A-ZÆØÅ]')
+_mcmac = re.compile('(Mc)|(Mac)|(Van)|(Von)')
 
 
 def title_case_lastname(s, encoding='u8'):  # type: (Any, str) -> bytes
@@ -138,7 +138,7 @@ def utitle_case_lastname(s):
        If ``s`` contains a recognized special case, then return it unchanged.
     """
     if not s:
-        return u''
+        return ''
     m = _mcmac.match(s)
     if m:
         return s
@@ -190,14 +190,14 @@ def unhtml(s, toencoding=None):
         s = s.decode('u8')
 
     tr = {
-        u'&nbsp;': u' ',
-        u'&Aring;': u'Å',
-        u'&AElig;': u'Æ',
-        u'&Oslash;': u'Ø',
-        u'&aring;': u'å',
-        u'&aelig;': u'æ',
-        u'&oslash;': u'ø',
-        u'&eacute;': u'é',
+        '&nbsp;': ' ',
+        '&Aring;': 'Å',
+        '&AElig;': 'Æ',
+        '&Oslash;': 'Ø',
+        '&aring;': 'å',
+        '&aelig;': 'æ',
+        '&oslash;': 'ø',
+        '&eacute;': 'é',
     }
 
     for k, v in tr.items():
@@ -259,7 +259,7 @@ def kronestring(kr):
 
 
 def orestring(n):
-    u"""Return a string version of the integer ``øre`` value. Either a two-digit
+    """Return a string version of the integer ``øre`` value. Either a two-digit
        string or a dash (as in 5,-).
     """
     if n == 0:
@@ -268,7 +268,7 @@ def orestring(n):
 
 
 def kr_ore(n):
-    u"""Convert the øre-value ``n`` to a proper NOK string value.
+    """Convert the øre-value ``n`` to a proper NOK string value.
     """
     kr, ore = divmod(n, 100)
     return kronestring(kr) + ',' + orestring(ore)

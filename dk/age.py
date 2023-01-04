@@ -1,4 +1,3 @@
-
 """Age (date subtraction) routines.
 """
 
@@ -6,7 +5,7 @@ from datetime import date as _date
 from calendar import monthrange as _monthrange, isleap as _isleap
 
 
-class age(object):
+class age:
     "The number of years, months, and days since date of birth."
     def __init__(self, dob, today=None):
         today = today or _date.today()
