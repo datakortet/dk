@@ -11,8 +11,8 @@
 
 def mkpalette(_source, base, colorlist):
     "Convenience function to define a palette."
-    base = '#%s' % base
-    colorlist = ['#%s' % c for c in colorlist.split()]
+    base = f'#{base}'
+    colorlist = [f'#{c}' for c in colorlist.split()]
     return [base] + colorlist
 
 

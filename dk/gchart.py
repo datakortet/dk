@@ -9,7 +9,7 @@ from dk.html import html
 def dataval(v):
     if int(v) == v:
         return str(v)
-    return '%.1f' % round(v, 1)
+    return f'{round(v, 1):.1f}'
 
 
 def data_list(ch, *lst):
@@ -34,7 +34,7 @@ class Chart(object):
     def dataval(self, v):
         if int(v) == v:
             return str(v)
-        return '%.1f' % round(v, 1)
+        return f'{round(v, 1):.1f}'
 
     def __setitem__(self, k, v):
         self.params[k] = v
@@ -58,7 +58,7 @@ class DataSeries(object):
         if r == 1:
             if int(v) == v:
                 return str(v)
-            return '%.1f' % v
+            return f'{v:.1f}'
         rv = round(v)
         return str(int(rv))
 
@@ -200,12 +200,12 @@ class GChart(object):
         }.get(t, t)
 
     def format_data(self):
-        return ','.join('%.2f' % float(d) for d in self.yvals)
+        return ','.join(f'{float(d):.2f}' for d in self.yvals)
 
     def data_range(self):
         low = min(self.yvals)
         high = max(self.yvals)
-        return '%.1f,%.1f' % (low, high)
+        return f'{low:.1f},{high:.1f}'
 
     def _xaxis_vals(self):
         return '|' + '|'.join('%d' % v for v in self.xvals) + '|'
@@ -224,8 +224,8 @@ class GChart(object):
         self.params['chg'] = '%d,%d' % (x, y)
 
     def axes_range(self):
-        xaxis = '0,%.1f,%.1f' % (min(self.xvals), max(self.xvals))
-        yaxis = '1,%.1f,%.1f' % (min(self.yvals), max(self.yvals))
+        xaxis = f'0,{min(self.xvals):.1f},{max(self.xvals):.1f}'
+        yaxis = f'1,{min(self.yvals):.1f},{max(self.yvals):.1f}'
         print('|'.join([xaxis, yaxis]))
         return '|'.join([xaxis, yaxis])
 

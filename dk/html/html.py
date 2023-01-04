@@ -124,7 +124,7 @@ def normalize(v):
 def quote_xhtml(v):
     if '"' in v:
         v = v.replace('"', '&quot;')
-    return '"%s"' % v
+    return f'"{v}"'
 
 
 def quote_smart(strval):
@@ -133,9 +133,9 @@ def quote_smart(strval):
     if dq and sq:
         return "'%s'" % strval.replace('"', '&quot;')
     elif dq:
-        return "'%s'" % strval
+        return f"'{strval}'"
     else:
-        return '"%s"' % strval
+        return f'"{strval}"'
 
 
 def plain_attribute(strval, legal=_s.ascii_letters + _s.digits + '-._:'):
@@ -238,13 +238,13 @@ class xtag(object):
 
             if isinstance(v, bool):
                 if v:
-                    res.append(' %s' % k)
+                    res.append(f' {k}')
             elif v is EmptyString:
-                res.append(' %s=""' % k)
+                res.append(f' {k}=""')
             else:
                 v = normalize(v)
                 if v:
-                    res.append(' %s=%s' % (k, quote(escape(v))))
+                    res.append(f' {k}={quote(escape(v))}')
         return ''.join(res)
 
     def _flatten(self):

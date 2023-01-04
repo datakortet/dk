@@ -23,7 +23,7 @@ class css(pset):
         return self._as_unicode().encode('u8')
 
     def _as_unicode(self):
-        return u';'.join(u'%s:%s' % (k, v) for (k, v) in self.attrs())
+        return u';'.join(f'{k}:{v}' for (k, v) in self.attrs())
 
     def __str__(self):
         if sys.version_info.major < 3:

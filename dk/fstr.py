@@ -40,7 +40,7 @@ def _index(s, v, start=None):
         else:
             return s.lower().index(v, start)
     except ValueError as e:
-        raise IndexError(str(e) + ' "%s"' % v)
+        raise IndexError(str(e) + f' "{v}"')
 
 
 class sindex(str):
@@ -85,7 +85,7 @@ class sindex(str):
 
                 if len(indices) == 0:
                     raise IndexError(
-                        "IndexError: none of '%s' found." % key.stop)
+                        f"IndexError: none of '{key.stop}' found.")
 
                 stop = min(indices)
             else:

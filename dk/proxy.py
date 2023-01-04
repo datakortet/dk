@@ -27,7 +27,7 @@ class proxy(object):
     ####################################################################
 
     def __repr__(self):
-        return 'proxy(%s)' % repr(self._value)
+        return f'proxy({repr(self._value)})'
 
     def __str__(self):
         return str(self._value)

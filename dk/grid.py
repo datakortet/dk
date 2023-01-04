@@ -114,7 +114,7 @@ class point(tuple):
         return self[1]
 
     def __repr__(self):
-        return 'point(%s,%s)' % (repr(self.y), repr(self.x))
+        return f'point({repr(self.y)},{repr(self.x)})'
 
 
 class rect(object):
@@ -610,7 +610,7 @@ class grid(object):
         msg = ''
         dims = ' and '.join(oor_dimensions())
         if dims:
-            msg += '%s dimension out of range. ' % dims
+            msg += f'{dims} dimension out of range. '
 
         bot = (self.y - 1, self.x - 1)
         index = (y, x)

@@ -81,7 +81,7 @@ class HtmlTag(object):
 
     def normalize_style(self, val):
         styles = [s.split(':', 1) for s in val.split(';') if s.strip()]
-        return ';'.join('{}:{}'.format(k.strip(), v.strip())
+        return ';'.join(f'{k.strip()}:{v.strip()}'
                         for k, v in sorted(styles)) + ';'
 
     def value_should_be_empty(self, tagname, attrs):
@@ -118,11 +118,11 @@ class HtmlTag(object):
 
     def __str__(self):
         if self.closing:
-            return "</%s>" % self.name
-        res = "<%s" % self.name
+            return f"</{self.name}>"
+        res = f"<{self.name}"
         if self.attrtxt:
             res += ' '
-        res += ' '.join(['%s="%s"' % (k, v) for k, v in self.attrs])
+        res += ' '.join([f'{k}="{v}"' for k, v in self.attrs])
         res += ">"
         return res
 
@@ -166,7 +166,7 @@ def simplify_simple_tags(html):
     """
     def replacement(m):
         grps = m.groups()
-        res = "<%s>%s</%s>" % (grps[0], grps[1].strip(), grps[0])
+        res = f"<{grps[0]}>{grps[1].strip()}</{grps[0]}>"
         # print "REPLS:", grps, res
         return res
 
@@ -178,7 +178,7 @@ def simplify_simple_tags(html):
         html,
         flags=re.MULTILINE | re.DOTALL
     )
-    sys.stderr.write('done: %.3f\n' % (time.time() - start))
+    sys.stderr.write(f'done: {time.time() - start:.3f}\n')
     return res
 
 

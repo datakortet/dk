@@ -63,7 +63,7 @@ class IPList(object):
         return [a.compressed for a in self]
 
     def __repr__(self):
-        return 'IPList(%r)' % list(self)
+        return f'IPList({list(self)!r})'
 
     def __str__(self):
         return ', '.join([a.compressed for a in self])

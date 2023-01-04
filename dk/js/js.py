@@ -35,7 +35,7 @@ def setpnumber_function(postnrid, poststedid):
 
 def setpnumber_connect(postnrid):
     "Add onblur handler that connects the above event handler."
-    return "connect($('%s'), 'onblur', setpnumber);" % postnrid
+    return f"connect($('{postnrid}'), 'onblur', setpnumber);"
 
 
 def focus(item):

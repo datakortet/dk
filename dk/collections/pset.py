@@ -22,8 +22,8 @@ def xmlrepr(v, toplevel=False):
             if hasattr(item, '__xml__'):
                 res.append(xmlrepr(item))
             else:
-                res.append('<item>%s</item>' % xmlrepr(item))
-        return '<list>%s</list>' % (''.join(res))
+                res.append(f'<item>{xmlrepr(item)}</item>')
+        return f"<list>{''.join(res)}</list>"
     return str(v)
 
 
@@ -133,11 +133,11 @@ class pset(dict):
             return self.__class__.__name__
 
     def __xml__(self):
-        res = ['<%s>' % self._name()]
+        res = [f'<{self._name()}>']
         for k, v in self:
             if k != 'name':
-                res.append('<%s>%s</%s>' % (k, xmlrepr(v), k))
-        res.append('</%s>' % self._name())
+                res.append(f'<{k}>{xmlrepr(v)}</{k}>')
+        res.append(f'</{self._name()}>')
         return ''.join(res)
 
     def __str__(self):
@@ -145,13 +145,13 @@ class pset(dict):
         for k, v in self:
             if k != 'name':
                 try:
-                    vals.append('%s=%s' % (k, repr(v)))
+                    vals.append(f'{k}={repr(v)}')
                 except:  # noqa
-                    vals.append('%s=UNPRINTABLE' % k)
+                    vals.append(f'{k}=UNPRINTABLE')
 
         vals = ', '.join(vals)
 
-        return '%s(%s)' % (self._name(), vals)
+        return f'{self._name()}({vals})'
 
     __repr__ = __str__
 

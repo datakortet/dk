@@ -23,14 +23,10 @@ def to_html(obj, ctx=None):
         else:
             res = obj.__html__()  # e.g. SafeString/SafeData
         if isinstance(res, bytes):
-            warnings.warn("obj.__html__() returned bytes!: {}".format(
-                obj.__class__.__name__
-            ))
+            warnings.warn(f"obj.__html__() returned bytes!: {obj.__class__.__name__}")
         return res
     if hasattr(obj, '_as_unicode'):
-        warnings.warn("obj has _as_unicode(): {}".format(
-            obj.__class__.__name__
-        ))
+        warnings.warn(f"obj has _as_unicode(): {obj.__class__.__name__}")
         return obj._as_unicode()
     if isinstance(obj, list):
         return u''.join([to_html(item, ctx) for item in obj])
@@ -163,7 +159,7 @@ def normalize(v):   # type: (Any) -> str
 def quote_xhtml(v):  # type: (str) -> str
     if u'"' in v:
         v = v.replace(u'"', u'&quot;')
-    return u'"%s"' % v
+    return f'"{v}"'
 
 
 def quote_smart(strval):
@@ -172,9 +168,9 @@ def quote_smart(strval):
     if dq and sq:
         return u"'%s'" % strval.replace(u'"', u'&quot;')
     elif dq:
-        return u"'%s'" % strval
+        return f"'{strval}'"
     else:
-        return u'"%s"' % strval
+        return f'"{strval}"'
 
 
 def plain_attribute(strval, legal=_s.ascii_letters + _s.digits + '-._:'):  # type: (str, str) -> bool
@@ -275,16 +271,16 @@ class xtag(object):
                 v = str(v)  # str is correct here for both py2 and 3
 
             if k in BOOLEAN_ATTRIBUTES and v == '4242424242':
-                res.append(u' %s ' % k)
+                res.append(f' {k} ')
             elif isinstance(v, bool) and k in BOOLEAN_ATTRIBUTES:
                 if v:
-                    res.append(u' %s' % k)
+                    res.append(f' {k}')
             elif v is EmptyString:
-                res.append(' %s=""' % k)
+                res.append(f' {k}=""')
             else:
                 v = normalize(v)
                 if v:
-                    res.append(u' %s=%s' % (k, quote(escape(v))))
+                    res.append(f' {k}={quote(escape(v))}')
         return u''.join(res)
 
     def _flatten(self):
