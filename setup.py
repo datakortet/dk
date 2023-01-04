@@ -7,11 +7,7 @@ classifiers = """\
 Development Status :: 3 - Alpha
 Intended Audience :: Developers
 Programming Language :: Python
-Programming Language :: Python :: 2
-Programming Language :: Python :: 2.6
-Programming Language :: Python :: 2.7
 Programming Language :: Python :: 3
-Programming Language :: Python :: 3.5
 Topic :: Software Development :: Libraries
 """
 
@@ -25,7 +21,6 @@ setuptools.setup(
     version=version,
     requires=[],
     install_requires=[
-        'six',
         'ipaddr',  # from dk.iplist
     ],
     description=__doc__.strip(),

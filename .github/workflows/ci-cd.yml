@@ -14,15 +14,15 @@ jobs:
       LINTDIR: ./ghlint
     steps:
       # setup environment
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: setup directories
         shell: bash
         run: |
           mkdir -p $PIP_CACHE_DIR
           mkdir -p $LINTDIR
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with:
-          python-version: '3.6'
+          python-version: '3.8'
 
       - run: pip install flake8
       - run: flake8 dk/** --max-line-length=199
@@ -34,11 +34,8 @@ jobs:
       matrix:
 
         # 3.5-9  (current matrix)
-        python-version: [ '3.5', '3.6']
+        python-version: [ '3.7', '3.8', '3.9', '3.10', '3.11' ]
       
-        # for debugging
-        # python-version: [ '3.9' ]
-
         os: [ubuntu-latest]
         # include:
         #   - python-version: '3.9'
@@ -52,11 +49,11 @@ jobs:
 
     steps:
       # setup environment
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: setup global directories
         shell: bash
         run: mkdir -p $PIP_CACHE_DIR
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -65,7 +62,7 @@ jobs:
       - run: pytest -vv --cov=dk tests
 
       - name: Upload coverage to codecov.io
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN}}
           fail_ci_if_error: false
@@ -80,9 +77,9 @@ jobs:
       - name: setup directories
         shell: bash
         run: mkdir -p $PIP_CACHE_DIR
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with:
-          python-version: '3.6'
+          python-version: '3.8'
 
       - name: Cleanup
         run: |
