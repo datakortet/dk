@@ -4,12 +4,7 @@ from .pset import pset
 
 
 def Boolean(s):
-    if isinstance(s, str):
-        if s.lower() in ('true', 'yes', '1'):
-            return True
-        else:
-            return False
-    return bool(s)
+    return s.lower() in ('true', 'yes', '1') if isinstance(s, str) else bool(s)
 
 
 def NOK(s):

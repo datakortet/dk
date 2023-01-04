@@ -1,4 +1,5 @@
-"""Age (date subtraction) routines.
+"""
+Age (date subtraction) routines.
 """
 
 from datetime import date as _date
@@ -6,7 +7,8 @@ from calendar import monthrange as _monthrange, isleap as _isleap
 
 
 class age:
-    "The number of years, months, and days since date of birth."
+    """The number of years, months, and days since date of birth.
+    """
     def __init__(self, dob, today=None):
         today = today or _date.today()
         if dob is None:
@@ -45,7 +47,8 @@ class age:
 
 
 def next_birthday(birthday, today=None):
-    "Return the date of the next birthday for someone born on date `birthday`."
+    """Return the date of the next birthday for someone born on date `birthday`.
+    """
     if today is None:
         today = _date.today()
 
@@ -66,7 +69,8 @@ def next_birthday(birthday, today=None):
 
 
 def birthday_this_year(birthday, today=None):
-    "Return the date of the birthday in the current year."
+    """Return the date of the birthday in the current year.
+    """
     if today is None:
         today = _date.today()
     return next_birthday(birthday, _date(today.year, 1, 1))
@@ -81,7 +85,8 @@ def previous_birthday(birthday, today=None):
 
 
 def years_ago(n, today=None):
-    "The date that is `n` years before `today`."
+    """The date that is `n` years before `today`.
+    """
     today = today or _date.today()
     pastyear = today.year - n
     _, pdays = _monthrange(pastyear, today.month)
@@ -92,36 +97,34 @@ def years_ago(n, today=None):
     else:
         pastday = _days_previous_month(pastyear, today.month)
         pastmonth = _past_month(today.month)
-    res = _date(pastyear, pastmonth, pastday)
-    return res
+    return _date(pastyear, pastmonth, pastday)
 
 
 def days_ago(n, dato=None):
-    "The date that is `n` days before `dato` (or today)."
+    """The date that is `n` days before `dato` (or today).
+    """
     today = dato or _date.today()
     return _date.fromordinal(today.toordinal() - n)
 
 
-def weeks_ago(n, today=None):
-    "The date that is `n` weeks before `today`."
+def weeks_ago(n: int, today=None) -> _date:
+    """The date that is `n` weeks before `today`.
+    """
     today = today or _date.today()
     if n != 0:
-        ret = _date.fromordinal(today.toordinal() - (7 * n))
-    else:
-        ret = _date.today()
-    return ret
+        return _date.fromordinal(today.toordinal() - (7 * n))
+    return _date.today()
 
 
 def _past_month(m):
-    "Subtract 1 from month."
-    if m == 1:
-        return 12
-    else:
-        return m - 1
+    """Subtract 1 from month.
+    """
+    return 12 if m == 1 else m - 1
 
 
-def _days_previous_month(y, m):
-    "The number of days in the month before year `y` and month `m`."
+def _days_previous_month(y: int, m: int) -> int:
+    """The number of days in the month before year `y` and month `m`.
+    """
     m -= 1
     if m == 0:
         y -= 1

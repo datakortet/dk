@@ -8,7 +8,7 @@ class mmap(list):
 
     def __repr__(self):
         vals = ', '.join('%s:%s' % kv for kv in self)
-        return '<mmap: ' + vals + '>'
+        return f'<mmap: {vals}>'
 
     __str__ = __repr__
 
@@ -27,10 +27,7 @@ class mmap(list):
         self.add(key, val)
 
     def __contains__(self, key):
-        for k, v in self:
-            if k == key:
-                return True
-        return False
+        return any(k == key for k, v in self)
 
     def __getitem__(self, key):
         for k, v in self:

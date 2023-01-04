@@ -2,7 +2,6 @@
 Mapping classes.
 """
 from collections import namedtuple
-import six
 
 
 keyval = namedtuple('keyval', 'key val')
@@ -85,21 +84,16 @@ class pset(dict):
         if other is None:
             return False
         if set(self._order) == set(other._order):  # pylint: disable=W0212
-            for key in self._order:
-                if self[key] != other[key]:
-                    return False
-            return True
+            return all(self[key] == other[key] for key in self._order)
         return False
 
     def _get_iterator(self, val):
         if not val:
             return []
-        if isinstance(val, pset):
+        if isinstance(val, pset) or not isinstance(val, dict):
             return val
-        elif isinstance(val, dict):
-            return val.items()
         else:
-            return val
+            return val.items()
 
     def __iadd__(self, other):
         for k, v in self._get_iterator(other):
@@ -126,16 +120,11 @@ class pset(dict):
         return self.__class__((v, k) for (k, v) in self.items())
 
     def _name(self):
-        if 'name' in self:
-            return self.name
-        else:
-            return self.__class__.__name__
+        return self.name if 'name' in self else self.__class__.__name__
 
     def __xml__(self):
         res = [f'<{self._name()}>']
-        for k, v in self:
-            if k != 'name':
-                res.append(f'<{k}>{xmlrepr(v)}</{k}>')
+        res.extend(f'<{k}>{xmlrepr(v)}</{k}>' for k, v in self if k != 'name')
         res.append(f'</{self._name()}>')
         return ''.join(res)
 
@@ -145,7 +134,7 @@ class pset(dict):
             if k != 'name':
                 try:
                     vals.append(f'{k}={repr(v)}')
-                except:  # noqa
+                except Exception:
                     vals.append(f'{k}=UNPRINTABLE')
 
         vals = ', '.join(vals)
@@ -331,10 +320,7 @@ class record(pset):  # pylint:disable=R0904
         "Decode using ``encoding``."
         def decodeval(v):
             "Helper function to decode value ``v``."
-            if type(v) is bytes:
-                return v.decode(encoding)
-            else:
-                return v
+            return v.decode(encoding) if type(v) is bytes else v
 
         neworder = []
         for k in self._order:
@@ -350,10 +336,7 @@ class record(pset):  # pylint:disable=R0904
         "Encode using ``encoding``."
         def encodeval(v):
             "Helper function to encode value ``v``."
-            if isinstance(v, str):
-                return v.encode(encoding)
-            else:
-                return v
+            return v.encode(encoding) if isinstance(v, str) else v
 
         neworder = []
         for k in self._order:

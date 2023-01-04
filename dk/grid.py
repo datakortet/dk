@@ -45,11 +45,8 @@ def _direction(start, end):
     return y, x
 
 
-try:
-    cmp
-except NameError:
-    def cmp(a, b):
-        return a - b
+def cmp(a, b):
+    return a - b
 
 
 def point_xiter(start, end):
@@ -93,10 +90,7 @@ def indexiter(length, ndx):
             raise ValueError("illegal index key %s", ndx)
 
     ix = list(_indxiter(length, ndx))
-    if ix:
-        return ix, min(ix), max(ix)
-    else:
-        return [], 0, 0
+    return (ix, min(ix), max(ix)) if ix else ([], 0, 0)
 
 
 class point(tuple):
@@ -145,11 +139,7 @@ class rect:
         return transpose
 
     def __repr__(self):
-        return 'rect(x={}, y={}, w={}, h={})'.format(
-            repr(self.x),
-            repr(self.y),
-            repr(self.w),
-            repr(self.h))
+        return f'rect(x={repr(self.x)}, y={repr(self.y)}, w={repr(self.w)}, h={repr(self.h)})'
 
     @property
     def x(self):
@@ -227,9 +217,7 @@ class value_iterator:
         res = []
         a, b = self.ndx_base()
         for y in a:
-            t = []
-            for x in b:
-                t.append(self.g._rows[y][x])
+            t = [self.g._rows[y][x] for x in b]
             res.append(t)
         return '\n'.join(map(str, res)) + str(self.rect())
 
@@ -326,10 +314,7 @@ class grid:
     def copy(cls, tgrid, fn=None):
         t = cls(emptyval=tgrid.empty._value)
         for k in tgrid.keys[:, :]:
-            if fn is None:
-                t[k] = tgrid[k]
-            else:
-                t[k] = fn(tgrid, k)
+            t[k] = tgrid[k] if fn is None else fn(tgrid, k)
         return t
 
     def __init__(self, rows=0, cols=0, emptyval=None):
@@ -715,11 +700,10 @@ class grid:
 
     def __getitem__(self, yx):
         ykey, xkey = yx
-        if self._ispoint(ykey, xkey):
-            y, x = self.keyiter(ykey, xkey)[0]
-            return self.get_cell(y, x)
-        else:
+        if not self._ispoint(ykey, xkey):
             return value_iterator(self, ykey, xkey)
+        y, x = self.keyiter(ykey, xkey)[0]
+        return self.get_cell(y, x)
 
     def __setitem__(self, yx, val):
         ykey, xkey = yx
@@ -733,13 +717,12 @@ class grid:
                 krect = self._keyiterrect(ndx)
                 vrect = val.rect()
 
-                if krect.isomorphic(vrect):
-                    transl = krect - vrect
-                    for oy, ox in val.indices():
-                        sy, sx = transl((oy, ox))
-                        self.set_cell(sy, sx, val.g[oy, ox])
-                else:
+                if not krect.isomorphic(vrect):
                     raise ValueError('Different sizes in assignment.')
+                transl = krect - vrect
+                for oy, ox in val.indices():
+                    sy, sx = transl((oy, ox))
+                    self.set_cell(sy, sx, val.g[oy, ox])
                 return
             elif not isinstance(val, str) and not isinstance(val, bytes):
                 try:

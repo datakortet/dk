@@ -1,6 +1,8 @@
 """
 New version of html.py module that works on/with Unicode.
 """
+
+import contextlib
 import inspect
 from typing import List, Any, Union
 from dk.text import unicode_repr
@@ -141,19 +143,15 @@ def u8escape(s):
 def rawstr2unicode(s):  # type: (bytes) -> str
     # only used from normalize (below)
     for enc in raw_string_encodings:
-        try:
+        with contextlib.suppress(UnicodeDecodeError):
             return s.decode(enc)
-        except UnicodeDecodeError:
-            pass
     raise UnicodeError("Could not decode raw string.")  # pragma: nocover
 
 
-def normalize(v):   # type: (Any) -> str
+def normalize(v):    # type: (Any) -> str
     """returns a stringified unicode version of v
     """
-    if isinstance(v, bytes):
-        return rawstr2unicode(v)
-    return str(v)
+    return rawstr2unicode(v) if isinstance(v, bytes) else str(v)
 
 
 def quote_xhtml(v):  # type: (str) -> str
@@ -166,7 +164,7 @@ def quote_smart(strval):
     dq = '"' in strval
     sq = "'" in strval
     if dq and sq:
-        return "'%s'" % strval.replace('"', '&quot;')
+        return f"""'{strval.replace('"', '&quot;')}'"""
     elif dq:
         return f"'{strval}'"
     else:
@@ -175,17 +173,11 @@ def quote_smart(strval):
 
 def plain_attribute(strval, legal=_s.ascii_letters + _s.digits + '-._:'):  # type: (str, str) -> bool
     # html 4: 3.2.2 p4 some attributes may be unquoted
-    for c in strval:
-        if c not in legal:
-            return False
-    return True
+    return all(c in legal for c in strval)
 
 
 def quote_if_needed(strval):  # type: (str) -> str
-    if plain_attribute(strval):
-        return strval
-    else:
-        return quote_smart(strval)
+    return strval if plain_attribute(strval) else quote_smart(strval)
 
 
 quote = quote_smart
@@ -226,8 +218,6 @@ def make_unicode(obj):
             return obj.decode('u8')
         except UnicodeDecodeError:  # pragma: nocover
             raise
-            return obj.decode('l1')
-
     return str(obj)
 
 
@@ -290,9 +280,9 @@ class xtag:
         yield self
 
     def __str__(self):
-        return '<' + self._name + self.attributes() + '>'
+        return f'<{self._name}{self.attributes()}>'
 
-    def __html__(self, ctx=None):  # type: () -> str
+    def __html__(self, ctx=None) -> str:
         return str(self)
 
     def __eq__(self, other):
@@ -307,7 +297,7 @@ class stag(xtag):
     """s(ingle)tag
     """
     def __str__(self):
-        return '<' + self._name + self.attributes() + '>'
+        return f'<{self._name}{self.attributes()}>'
 
 
 class tag(xtag):
@@ -362,10 +352,10 @@ class tag(xtag):
         return
 
     def open_tag(self):
-        return '<' + self._name + self.attributes() + '>'
+        return f'<{self._name}{self.attributes()}>'
 
     def close_tag(self):
-        return '</' + self._name + '>' + self._nlafter
+        return f'</{self._name}>{self._nlafter}'
 
     def __str__(self):
         res = []
@@ -408,8 +398,7 @@ class lines(text_grouping):
     def flatten(self):
         content = []
         for c in self._content[:-1]:
-            content.append(c)
-            content.append('<br>')
+            content.extend((c, '<br>'))
         content.append(self._content[-1])
         return self._flatten(content)
 
@@ -420,12 +409,11 @@ class dtag(tag):
        captions, etc.
     """
     def _as_unicode(self):
-        if self._content:
-            if len(self._content) == 1 and self._content[0] == '':
-                return ''
-            return super()._as_unicode()
-        else:
+        if not self._content:
             return ''
+        if len(self._content) == 1 and self._content[0] == '':
+            return ''
+        return super()._as_unicode()
 
     def flatten(self, lst=None):
         if not self._content:
@@ -434,17 +422,16 @@ class dtag(tag):
 
 
 def _add(a, b):
-    t = {}
-    t.update(a)
-    t.update(b)
-    return t
+    return {**a, **b}
 
 
 def mktag(name, _parent=tag, _nlafter=False, **attrs):
+
     class _tmp(_parent):
         def __init__(self, *content, **kw):
             super().__init__(name, *content, **_add(attrs, kw))
-            self._nlafter = _nlafter and '\n' or ''
+            self._nlafter = '\n' if _nlafter else ''
+
     _tmp.__name__ = name
     return _tmp
 

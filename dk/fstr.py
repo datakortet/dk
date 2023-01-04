@@ -1,3 +1,4 @@
+import contextlib
 class fstr(str):
     """String sub-class with a split() method that splits a given indexes
        ('fields').
@@ -13,7 +14,7 @@ class fstr(str):
 
     """
     def split(self, *ndxs):
-        if len(ndxs) == 0:
+        if not ndxs:
             return [self]
         if len(ndxs) == 1:
             i = ndxs[0]
@@ -37,7 +38,7 @@ def _index(s, v, start=None):
         else:
             return s.lower().index(v, start)
     except ValueError as e:
-        raise IndexError(str(e) + f' "{v}"')
+        raise IndexError(f'{str(e)} "{v}"')
 
 
 class sindex(str):
@@ -63,32 +64,26 @@ class sindex(str):
             Hello
 
         """
-        if isinstance(key, slice):
-            if key.start is None:
-                start = 0
-            else:
-                start = _index(self, key.start) + len(key.start)
-
-            if key.stop is None:
-                stop = len(self)
-
-            elif isinstance(key.stop, tuple):
-                indices = []
-                for end in key.stop:
-                    try:
-                        indices.append(_index(self, end))
-                    except IndexError:
-                        pass
-
-                if len(indices) == 0:
-                    raise IndexError(
-                        f"IndexError: none of '{key.stop}' found.")
-
-                stop = min(indices)
-            else:
-                stop = _index(self, key.stop, start)
-
-            return super().__getitem__(slice(start, stop)).strip()
-
-        else:
+        if not isinstance(key, slice):
             return super().__getitem__(key)
+
+        start, stop = key.start, key.stop
+        start = 0 if start is None else _index(self, start) + len(start)
+
+        if stop is None:
+            stop = len(self)
+
+        elif isinstance(stop, tuple):
+            indices = []
+            for end in key.stop:
+                with contextlib.suppress(IndexError):
+                    indices.append(_index(self, end))
+
+            if not indices:
+                raise IndexError(f"IndexError: none of '{key.stop}' found.")
+
+            stop = min(indices)
+        else:
+            stop = _index(self, key.stop, start)
+
+        return super().__getitem__(slice(start, stop)).strip()

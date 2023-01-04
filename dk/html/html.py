@@ -1,6 +1,8 @@
 """
 HTML helper file.
 """
+
+import contextlib
 from .uhtml import to_html
 import html.entities as _h
 import string as _s
@@ -81,12 +83,11 @@ def escape(strval, enc=None):
 def unescape(txt):
     """Convert text containing entitydefs into Unicode.
     """
-    from html.parser import HTMLParser
-    h = HTMLParser()
+    import html
     if isinstance(txt, bytes):
         txt = txt.decode('u8')
     # this one is undocumented...
-    return h.unescape(txt)
+    return html.unescape(txt)
 
 
 def u8escape(strval):
@@ -95,10 +96,8 @@ def u8escape(strval):
 
 def rawstr2unicode(strval):
     for enc in raw_string_encodings:
-        try:
+        with contextlib.suppress(UnicodeDecodeError):
             return strval.decode(enc)
-        except UnicodeDecodeError:
-            pass
     raise UnicodeError("Could not decode raw string.")
 
 
@@ -124,7 +123,7 @@ def quote_smart(strval):
     dq = '"' in strval
     sq = "'" in strval
     if dq and sq:
-        return "'%s'" % strval.replace('"', '&quot;')
+        return f"""'{strval.replace('"', '&quot;')}'"""
     elif dq:
         return f"'{strval}'"
     else:
@@ -133,17 +132,11 @@ def quote_smart(strval):
 
 def plain_attribute(strval, legal=_s.ascii_letters + _s.digits + '-._:'):
     # html 4: 3.2.2 p4 some attributes may be unquoted
-    for c in strval:
-        if c not in legal:
-            return False
-    return True
+    return all(c in legal for c in strval)
 
 
 def quote_if_needed(strval):
-    if plain_attribute(strval):
-        return strval
-    else:
-        return quote_smart(strval)
+    return strval if plain_attribute(strval) else quote_smart(strval)
 
 
 quote = quote_smart
@@ -247,7 +240,7 @@ class xtag:
         yield self
 
     def __str__(self):
-        return '<' + self._name + self.attributes() + '>'
+        return f'<{self._name}{self.attributes()}>'
 
     def __html__(self):
         return str(self)
@@ -255,11 +248,7 @@ class xtag:
     def __eq__(self, other):
         if isinstance(other, bytes):
             return self.__html__() == other.decode('u8')
-        if isinstance(other, str):
-            return self.__html__() == other
-        # if sys.version_info.major >= 3 and isinstance(other, str):
-        #     pass
-        return False
+        return self.__html__() == other if isinstance(other, str) else False
 
     __repr__ = __str__
 
@@ -268,7 +257,7 @@ class stag(xtag):
     """s(ingle)tag
     """
     def __str__(self):
-        return '<' + self._name + self.attributes() + '>'
+        return f'<{self._name}{self.attributes()}>'
 
 
 class tag(xtag):
@@ -330,10 +319,10 @@ class tag(xtag):
         return
 
     def open_tag(self):
-        return '<' + self._name + self.attributes() + '>'
+        return f'<{self._name}{self.attributes()}>'
 
     def close_tag(self):
-        return '</' + self._name + '>' + self._nlafter
+        return f'</{self._name}>{self._nlafter}'
 
     def __str__(self):
         res = []
@@ -386,12 +375,11 @@ class dtag(tag):
        captions, etc.
     """
     def __str__(self):
-        if self._content:
-            if len(self._content) == 1 and self._content[0] == '':
-                return ''
-            return super().__str__()
-        else:
+        if not self._content:
             return ''
+        if len(self._content) == 1 and self._content[0] == '':
+            return ''
+        return super().__str__()
 
     def flatten(self, lst=None):
         if not self._content:
@@ -400,17 +388,15 @@ class dtag(tag):
 
 
 def _add(left, right):
-    t = {}
-    t.update(left)
-    t.update(right)
-    return t
+    return {**left, **right}
 
 
 def mktag(name, _parent=tag, _nlafter=False, **attrs):
     class _tmp(_parent):
         def __init__(self, *content, **kw):
-            _parent.__init__(self, name, *content, **_add(attrs, kw))
-            self._nlafter = _nlafter and '\n' or ''
+            super().__init__(name, *content, **_add(attrs, kw))
+            self._nlafter = '\n' if _nlafter else ''
+
     _tmp.__name__ = name
     return _tmp
 
@@ -673,8 +659,6 @@ class sqlresult(tag):
             heading = [d[0] for d in desc.cols]
             tdcell = [d[1] for d in desc.cols]
             result.append(map(th, heading))
-        else:
-            pass
 
         for j, item in enumerate(res):
             if desc:
@@ -682,10 +666,8 @@ class sqlresult(tag):
             else:
                 cells = [td(cell) for cell in item]
 
-            if j % 2 == 0:
-                row = tr(cells, style=evenstyle)
-            else:
-                row = tr(cells, style=oddstyle)
+            row = tr(cells, style=evenstyle if j%2 == 0 else oddstyle)
+
             result.append(row)
         tbl = table(result, style=css(font='10pt Verdana', margin_left='10%'))
         self.content = (tbl,)

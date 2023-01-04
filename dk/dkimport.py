@@ -21,23 +21,12 @@ def dkimport(name):
     name = str(name)  # can't import unicode, or special chars..
     if name.startswith('/'):
         raise ValueError("Cannot import from implicit root.")
-    # print("DKIMPORT:", name)
-    if sys.version_info < (3, 0):  # pragma: nocover
-        if '.' in name:
-            package, item = name.rsplit('.', 1)
-            tmp = __import__(package, {}, {}, [item], -1)
-            return getattr(tmp, item)
-        else:
-            return __import__(name, {}, {}, [], -1)
-    else:  # pragma: nocover
-        if '.' in name:
-            package, item = name.rsplit('.', 1)
-            tmp = __import__(package, {}, {}, [item], 0)
-            return getattr(tmp, item)
-        else:
-            return __import__(name, {}, {}, [], 0)
-        # import importlib
-        # return importlib.import_module(name)
+
+    if '.' not in name:
+        return __import__(name, {}, {}, [], 0)
+    package, item = name.rsplit('.', 1)
+    tmp = __import__(package, {}, {}, [item], 0)
+    return getattr(tmp, item)
 
 
 def _true(_x):
@@ -52,7 +41,7 @@ def load_files_from(module_path, module_name, filefilter=None):
         valid_fname = fname.endswith('.py') and not fname.startswith('_')
         if valid_fname and filefilter(fname):
             name = os.path.splitext(fname)[0]
-            yield dkimport(module_name + '.' + name)
+            yield dkimport(f'{module_name}.{name}')
 
 
 def defined_symbols(module, attrfilter=None, itemfilter=None):
@@ -106,11 +95,7 @@ def dkimport_star(modname, **kw):
     fpath = os.path.join(parent_path, module_name)
     symbols = []
     for m in load_files_from(fpath, modname, kw.get('filefilter')):
-        for symbol in defined_symbols(m,
-                                      kw.get('attrfilter'),
-                                      kw.get('itemfilter')):
-            symbols.append(symbol)
-
+        symbols += defined_symbols(m, kw.get('attrfilter'), kw.get('itemfilter'))
     return symbols
 
 

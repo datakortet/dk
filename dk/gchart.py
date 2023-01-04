@@ -5,9 +5,7 @@ from dk.html import html
 
 
 def dataval(v):
-    if int(v) == v:
-        return str(v)
-    return f'{round(v, 1):.1f}'
+    return str(v) if int(v) == v else f'{round(v, 1):.1f}'
 
 
 def data_list(ch, *lst):
@@ -30,9 +28,7 @@ class Chart:
         self.params['chs'] = '%dx%d' % (x, y)
 
     def dataval(self, v):
-        if int(v) == v:
-            return str(v)
-        return f'{round(v, 1):.1f}'
+        return str(v) if int(v) == v else f'{round(v, 1):.1f}'
 
     def __setitem__(self, k, v):
         self.params[k] = v
@@ -54,9 +50,7 @@ class DataSeries:
     def dataval(self, v):
         r = self.kw.get('round', 0)
         if r == 1:
-            if int(v) == v:
-                return str(v)
-            return f'{v:.1f}'
+            return str(v) if int(v) == v else f'{v:.1f}'
         rv = round(v)
         return str(int(rv))
 
@@ -137,8 +131,9 @@ class XYLineChart(Chart):
         print(x.xrange)
         print(x.yrange)
 
-        src = 'http://chart.apis.google.com/chart?'
-        src += '&'.join('%s=%s' % x for x in self.params.items())
+        src = 'http://chart.apis.google.com/chart?' + '&'.join(
+            '%s=%s' % x for x in self.params.items()
+        )
         print("LENGTH:", len(src))
         return str(html.img(src=src))
 
@@ -216,7 +211,7 @@ class GChart:
         return '|' + '|'.join(str(n) for n in range(start, end, step)) + '|'
 
     def axis_labels(self):
-        return '0:' + self._xaxis_vals() + '1:' + self._yaxis_vals()
+        return f'0:{self._xaxis_vals()}1:{self._yaxis_vals()}'
 
     def grid_lines(self, x, y):
         self.params['chg'] = '%d,%d' % (x, y)

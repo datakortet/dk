@@ -1,4 +1,3 @@
-import sys
 from dk.collections import pset
 
 

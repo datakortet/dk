@@ -24,4 +24,4 @@ class oset(set):
         return iter(self._order)
 
     def __repr__(self):
-        return 'oset(' + repr(self._order) + ')'
+        return f'oset({repr(self._order)})'

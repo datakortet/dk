@@ -108,7 +108,7 @@ def utitle_case(val):
     if val is None:
         return ''
     if not isinstance(val, str):
-        raise ValueError(repr(val) + ' of type ' + str(type(val)))
+        raise ValueError(f'{repr(val)} of type {str(type(val))}')
     return val.title()
 
 
@@ -203,10 +203,7 @@ def unhtml(s, toencoding=None):
     for k, v in tr.items():
         s = s.replace(k, v)
 
-    if toencoding is None:
-        return s
-    else:
-        return s.encode(toencoding)
+    return s if toencoding is None else s.encode(toencoding)
 
 
 def html2u8(s):
@@ -215,7 +212,7 @@ def html2u8(s):
     return unhtml(s, 'u8')
 
 
-def normalize(v):  # type: (Any) -> bytes
+def normalize(v):    # type: (Any) -> bytes
     """Return a string version of v such that
 
          normalize(u) == normalize(v) iff **not** (u != v)
@@ -227,9 +224,7 @@ def normalize(v):  # type: (Any) -> bytes
     """
     if isinstance(v, str):
         return v.encode('u8')
-    if v in (None, ''):
-        return b''
-    return str(v).encode('u8')
+    return b'' if v in (None, '') else str(v).encode('u8')
 
 
 def nlat(v):
@@ -262,16 +257,14 @@ def orestring(n):
     """Return a string version of the integer ``øre`` value. Either a two-digit
        string or a dash (as in 5,-).
     """
-    if n == 0:
-        return '-'
-    return '%02d' % n
+    return '-' if n == 0 else '%02d' % n
 
 
 def kr_ore(n):
     """Convert the øre-value ``n`` to a proper NOK string value.
     """
     kr, ore = divmod(n, 100)
-    return kronestring(kr) + ',' + orestring(ore)
+    return f'{kronestring(kr)},{orestring(ore)}'
 
 
 # def mk_post(model):

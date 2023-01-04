@@ -8,7 +8,4 @@ class invdict(dict):
          >>> -invdict({'key': 'val'}) == {'val': 'key'}
     """
     def __neg__(self):
-        res = {}
-        for k, v in self.items():
-            res[v] = k
-        return res
+        return {v: k for k, v in self.items()}
