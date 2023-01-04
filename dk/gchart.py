@@ -123,7 +123,7 @@ class XYLineChart(Chart):
         self.params['chxl'] = '0:|{}|1:|{}|'.format(
             '|'.join(map(str, range(53)[::2])),
             '|'.join(map(str, range(70)[::10])),
-            )
+        )
         self.params['chg'] = '7.7,14.3'
         self.params['chm'] = 'o,cfffdf,0,-1,7,0'
 

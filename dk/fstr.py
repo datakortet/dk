@@ -1,4 +1,6 @@
 import contextlib
+
+
 class fstr(str):
     """String sub-class with a split() method that splits a given indexes
        ('fields').

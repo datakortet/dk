@@ -1,7 +1,5 @@
 """FIXME: many of these really should go in their own modules...
 """
-from typing import Any
-
 import re
 
 

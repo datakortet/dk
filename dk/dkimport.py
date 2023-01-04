@@ -3,7 +3,6 @@ Convenience function for importing a fqdn from a package.
 (to hide the baroque nature of __import__).
 """
 
-import sys
 import os
 import inspect
 

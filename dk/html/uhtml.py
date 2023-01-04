@@ -4,7 +4,7 @@ New version of html.py module that works on/with Unicode.
 
 import contextlib
 import inspect
-from typing import List, Any, Union
+from typing import List, Union
 from dk.text import unicode_repr
 import types as _types
 import warnings

@@ -666,7 +666,7 @@ class sqlresult(tag):
             else:
                 cells = [td(cell) for cell in item]
 
-            row = tr(cells, style=evenstyle if j%2 == 0 else oddstyle)
+            row = tr(cells, style=evenstyle if j % 2 == 0 else oddstyle)
 
             result.append(row)
         tbl = table(result, style=css(font='10pt Verdana', margin_left='10%'))
