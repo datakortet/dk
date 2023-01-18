@@ -13,7 +13,7 @@ Topic :: Software Development :: Libraries
 
 import setuptools
 
-version = '1.1.12'
+version = '1.2.0'
 
 
 setuptools.setup(
