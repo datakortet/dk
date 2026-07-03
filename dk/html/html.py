@@ -280,7 +280,7 @@ class tag(xtag):
     """
     def __init__(self, tag_name, *content, **kw):
         xtag.__init__(self, tag_name, **kw)
-        if len(content) == 1 and type(content[0]) == _types.GeneratorType:
+        if len(content) == 1 and isinstance(content[0], _types.GeneratorType):
             self._content = list(content[0])
         else:
             self._content = content
